@@ -1,0 +1,11 @@
+set visualbell
+hi Bell opacity: .5;
+
+set cpt=sl
+
+noremap j 4j
+noremap k 4k
+
+map B :bmarks -tags=
+
+
