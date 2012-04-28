@@ -7,7 +7,6 @@
   st = status
   up = remote -v update
 [github]
-	user = 
-	token = 
+  user = mtth
 [core]
 	excludesfile = /Users/Matt/.gitignore_global

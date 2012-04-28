@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_cnt =4
 let g:netrw_dirhist_1='/Users/Matt/Library/Python/ouragan/test'
 let g:netrw_dirhist_2='/Users/Matt/Documents/Research/Amzn/code'
 let g:netrw_dirhist_3='/Users/Matt'
+let g:netrw_dirhist_4='/Users/Matt/.git'
