@@ -4,6 +4,8 @@
 [alias]
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   co = checkout
+  st = status
+  up = remote -v update
 [github]
 	user = 
 	token = 
