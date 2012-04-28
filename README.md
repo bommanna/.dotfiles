@@ -6,7 +6,7 @@ List of files and folders tracked here:
 * .bash\_profile
 * .gitignore\_global
 * .gitignore
-* .gitconfig\_sample
+* .gitconfig
 * .inputrc
 * .vimperatorrc
 * .vimrc

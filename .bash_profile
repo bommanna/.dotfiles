@@ -21,6 +21,7 @@ export LSCOLORS
 # Alisases
 alias la='ls -AFG'
 alias ll='ls -AFGl'
+alias nn='ssh nncsts.com'
 
 # Terminal prompt display
 PS1='[ \u@\h ] \[\e[0;36m\]\W\[\e[m\] \$ '
