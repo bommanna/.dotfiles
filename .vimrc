@@ -14,6 +14,7 @@ set linebreak
 set tabstop=2
 set shiftwidth=2
 set expandtab
+set showbreak=>>\ \ 
 
 " LATEX:
 " To install, run the following command in VIM after downloading the files"
@@ -51,3 +52,4 @@ noremap ;; :%s:::g<Left><Left><Left>
 noremap ;' :%s:::gc<Left><Left><Left><Left>
 noremap j gj
 noremap k gk
+noremap Q :set background=
