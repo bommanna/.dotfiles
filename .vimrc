@@ -29,7 +29,7 @@ set shellslash
 " program to always generate a file-name.
 set grepprg=grep\ -nH\ $*
 " This enables automatic indentation as you type.
-filetype indent on
+" filetype indent on
 " Starting with Vim 7, the filetype of empty .tex files defaults to
 " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
 " The following changes the default filetype back to 'tex':
