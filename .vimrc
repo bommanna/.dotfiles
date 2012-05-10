@@ -1,5 +1,6 @@
 syntax enable
 set nu
+set showtabline=2
 
 " COLORS:
 set t_Co=256
