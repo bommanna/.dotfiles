@@ -8,7 +8,7 @@ colorscheme solarized
 set hlsearch
 
 " TEXT FORMATTING:
-set textwidth=250
+set textwidth=0
 set wrap
 set linebreak
 set tabstop=2
