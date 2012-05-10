@@ -8,6 +8,7 @@ List of files and folders tracked here:
 * .gitignore
 * .gitconfig
 * .inputrc
+* .tmux.conf
 * .vimperatorrc
 * .vimrc
 * .vim/ (except .vim/.netrwhist)
@@ -15,6 +16,11 @@ List of files and folders tracked here:
 List of useful commands to run for setup
 ----------------------------------------
 ### In bash, to setup the hostname
-$ sudo scutil --set HostName <DesiredHostName>
+    $ sudo scutil --set HostName <DesiredHostName>
 ### In VIM, to install latex-suite doc
-:helptags ~/.vim/doc
+    :helptags ~/.vim/doc
+### Installing TMUX
+Download libevent and tmux and run in the directory of each download the following commands:
+    $ ./configure
+    $ sudo make
+    $ sudo make install
