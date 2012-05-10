@@ -20,7 +20,8 @@ List of useful commands to run for setup
 ### In VIM, to install latex-suite doc
     :helptags ~/.vim/doc
 ### Installing TMUX
-Download libevent and tmux and run in the directory of each download the following commands:
+Download [libevent](http://libevent.org/) and [tmux](http://tmux.sourceforge.net/) and run in the directory of each download the following commands:
+
     $ ./configure
     $ sudo make
     $ sudo make install
