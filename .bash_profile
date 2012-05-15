@@ -1,8 +1,6 @@
 # .bash_profile
 
 # Path appends
-## General purpose
-PATH=.:$PATH:/Users/Matt/Library/Python/
 ## MySQL
 PATH=/usr/local/mysql/bin:$PATH
 ## Macports
