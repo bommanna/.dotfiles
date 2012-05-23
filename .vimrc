@@ -2,6 +2,7 @@ syntax enable
 set nu
 set showtabline=2
 
+
 " COLORS:
 set t_Co=256
 set background=dark
@@ -16,6 +17,7 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 set showbreak=>>\ \ 
+set colorcolumn=80
 
 " LATEX:
 " To install, run the following command in VIM after downloading the files"
@@ -44,8 +46,12 @@ set foldmethod=indent
 " au BufWinLeave * mkview
 " au BufWinEnter * silent loadview
 
+" MARKDOWN:
+au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
+
 " COMMANDS:
-autocmd FileType python set colorcolumn=80|set tabstop=4|set shiftwidth=4
+autocmd FileType python set tabstop=4|set shiftwidth=4
+autocmd FileType mkd set tabstop=4|set shiftwidth=4
 
 " ALIASES:
 nnoremap <silent> <Space> :nohlsearch<CR>
