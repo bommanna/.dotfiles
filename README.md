@@ -3,15 +3,16 @@ Configuration files
 
 List of files and folders tracked here:
 ---------------------------------------
-    * .bash\_profile
-    * .gitignore\_global
-    * .gitignore
-    * .gitconfig
-    * .inputrc
-    * .tmux.conf
-    * .vimperatorrc
-    * .vimrc
-    * .vim/ (except .vim/.netrwhist)
+
+* .bash\_profile
+* .gitignore\_global
+* .gitignore
+* .gitconfig
+* .inputrc
+* .tmux.conf
+* .vimperatorrc
+* .vimrc
+* .vim/ (except .vim/.netrwhist)
 
 List of useful commands to run for setup
 ----------------------------------------

@@ -9,16 +9,19 @@ would have no way to get it back without manually plugging my keyboard and
 mouse into the computer and read it lacally.
 
 The solution required three elements:
-    *   a way to dynamically update my IP from the mini. This is done by using
-        a script called [ddclient](http://sourceforge.net/apps/trac/ddclient).
-        I copied the script to `/usr/sbin` and then had to create two 
-        directories and save a config file with spec from namecheap.
-    *   a way to run that update either automatically or at reboot. I ended up
-        using cron via the crontab for root.
-    *   a way to start the computer without having to plug in a keyboard and
-        mouse. This was done by going to the bluetooth panel in the settings
-        of mac os and deactivating the automatic search for keyboard and mouse
-        and start.
+
+*   a way to dynamically update my IP from the mini. This is done by using
+    a script called [ddclient](http://sourceforge.net/apps/trac/ddclient).
+    I copied the script to `/usr/sbin` and then had to create two 
+    directories and save a config file with spec from namecheap.
+
+*   a way to run that update either automatically or at reboot. I ended up
+    using cron via the crontab for root.
+
+*   a way to start the computer without having to plug in a keyboard and
+    mouse. This was done by going to the bluetooth panel in the settings
+    of mac os and deactivating the automatic search for keyboard and mouse
+    and start.
 
 ### Commands
 
