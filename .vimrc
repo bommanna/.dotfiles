@@ -46,7 +46,7 @@ let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
 
 " FOLDS: Autosave/load of folds
-set foldcolumn=6
+set foldcolumn=2
 set foldmethod=indent
 
 " VIEWS: Turned off because loading the views seems to mess up the settings

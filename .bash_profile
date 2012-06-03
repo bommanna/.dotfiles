@@ -2,7 +2,7 @@
 
 # Path appends
 ## General purpose
-PATH=.:$PATH:/Users/Matt/Library/Python/
+PATH=.:$PATH:/Users/Matt/Library/Python
 ## MySQL
 PATH=/usr/local/mysql/bin:$PATH
 ## Macports
@@ -18,7 +18,7 @@ export PATH
 LSCOLORS=gxfxcxdxbxegedabagacad
 export LSCOLORS
 
-# Alisases
+# Aliases
 alias la='ls -AFG'
 alias ll='ls -AFGl'
 alias nn='ssh nncsts.com'
