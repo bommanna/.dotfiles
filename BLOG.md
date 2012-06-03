@@ -27,7 +27,7 @@ The solution required three elements:
 
     $ sudo mkdir /usr/sbin/                 # to store the ddclient script
     $ sudo mkdir /etc/ddclient              # to store the ddclient.conf file
-    $ sudo mkdir /var/cache/ddclient        # to stare ddclient cache file
+    $ sudo mkdir /var/cache/ddclient        # to store ddclient cache file
     $ sudo crontab -e                       # to edit root crontab
 
 ### .ddclient.conf
@@ -43,3 +43,23 @@ The solution required three elements:
 
     MAILTO=matt@nncsts.com
     * * * * * /usr/sbin/ddclient
+
+6/1/2012
+--------
+I recently learned about the [sphinx](http://todo.com) documentation tool and
+started using it. The autodoc module allows it to pull doctrings automatically
+from python modules, classes and methods. So far, it seems like a great, the 
+only downside is that it uses rst as markup scheme instead of md. I am using it
+for the Amzn documentation and soon will organize the ouragan documentation
+with it.
+
+It can be used to output to pdf but the main usage seems to be creating html
+docs. There are several templates available too (although *scrolls*, one of the
+nicer ones, seems to not function correctly at this time unfortunately). This 
+is particularly useful coupled with the following python command:
+
+    $ python -m SimpleHTTPServer
+
+This lets you run a simple httpserver from the current working directory (the
+default port is 8080 is believe) accessible from everywhere. Just put the
+documentation html files there and you are all set!

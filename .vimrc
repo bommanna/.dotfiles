@@ -1,7 +1,13 @@
+" PATHOGEN:
+call pathogen#infect()
+call pathogen#helptags()
+
+" GENERAL:
 syntax enable
 set nu
 set showtabline=2
-
+set wildignore=*.swp,*.bak,*.pyc,*.class
+set noswapfile
 
 " COLORS:
 set t_Co=256
@@ -13,8 +19,8 @@ set hlsearch
 set textwidth=0
 set wrap
 set linebreak
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set expandtab
 set showbreak=>>\ \ 
 set colorcolumn=80
@@ -42,16 +48,17 @@ let g:Tex_DefaultTargetFormat='pdf'
 " FOLDS: Autosave/load of folds
 set foldcolumn=6
 set foldmethod=indent
-" Turned off because loading the views seems to mess up the settings
+
+" VIEWS: Turned off because loading the views seems to mess up the settings
 " au BufWinLeave * mkview
 " au BufWinEnter * silent loadview
 
-" MARKDOWN:
-au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
+" MARKDOWN: Turned off (if it's on, markdown highlighting doesn't work!)
+" au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
 
-" COMMANDS:
-autocmd FileType python set tabstop=4|set shiftwidth=4
-autocmd FileType mkd set tabstop=4|set shiftwidth=4
+" FILETYPE AUTOCOMMANDS: Turned off because 4 is back to default tabstop
+" autocmd FileType python set tabstop=4|set shiftwidth=4
+" autocmd FileType mkd set tabstop=4|set shiftwidth=4
 
 " ALIASES:
 nnoremap <silent> <Space> :nohlsearch<CR>
