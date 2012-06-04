@@ -87,3 +87,5 @@ CTags_ for vimtags).
 .. _pathogen: https://github.com/tpope/vim-pathogen
 .. _vimtags: #
 .. _pyflakes: #
+.. _MacVim: #
+.. _CTags: #
