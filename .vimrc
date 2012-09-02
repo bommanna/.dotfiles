@@ -60,6 +60,10 @@ set foldmethod=indent
 " autocmd FileType python set tabstop=4|set shiftwidth=4
 " autocmd FileType mkd set tabstop=4|set shiftwidth=4
 
+" HTML:
+au BufRead,BufNewFile *.html   set filetype=html
+autocmd FileType html set tabstop=2|set shiftwidth=2|set colorcolumn=0
+
 " ALIASES:
 nnoremap <silent> <Space> :nohlsearch<CR>
 noremap ;; :%s:::g<Left><Left><Left>
