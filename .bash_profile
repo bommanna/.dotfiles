@@ -2,7 +2,7 @@
 
 # Path appends
 ## General purpose
-PATH=.:$PATH:/Users/Matt/Library/Python
+PATH=.:$PATH
 ## MySQL
 PATH=/usr/local/mysql/bin:$PATH
 ## Macports
@@ -34,3 +34,5 @@ export MKL_NUM_THREADS
 ## Gurobi license location
 GRB_LICENSE_FILE="/Users/Matt/Library/Gurobi/gurobi.lic"
 export GRB_LICENSE_FILE
+## MySQL python libraries import
+export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH

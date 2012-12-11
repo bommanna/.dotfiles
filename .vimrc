@@ -15,6 +15,10 @@ set background=dark
 colorscheme solarized
 set hlsearch
 
+" CURSOR:
+set cursorcolumn
+set cursorline
+
 " TEXT FORMATTING:
 set textwidth=0
 set wrap
@@ -63,6 +67,27 @@ set foldmethod=indent
 " HTML:
 au BufRead,BufNewFile *.html   set filetype=html
 autocmd FileType html set tabstop=2|set shiftwidth=2|set colorcolumn=0
+" HAML:
+au BufRead,BufNewFile *.haml   set filetype=haml
+autocmd FileType haml set tabstop=2|set shiftwidth=2|set colorcolumn=0
+
+function! AutoCompileCoffee ()
+    ! coffee -o ../js -c %
+    echo '.coffee file autocompiled!'
+endfunction
+
+function! AutoCompileHAML ()
+    ! haml-coffee -i . -o ../js/jst.js
+    echo '.haml files autocompiled!'
+endfunction
+
+autocmd     BufWritePost     *.coffee     :call AutoCompileCoffee()
+autocmd     BufWritePost     *.haml     :call AutoCompileHAML()
+
+" GENERAL AUTOCOMMANDS:
+
+au InsertEnter  *   :set nocursorline
+au InsertLeave  *   :set cursorline
 
 " ALIASES:
 nnoremap <silent> <Space> :nohlsearch<CR>
