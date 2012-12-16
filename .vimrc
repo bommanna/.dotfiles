@@ -23,8 +23,8 @@ set cursorline
 set textwidth=0
 set wrap
 set linebreak
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 set showbreak=>>\ \ 
 set colorcolumn=80
@@ -66,10 +66,13 @@ set foldmethod=indent
 
 " HTML:
 au BufRead,BufNewFile *.html   set filetype=html
-autocmd FileType html set tabstop=2|set shiftwidth=2|set colorcolumn=0
+autocmd FileType html set tabstop=1|set shiftwidth=1|set colorcolumn=0
 " HAML:
 au BufRead,BufNewFile *.haml   set filetype=haml
-autocmd FileType haml set tabstop=2|set shiftwidth=2|set colorcolumn=0
+autocmd FileType haml set colorcolumn=0
+" STYLUS:
+au BufRead,BufNewFile *.styl   set filetype=stylus
+autocmd FileType css set colorcolumn=0
 
 function! AutoCompileCoffee ()
     ! coffee -o ../js -c %
@@ -81,13 +84,30 @@ function! AutoCompileHAML ()
     echo '.haml files autocompiled!'
 endfunction
 
+function! AutoCompileStyl ()
+    ! stylus . --out ../css
+    echo '.styl files autocompiled!'
+endfunction
+
 autocmd     BufWritePost     *.coffee     :call AutoCompileCoffee()
 autocmd     BufWritePost     *.haml     :call AutoCompileHAML()
+autocmd     BufWritePost     *.styl     :call AutoCompileStyl()
 
 " GENERAL AUTOCOMMANDS:
 
 au InsertEnter  *   :set nocursorline
 au InsertLeave  *   :set cursorline
+
+" OTHER HELPERS:
+
+function! Retab ()
+    set tabstop=4
+    set noexpandtab
+    %retab!
+    set tabstop=2
+    set expandtab
+    %retab
+endfunction
 
 " ALIASES:
 nnoremap <silent> <Space> :nohlsearch<CR>
