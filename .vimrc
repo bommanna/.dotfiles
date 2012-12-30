@@ -8,6 +8,7 @@ set nu
 set showtabline=2
 set wildignore=*.swp,*.bak,*.pyc,*.class
 set noswapfile
+set scrolloff=5
 
 " COLORS:
 set t_Co=256
