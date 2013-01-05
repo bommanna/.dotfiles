@@ -27,6 +27,13 @@ set background=dark
 set hlsearch
 colorscheme solarized
 
+" STATUS LINE:
+set statusline=%f         " Path to the file
+set statusline+=%=        " Switch to the right side
+set statusline+=%l        " Current line
+set statusline+=/         " Separator
+set statusline+=%L        " Total lines
+
 " LATEX:
 " To install, run the following command in VIM after downloading the files"
 " :helptags ~/.vim/doc
@@ -53,11 +60,11 @@ function! AutoCompile ()
       let src = expand('%')
       let dest = firstLine[2]
       if &ft ==# 'coffee'
-        echom system('coffee -o ' . dest . ' -c ' . src)
+        echo system('coffee -o ' . dest . ' -c ' . src)
       elseif &ft ==# 'haml'
-        echom system('haml-coffee -i . -o ' . dest)
+        echo system('haml-coffee -i . -o ' . dest)
       elseif &ft ==# 'stylus'
-        echom system('stylus . --out ' . dest)
+        echo system('stylus ' . src . ' --out ' . dest)
       endif
     endif
     echom 'File autocompiled to ' . dest . ' !'
@@ -75,13 +82,13 @@ augroup END
 " COFFEE:
 augroup coffeegroup
   au!
-  au  FileType            coffee        set colorcolumn=80
+  au  FileType            coffee        setlocal colorcolumn=80
 augroup END
 
 " PYTHON:
 augroup pythongroup
   au!
-  au  FileType            python        set colorcolumn=80
+  au  FileType            python        setlocal colorcolumn=80
 augroup END
 
 " ALIASES:
