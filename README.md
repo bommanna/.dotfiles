@@ -40,3 +40,4 @@ Download [node.js](http://nodejs.org/) and install.
   $ sudo npm install -g stylus
 
 To autocompile one of those files, add a comment on the first line of the form AUTOCOMPILE <dest>.
+
