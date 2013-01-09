@@ -64,14 +64,16 @@ function! AutoCompile ()
       let src = expand('%')
       let dest = firstLine[2]
       if &ft ==# 'coffee'
-        echo system('coffee -o ' . dest . ' -c ' . src)
+        let result = system('coffee -o ' . dest . ' -c ' . src)
       elseif &ft ==# 'haml'
-        echo system('haml-coffee -i . -o ' . dest)
+        let result = system('haml-coffee -i . -o ' . dest)
       elseif &ft ==# 'stylus'
-        echo system('stylus ' . src . ' --out ' . dest)
+        let result = system('stylus ' . src . ' --out ' . dest)
       endif
     endif
-    echom 'File autocompiled to ' . dest . ' !'
+    if v:shell_error
+      echo result
+    endif
   endif
 endfunction
 
