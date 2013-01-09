@@ -5,7 +5,9 @@ call pathogen#helptags()
 " GENERAL:
 syntax enable
 filetype plugin on
-set nu
+set number
+set nostartofline
+set autoindent
 set showtabline=2
 set wildignore=*.swp,*.bak,*.pyc,*.class
 set noswapfile
@@ -14,6 +16,7 @@ set cursorcolumn
 set cursorline
 set foldcolumn=2
 set foldmethod=indent
+set foldminlines=0
 set textwidth=0
 set wrap
 set linebreak
@@ -24,6 +27,7 @@ set colorcolumn=0
 set showbreak=>>\ \ 
 set t_Co=256
 set background=dark
+set incsearch
 set hlsearch
 colorscheme solarized
 
@@ -92,13 +96,13 @@ augroup pythongroup
 augroup END
 
 " ALIASES:
-inoremap jk <esc>
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <silent> <Space> :nohlsearch<CR>
-nnoremap ;; :%s:::g<Left><Left><Left>
-noremap ;' :%s:::gc<Left><Left><Left><Left>
+inoremap <tab> <esc>
+noremap <leader>ev :vsplit $MYVIMRC<cr>
+noremap <leader>sv :source $MYVIMRC<cr>
+noremap <leader>ra <esc>:%s/
+noremap <leader>re <esc>:set relativenumber<cr>:.,+
+noremap <leader>pa :set paste!<cr>
+noremap <silent> <space> :nohlsearch<cr>:set number<cr>
 noremap j gj
 noremap k gk
-inoremap <esc> <nop>
 noremap Q <nop>
