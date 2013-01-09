@@ -92,6 +92,7 @@ augroup pythongroup
 augroup END
 
 " ALIASES:
+inoremap jk <esc>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <silent> <Space> :nohlsearch<CR>
@@ -99,4 +100,5 @@ nnoremap ;; :%s:::g<Left><Left><Left>
 noremap ;' :%s:::gc<Left><Left><Left><Left>
 noremap j gj
 noremap k gk
+inoremap <esc> <nop>
 noremap Q <nop>
