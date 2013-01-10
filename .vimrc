@@ -97,13 +97,19 @@ augroup pythongroup
   au  FileType            python        setlocal colorcolumn=80
 augroup END
 
-" ALIASES:
+" MAPPINGS:
 inoremap <tab> <esc>
 vnoremap <tab> <esc>
-noremap <leader>o :e 
-noremap <leader>t :tabnew 
+noremap <c-l> :tabnext<cr>
+noremap <c-h> :tabprevious<cr>
+inoremap <c-l> <esc>:tabnext<cr>
+inoremap <c-h> <esc>:tabprevious<cr>
 noremap <leader>w :w<cr>
 noremap <leader>q :q<cr>
+noremap <leader>ea :e 
+noremap <leader>ee :e .<cr>
+noremap <leader>ta :tabnew 
+noremap <leader>te :tabnew .<cr>
 noremap <leader>ev :split $MYVIMRC<cr>
 noremap <leader>sv :source $MYVIMRC<cr>
 noremap <leader>ra <esc>:%s/
