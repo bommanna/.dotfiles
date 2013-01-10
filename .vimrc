@@ -99,7 +99,12 @@ augroup END
 
 " ALIASES:
 inoremap <tab> <esc>
-noremap <leader>ev :vsplit $MYVIMRC<cr>
+vnoremap <tab> <esc>
+noremap <leader>o :e 
+noremap <leader>t :tabnew 
+noremap <leader>w :w<cr>
+noremap <leader>q :q<cr>
+noremap <leader>ev :split $MYVIMRC<cr>
 noremap <leader>sv :source $MYVIMRC<cr>
 noremap <leader>ra <esc>:%s/
 noremap <leader>re <esc>:set relativenumber<cr>:.,+
