@@ -98,8 +98,6 @@ augroup pythongroup
 augroup END
 
 " MAPPINGS:
-inoremap <tab> <esc>
-vnoremap <tab> <esc>
 noremap <c-l> :tabnext<cr>
 noremap <c-h> :tabprevious<cr>
 inoremap <c-l> <esc>:tabnext<cr>
