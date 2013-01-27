@@ -5,10 +5,11 @@ call pathogen#helptags()
 " GENERAL:
 syntax enable
 filetype plugin on
+set hidden
 set number
 set nostartofline
 set autoindent
-set showtabline=2
+" set showtabline=2
 set wildignore=*.swp,*.bak,*.pyc,*.class
 set noswapfile
 set scrolloff=5
@@ -29,6 +30,8 @@ set t_Co=256
 set background=dark
 set incsearch
 set hlsearch
+set ignorecase
+set smartcase
 colorscheme solarized
 
 " STATUS LINE:
@@ -70,9 +73,9 @@ function! AutoCompile ()
       elseif &ft ==# 'stylus'
         let result = system('stylus ' . src . ' --out ' . dest)
       endif
-    endif
-    if v:shell_error
-      echo result
+      if v:shell_error
+        echo result
+      endif
     endif
   endif
 endfunction
@@ -82,6 +85,8 @@ augroup general
   au!
   au  InsertEnter         *           set nocursorline
   au  InsertLeave         *           set cursorline
+  au  WinLeave            *           set nocursorline | set nocursorcolumn
+  au  WinEnter            *           set cursorline | set cursorcolumn
   au  BufWritePost        *           call AutoCompile()
 augroup END
 
@@ -97,16 +102,23 @@ augroup pythongroup
   au  FileType            python        setlocal colorcolumn=80
 augroup END
 
+" NERDTREE:
+augroup nerdtreegroup
+  au!
+  autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
+  autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
+augroup END
+
 " MAPPINGS:
-noremap <c-l> :tabnext<cr>
-noremap <c-h> :tabprevious<cr>
-inoremap <c-l> <esc>:tabnext<cr>
-inoremap <c-h> <esc>:tabprevious<cr>
+noremap <c-n> :NERDTreeToggle<cr>
+noremap <c-h> :bprev<cr>
+noremap <c-l> :bnext<cr>
 noremap <leader>w :w<cr>
 noremap <leader>q :q<cr>
+noremap <leader>Q :bd<cr>
 noremap <leader>ea :e 
 noremap <leader>ee :e .<cr>
-noremap <leader>ta :tabnew 
+noremap <leader>ta :
 noremap <leader>te :tabnew .<cr>
 noremap <leader>ev :split $MYVIMRC<cr>
 noremap <leader>sv :source $MYVIMRC<cr>
@@ -117,3 +129,7 @@ noremap <silent> <space> :nohlsearch<cr>:set number<cr>
 noremap j gj
 noremap k gk
 noremap Q <nop>
+
+" ABBREVIATIONS:
+iabbr MM Matthieu Monsch
+
