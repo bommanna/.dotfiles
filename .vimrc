@@ -9,7 +9,7 @@ set hidden
 set number
 set nostartofline
 set autoindent
-" set showtabline=2
+set wildmenu
 set wildignore=*.swp,*.bak,*.pyc,*.class
 set noswapfile
 set scrolloff=5
@@ -65,11 +65,12 @@ function! AutoCompile ()
   if len(firstLine) > 2
     if firstLine[1] ==# 'AUTOCOMPILE'
       let src = expand('%')
-      let dest = firstLine[2]
+      let srcdir = expand('%:p:h')
+      let dest = srcdir . '/' . firstLine[2]
       if &ft ==# 'coffee'
         let result = system('coffee -o ' . dest . ' -c ' . src)
       elseif &ft ==# 'haml'
-        let result = system('haml-coffee -i . -o ' . dest)
+        let result = system('haml-coffee -i ' . firstLine[3] . ' -o ' . dest)
       elseif &ft ==# 'stylus'
         let result = system('stylus ' . src . ' --out ' . dest)
       endif
@@ -103,23 +104,28 @@ augroup pythongroup
 augroup END
 
 " NERDTREE:
+let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeQuitOnOpen = 1
 augroup nerdtreegroup
   au!
-  autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
-  autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
+  autocmd FileType nerdtree noremap <buffer> <silent> <space> :nohlsearch<cr>
 augroup END
 
 " MAPPINGS:
-noremap <c-n> :NERDTreeToggle<cr>
-noremap <c-h> :bprev<cr>
-noremap <c-l> :bnext<cr>
+noremap <c-h> <c-w>h
+noremap <c-j> <c-w>j
+noremap <c-k> <c-w>k
+noremap <c-l> <c-w>l
+inoremap <c-h> <esc><c-w>h
+inoremap <c-j> <esc><c-w>j
+inoremap <c-k> <esc><c-w>k
+inoremap <c-l> <esc><c-w>l
 noremap <leader>w :w<cr>
 noremap <leader>q :q<cr>
 noremap <leader>Q :bd<cr>
-noremap <leader>ea :e 
-noremap <leader>ee :e .<cr>
-noremap <leader>ta :
-noremap <leader>te :tabnew .<cr>
+noremap <leader>b :b 
+noremap <leader>e :e 
+noremap <leader>t :NERDTreeToggle<cr><c-w>=<cr>
 noremap <leader>ev :split $MYVIMRC<cr>
 noremap <leader>sv :source $MYVIMRC<cr>
 noremap <leader>ra <esc>:%s/
