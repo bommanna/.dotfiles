@@ -70,7 +70,7 @@ function! AutoCompile ()
       if &ft ==# 'coffee'
         let result = system('coffee -o ' . dest . ' -c ' . src)
       elseif &ft ==# 'haml'
-        let result = system('haml-coffee -i ' . firstLine[3] . ' -o ' . dest)
+        let result = system('haml-coffee -b -i ' . firstLine[3] . ' -o ' . dest)
       elseif &ft ==# 'stylus'
         let result = system('stylus ' . src . ' --out ' . dest)
       endif
