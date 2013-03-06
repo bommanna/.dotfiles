@@ -1,18 +1,18 @@
-[submodule "/Users/Matt/.vim/bundle/vim-markdown"]
-	path = /Users/Matt/.vim/bundle/vim-markdown
+[submodule ".vim/bundle/vim-markdown"]
+	path = .vim/bundle/vim-markdown
 	url = git://github.com/tpope/vim-markdown.git
-[submodule "/Users/Matt/.vim/bundle/vim-colors-solarized"]
-	path = /Users/Matt/.vim/bundle/vim-colors-solarized
+[submodule ".vim/bundle/vim-colors-solarized"]
+	path = .vim/bundle/vim-colors-solarized
 	url = git://github.com/altercation/vim-colors-solarized.git
-[submodule "/Users/Matt/.vim/bundle/vim-coffee-script"]
-	path = /Users/Matt/.vim/bundle/vim-coffee-script
+[submodule ".vim/bundle/vim-coffee-script"]
+	path = .vim/bundle/vim-coffee-script
 	url = git://github.com/kchmck/vim-coffee-script.git
-[submodule "/Users/Matt/.vim/bundle/nerdtree"]
-	path = /Users/Matt/.vim/bundle/nerdtree
+[submodule ".vim/bundle/nerdtree"]
+	path = .vim/bundle/nerdtree
 	url = git://github.com/scrooloose/nerdtree.git
-[submodule "/Users/Matt/.vim/bundle/vim-stylus"]
-	path = /Users/Matt/.vim/bundle/vim-stylus
+[submodule ".vim/bundle/vim-stylus"]
+	path = .vim/bundle/vim-stylus
 	url = git://github.com/wavded/vim-stylus.git
-[submodule "/Users/Matt/.vim/bundle/Latex-Suite"]
-	path = /Users/Matt/.vim/bundle/Latex-Suite
+[submodule ".vim/bundle/Latex-Suite"]
+	path = .vim/bundle/Latex-Suite
 	url = git://github.com/jcf/vim-latex.git
