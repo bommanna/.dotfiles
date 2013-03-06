@@ -123,18 +123,15 @@ inoremap <c-l> <esc><c-w>l
 noremap <leader>w :w<cr>
 noremap <leader>q :q<cr>
 noremap <leader>Q :bd<cr>
-noremap <leader>b :b 
-noremap <leader>e :e 
 noremap <leader>t :NERDTreeToggle<cr><c-w>=<cr>
 noremap <leader>ev :split $MYVIMRC<cr>
 noremap <leader>sv :source $MYVIMRC<cr>
-noremap <leader>ra <esc>:%s/
-noremap <leader>re <esc>:set relativenumber<cr>:.,+
-noremap <leader>pa :set paste!<cr>
+noremap <silent> <leader>ra <esc>:%s/
+noremap <silent> <leader>re <esc>:set relativenumber<cr>:.,+
 noremap <silent> <space> :nohlsearch<cr>:set number<cr>
 noremap j gj
 noremap k gk
-noremap Q <nop>
+noremap Q :set paste!<cr>
 
 " ABBREVIATIONS:
 iabbr MM Matthieu Monsch
