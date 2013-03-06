@@ -1,38 +1,45 @@
 Configuration files
 ===================
 
-List of files and folders tracked here:
----------------------------------------
+Install
+-------
 
-* .bash\_profile
-* .gitignore\_global
-* .gitignore
-* .gitconfig
-* .inputrc
-* .tmux.conf
-* .vimrc
-* .vim/ (except .vim/.netrwhist)
+.. code:: bash
+
+  $ git init
+  $ git remote add origin git@github.com:mtth/config.git
+  $ git submodule update --init
+
 
 List of useful commands to run for setup
 ----------------------------------------
-### In bash, to setup the hostname
+
+Setup the hostname
+******************
+
+.. code:: bash
 
   $ sudo scutil --set HostName <DesiredHostName>
 
-### In VIM, to install latex-suite doc
 
-  :helptags ~/.vim/doc
+Installing TMUX
+***************
 
-### Installing TMUX
 Download [libevent](http://libevent.org/) and [tmux](http://tmux.sourceforge.net/) and run in the directory of each download the following commands:
+
+.. code:: bash
 
   $ ./configure
   $ sudo make
   $ sudo make install
 
-### Install coffee-script, haml-coffee and stylus
 
-Download [node.js](http://nodejs.org/) and install.
+Install coffee-script, haml-coffee and stylus
+*********************************************
+
+Download [node.js](http://nodejs.org/) and run:
+
+.. code:: bash
 
   $ sudo npm install -g coffee-script
   $ sudo npm install -g haml-coffee
@@ -40,8 +47,9 @@ Download [node.js](http://nodejs.org/) and install.
 
 To autocompile one of those files, add a comment on the first line of the form AUTOCOMPILE <dest>.
 
-Stuff I learn
---
+
+Misc
+----
 
 5/23/2012
 **

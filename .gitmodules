@@ -16,3 +16,6 @@
 [submodule ".vim/bundle/Latex-Suite"]
 	path = .vim/bundle/Latex-Suite
 	url = git://github.com/jcf/vim-latex.git
+[submodule ".vim/bundle/Command-T"]
+	path = .vim/bundle/Command-T
+	url = git://github.com/wincent/Command-T.git
