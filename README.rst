@@ -8,6 +8,7 @@ Install
 
   $ git init
   $ git remote add origin git@github.com:mtth/config.git
+  $ git pull origin master
   $ git submodule update --init
 
 
@@ -25,7 +26,7 @@ Setup the hostname
 Installing TMUX
 ***************
 
-Download [libevent](http://libevent.org/) and [tmux](http://tmux.sourceforge.net/) and run in the directory of each download the following commands:
+Download libevent_ and tmux_ and run in the directory of each download the following commands:
 
 .. code:: bash
 
@@ -37,7 +38,7 @@ Download [libevent](http://libevent.org/) and [tmux](http://tmux.sourceforge.net
 Install coffee-script, haml-coffee and stylus
 *********************************************
 
-Download [node.js](http://nodejs.org/) and run:
+Download node.js_ and run:
 
 .. code:: bash
 
@@ -139,3 +140,6 @@ CTags_ for vimtags).
 .. _pyflakes: #
 .. _MacVim: #
 .. _CTags: #
+.. _libevent: http://libevent.org/
+.. _tmux: http://tmux.sourceforge.net/
+.. _node.js: http://nodejs.org/
