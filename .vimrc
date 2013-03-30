@@ -5,36 +5,38 @@ call pathogen#helptags()
 " GENERAL:
 syntax enable
 filetype plugin on
-set hidden
-set number
-set nostartofline
-set autoindent
-set wildmenu
-set wildignore=*.swp,*.bak,*.pyc,*.class
-set noswapfile
-set scrolloff=5
-set cursorcolumn
-set cursorline
-set foldcolumn=2
-set foldmethod=indent
-set foldminlines=0
-set textwidth=0
-set wrap
-set linebreak
-set tabstop=2
-set shiftwidth=2
-set expandtab
-set colorcolumn=80
+set hidden  " allow hidden buffers
+set number  " activate line numbers
+set nostartofline " keeps cursor on current column for movements like H, M, ...
+set autoindent  " smarter indentation
+set wildmenu  " allow autocompletion with c-n
+set wildignore=*.swp,*.bak,*.pyc,*.class  " don't show these files in autocompletion
+set noswapfile  " don't use swap files for saves
+set scrolloff=5 " allow 5 lines below/above the cursor
+set cursorcolumn  " highlight the current column
+set cursorline    " highlight the current row
+set foldcolumn=2  " width of the fold column
+set foldnestmax=3 " maximum fold level
+set foldmethod=indent " fold by indent
+set foldminlines=0  " allow folding of single lines
+set textwidth=0 " don't insert line breaks for long lines
+set wrap  " wrap long lines
+set linebreak " ? for latex
+set tabstop=2 " number of spaces a tab takes (displayed)
+set shiftwidth=2  " number of spaces used when using indent keys (>>, ...) and for autoindent
+set expandtab " insert spaces instead of a tab when tabbing
+set colorcolumn=80  " highlight 80th column
 set showbreak=>>\ \ 
-set t_Co=256
-set background=dark
-set incsearch
-set hlsearch
-set ignorecase
-set smartcase
-colorscheme solarized
+set t_Co=256 " terminal colors
+set background=dark " theme
+set incsearch " highlight potential matches as search query is being typed
+set hlsearch  " highlight all matches after executing search query
+set ignorecase  " if all lowercase in search query, ignore case
+set smartcase " if some uppercase in search query, respect case
+colorscheme solarized " colorscheme
 
 " STATUS LINE:
+" nicer status line
 set statusline=%f         " Path to the file
 set statusline+=%=        " Switch to the right side
 set statusline+=%l        " Current line
@@ -51,6 +53,7 @@ let g:Tex_DefaultTargetFormat='pdf'
 
 " FUNCTIONS:
 
+" retab file using 2 spaces instead of 4 per tab
 function! Retab ()
   set tabstop=4
   set noexpandtab
@@ -60,6 +63,7 @@ function! Retab ()
   %retab
 endfunction
 
+" autocompile coffeescript, haml, stylus on save using a comment on the first line
 function! AutoCompile ()
   let firstLine = split(getline(1))
   if len(firstLine) > 2
@@ -112,6 +116,8 @@ augroup nerdtreegroup
 augroup END
 
 " MAPPINGS:
+
+" easy movement around splits
 noremap <c-h> <c-w>h
 noremap <c-j> <c-w>j
 noremap <c-k> <c-w>k
@@ -120,18 +126,39 @@ inoremap <c-h> <esc><c-w>h
 inoremap <c-j> <esc><c-w>j
 inoremap <c-k> <esc><c-w>k
 inoremap <c-l> <esc><c-w>l
-noremap <leader>w :w<cr>
-noremap <leader>q :q<cr>
-noremap <leader>Q :bd<cr>
-noremap <leader>f :NERDTreeToggle<cr><c-w>=<cr>
-noremap <leader>ev :split $MYVIMRC<cr>
-noremap <leader>sv :source $MYVIMRC<cr>
-noremap <leader>ra :%s/
-noremap <leader>re :set relativenumber<cr>:.,+
-noremap <silent> <space> :nohlsearch<cr>:set number<cr>
-noremap j gj
-noremap k gk
-noremap Q :set paste!<cr>
+
+" buffer operations (save, close, delete)
+nnoremap <leader>w :w<cr>
+nnoremap <leader>q :q<cr>
+nnoremap <leader>Q :bd<cr>
+
+" toggle NERDtree
+nnoremap <leader>f :NERDTreeToggle<cr><c-w>=<cr>
+
+" .vimrc sugar (open in horizontal split, source)
+nnoremap <leader>ev :split $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" replace (all, from current line)
+nnoremap <leader>ra :%s/
+nnoremap <leader>re :set relativenumber<cr>:.,+
+
+" execute file using shell python
+nnoremap <leader>pp :w<CR>:!python %<cr>
+
+" toggle search hightlight off and restore numbers
+nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
+
+" visual up, down (useful for long lines)
+nnoremap j gj
+nnoremap k gk
+
+" toggle paste mode
+nnoremap Q :set paste!<cr>
+
+" execute selection with shell python (without, with replacing selection)
+vnoremap <leader>pp :w !python<cr>
+vnoremap <leader>py :!python<cr>
 
 " ABBREVIATIONS:
 iabbr MM Matthieu Monsch
