@@ -139,12 +139,13 @@ nnoremap <leader>t :NERDTreeToggle<cr><c-w>=<cr>
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
-" replace (all, from current line)
-nnoremap <leader>ra :%s/
-nnoremap <leader>re :set relativenumber<cr>:.,+
+" replace (all, on current line, from current line)
+nnoremap <leader>ra q:i%s/
+nnoremap <leader>rl q:i.s/
+nnoremap <leader>re :set relativenumber<cr>q:i.,+
 
 " execute file using shell python
-nnoremap <leader>pp :w<CR>:!python %<cr>
+nnoremap <leader>pp :w<cr>:!python %<cr>
 
 " toggle search hightlight off and restore numbers
 nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
@@ -170,8 +171,8 @@ vnoremap <leader>pp :w !python<cr>
 vnoremap <leader>py :!python<cr>
 
 " replace selection (all, one occurrence on current line)
-vnoremap <leader>sa "hy:%s/<C-r>h/
-vnoremap <leader>se "hy:.s/<C-r>h/
+vnoremap <leader>ra "hy/<c-r>h<cr>q:i%s/<c-r>h/
+vnoremap <leader>re "hyq:i.s/<c-r>h/
 
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<C-U>
