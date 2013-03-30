@@ -16,3 +16,6 @@
 [submodule ".vim/bundle/Latex-Suite"]
 	path = .vim/bundle/Latex-Suite
 	url = git://github.com/jcf/vim-latex.git
+[submodule ".vim/bundle/ctrlp.vim"]
+	path = .vim/bundle/ctrlp.vim
+	url = git://github.com/kien/ctrlp.vim.git
