@@ -19,6 +19,7 @@ set foldcolumn=2  " width of the fold column
 set foldnestmax=3 " maximum fold level
 set foldmethod=indent " fold by indent
 set foldminlines=0  " allow folding of single lines
+set foldlevelstart=4 " open folds on open
 set textwidth=0 " don't insert line breaks for long lines
 set wrap  " wrap long lines
 set linebreak " ? for latex
@@ -33,6 +34,7 @@ set incsearch " highlight potential matches as search query is being typed
 set hlsearch  " highlight all matches after executing search query
 set ignorecase  " if all lowercase in search query, ignore case
 set smartcase " if some uppercase in search query, respect case
+set laststatus=2 " always show status line
 colorscheme solarized " colorscheme
 
 " STATUS LINE:
@@ -172,12 +174,13 @@ nnoremap # #<c-o>
 
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gs :Gstatus<cr><c-w>20+
 nnoremap <leader>ga :Gadd<cr>
 nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gbr :Gbrowse<cr>
 nnoremap <leader>gbl :Gblame<cr>
+nnoremap <leader>gp :Git push<cr>
 
 " execute selection with shell python (without, with replacing selection)
 vnoremap <leader>pp :w !python<cr>
