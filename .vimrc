@@ -133,7 +133,7 @@ nnoremap <leader>q :q<cr>
 nnoremap <leader>Q :bd<cr>
 
 " toggle NERDtree
-nnoremap <leader>f :NERDTreeToggle<cr><c-w>=<cr>
+nnoremap <leader>t :NERDTreeToggle<cr><c-w>=<cr>
 
 " .vimrc sugar (open in horizontal split, source)
 nnoremap <leader>ev :split $MYVIMRC<cr>
@@ -156,9 +156,30 @@ nnoremap k gk
 " toggle paste mode
 nnoremap Q :set paste!<cr>
 
+" ctrlp plugin (search among files, buffers)
+nnoremap <leader>f :CtrlP<cr>
+nnoremap <leader>b :CtrlPBuffer<cr>
+
+" always use command line window
+nnoremap : q:i
+nnoremap / q/i
+nnoremap ? q?i
+
 " execute selection with shell python (without, with replacing selection)
 vnoremap <leader>pp :w !python<cr>
 vnoremap <leader>py :!python<cr>
+
+" enable search for selected text, forwards (*) or backwards (#)
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " ABBREVIATIONS:
 iabbr MM Matthieu Monsch
