@@ -166,6 +166,19 @@ nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
 
+" don't move on * and #
+nnoremap * *<c-o>
+nnoremap # #<c-o>
+
+" fugitive
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>ga :Gadd<cr>
+nnoremap <leader>gco :Gcheckout<cr>
+nnoremap <leader>gci :Gcommit<cr>
+nnoremap <leader>gbr :Gbrowse<cr>
+nnoremap <leader>gbl :Gblame<cr>
+
 " execute selection with shell python (without, with replacing selection)
 vnoremap <leader>pp :w !python<cr>
 vnoremap <leader>py :!python<cr>
