@@ -176,9 +176,9 @@ nnoremap # #<c-o>
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr><c-w>10+
-nnoremap <leader>ga :Gwrite<cr>
-nnoremap <leader>gco :Gread<cr>
-nnoremap <leader>gci :Gcommit<cr>
+nnoremap <leader>gw :Gwrite<cr>
+nnoremap <leader>gr :Gread<cr>
+nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gbr :Gbrowse<cr>
 nnoremap <leader>gbl :Gblame<cr>
 nnoremap <leader>gp :Git push<cr>
