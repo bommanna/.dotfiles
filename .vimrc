@@ -21,6 +21,7 @@ set foldnestmax=3         " maximum fold level
 set foldmethod=indent     " fold by indent
 set foldminlines=0        " allow folding of single lines
 set foldlevelstart=4      " open folds on open
+set fillchars="fold: "    " don't show hyphens after folds
 set textwidth=0           " don't insert line breaks for long lines
 set wrap                  " wrap long lines
 set linebreak             " ? for latex
