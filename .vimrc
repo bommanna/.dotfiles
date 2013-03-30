@@ -169,6 +169,10 @@ nnoremap ? q?i
 vnoremap <leader>pp :w !python<cr>
 vnoremap <leader>py :!python<cr>
 
+" replace selection (all, one occurrence on current line)
+vnoremap <leader>sa "hy:%s/<C-r>h/
+vnoremap <leader>se "hy:.s/<C-r>h/
+
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
