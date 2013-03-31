@@ -15,7 +15,6 @@ set wildmenu              " allow autocompletion with c-n
 set wildignore=*.swp,*.bak,*.pyc,*.class          " don't show these files in autocompletion
 set dictionary=/usr/share/dict/words              " dictionary completion for use with <c-x><c-k>
 set spellfile=~/.vim/custom-dictionary.utf-8.add  " file where to add new dict words
-set spell                 " activate spellchecking
 set lazyredraw            " don't redraw during macros, etc
 set noswapfile            " don't use swap files for saves
 set scrolloff=5           " allow 5 lines below/above the cursor
@@ -197,6 +196,9 @@ nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gp :Git push<cr>
+
+" toggle spell checking
+nnoremap <leader>sp :set spell!<cr>
 
 " execute selection using bash (no replacement)
 vnoremap <leader>bb :w !bash<cr>
