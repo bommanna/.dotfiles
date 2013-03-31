@@ -174,7 +174,6 @@ nnoremap <leader>b :CtrlPBuffer<cr>
 nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
-nnoremap ! q:i!
 
 " don't move on * and #
 nnoremap * *<c-o>
@@ -204,7 +203,6 @@ vnoremap <leader>bb :w !bash<cr>
 
 " execute selection with shell python (without, with replacing selection)
 vnoremap <leader>pp :w !python<cr>
-vnoremap <leader>py :!python<cr>
 
 " replace selection (all, one occurrence on current line)
 vnoremap <leader>ra "hy/<c-r>h<cr>q:i%s/<c-r>h/
