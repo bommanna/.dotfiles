@@ -7,10 +7,16 @@ syntax enable
 filetype plugin on
 set hidden                " allow hidden buffers
 set number                " activate line numbers
+set shell=/bin/bash\ --rcfile\ ~/.bash_profile
+set encoding=utf-8        " duh
 set nostartofline         " keeps cursor on current column for movements like H, M, ...
 set autoindent            " smarter indentation
 set wildmenu              " allow autocompletion with c-n
-set wildignore=*.swp,*.bak,*.pyc,*.class  " don't show these files in autocompletion
+set wildignore=*.swp,*.bak,*.pyc,*.class          " don't show these files in autocompletion
+set dictionary=/usr/share/dict/words              " dictionary completion for use with <c-x><c-k>
+set spellfile=~/.vim/custom-dictionary.utf-8.add  " file where to add new dict words
+set spell                 " activate spellchecking
+set lazyredraw            " don't redraw during macros, etc
 set noswapfile            " don't use swap files for saves
 set scrolloff=5           " allow 5 lines below/above the cursor
 set cursorcolumn          " highlight the current column
@@ -122,14 +128,10 @@ augroup END
 " MAPPINGS:
 
 " easy movement around splits
-inoremap <c-h> <esc><c-w>h
-inoremap <c-j> <esc><c-w>j
-inoremap <c-k> <esc><c-w>k
-inoremap <c-l> <esc><c-w>l
-noremap <c-h> <c-w>h
-noremap <c-j> <c-w>j
-noremap <c-k> <c-w>k
-noremap <c-l> <c-w>l
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
 
 " buffer operations (save, close, delete)
 nnoremap <leader>w :w<cr>
@@ -145,13 +147,16 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " replace (all, on current line, from current line)
 nnoremap <leader>ra q:i%s/
-nnoremap <leader>rl q:i.s/
-nnoremap <leader>re :set relativenumber<cr>q:i.,+
+nnoremap <leader>re q:i.s/
+nnoremap <leader>rr zz:set relativenumber<cr>q:i.,+
+
+" execute file using bash
+nnoremap <leader>bb :%w !bash<cr>
 
 " execute file using shell python
-nnoremap <leader>pp :w<cr>:!python %<cr>
+nnoremap <leader>pp :%w !python<cr>
 
-" toggle search hightlight off and restore numbers
+" toggle search highlight off and restore numbers
 nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
 
 " visual up, down (useful for long lines)
@@ -169,10 +174,20 @@ nnoremap <leader>b :CtrlPBuffer<cr>
 nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
+nnoremap ! q:i!
 
 " don't move on * and #
 nnoremap * *<c-o>
 nnoremap # #<c-o>
+
+" easier movements on the line
+nnoremap H ^
+nnoremap J L
+nnoremap L $
+nnoremap K H
+
+" remap join lines
+nnoremap $ J
 
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
@@ -180,9 +195,12 @@ nnoremap <leader>gs :Gstatus<cr><c-w>10+
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gbr :Gbrowse<cr>
-nnoremap <leader>gbl :Gblame<cr>
+nnoremap <leader>gh :Gbrowse<cr>
+nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gp :Git push<cr>
+
+" execute selection using bash (no replacement)
+vnoremap <leader>bb :w !bash<cr>
 
 " execute selection with shell python (without, with replacing selection)
 vnoremap <leader>pp :w !python<cr>

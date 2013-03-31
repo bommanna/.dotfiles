@@ -11,14 +11,6 @@ Install
   $ git pull origin master
   $ git submodule update --init
 
-To activate Command-T:
-
-.. code:: bash
-
-  $ cd .vim/bundle/Command-T/ruby/command-t
-  $ ruby extconf.rb
-  $ make
-
 
 List of useful commands to run for setup
 ----------------------------------------
