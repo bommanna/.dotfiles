@@ -61,9 +61,9 @@ set ignorecase                  " if all lowercase in search query, ignore case
 set smartcase                   " if some uppercase in search query, respect case
 
 " SPELLING:
-set dictionary=/usr/share/dict/words              " dictionary completion for use with <c-x><c-k>
-set spellfile=~/.vim/custom-dictionary.utf-8.add  " file where to add new dict words
-set dictionary+=~/.vim/custom-dictionary.utf-8.add
+set dictionary=/usr/share/dict/words                    " dictionary completion for use with <c-x><c-k>
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add  " file where to add new dict words
+set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add
 
 " STATUS LINE:
 " nicer status line

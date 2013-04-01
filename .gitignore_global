@@ -32,6 +32,7 @@
 # Logs and databases #
 ######################
 *.db
+*.rdb
 *.log
 *.sql
 *.sqlite
@@ -41,3 +42,24 @@
 .DS_Store*
 ehthumbs.db
 Thumbs.db
+
+# Data files #
+##############
+*.json
+*.xls
+*.csv
+*.tsv
+
+# Documentation files #
+#######################
+*.ppt
+*.pptx
+*.pdf
+*.aux
+*.doc
+*.docx
+
+# Virtual environments #
+########################
+venv
+
