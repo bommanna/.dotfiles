@@ -144,7 +144,7 @@ nnoremap <c-l> <c-w>l
 " buffer operations (save, close, delete)
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
-nnoremap <leader>Q :bd<cr>
+nnoremap <leader>Q :q!<cr>
 
 " toggle NERDtree
 nnoremap <leader>t :NERDTreeToggle<cr><c-w>=<cr>
