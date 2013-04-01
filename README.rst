@@ -81,13 +81,13 @@ Commands::
     protocol=namecheap
     use=if, if=en0
     server=dynamicdns.park-your-domain.com
-    login=nncsts.com
+    login=<domain>
     password=<password>
     @
 
 root crontab::
 
-    MAILTO=matt@nncsts.com
+    MAILTO=<email>
     * * * * * /usr/sbin/ddclient
 
 .. _ddclient: http://sourceforge.net/apps/trac/ddclient
@@ -99,3 +99,4 @@ root crontab::
 .. _libevent: http://libevent.org/
 .. _tmux: http://tmux.sourceforge.net/
 .. _node.js: http://nodejs.org/
+
