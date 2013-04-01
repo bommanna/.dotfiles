@@ -16,8 +16,8 @@
 [submodule ".vim/bundle/ctrlp.vim"]
 	path = .vim/bundle/ctrlp.vim
 	url = git://github.com/kien/ctrlp.vim.git
-[submodule ".util/t"]
-	path = .util/t
+[submodule "util/t"]
+	path = util/t
 	url = git://github.com/sjl/t.git
 [submodule ".vim/bundle/vim-fugitive"]
 	path = .vim/bundle/vim-fugitive
