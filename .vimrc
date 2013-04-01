@@ -213,7 +213,7 @@ nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>sp :set spell!<cr>
 
 " latex
-nnoremap <leader>ll :!latexmk -pdf %<cr>
+nnoremap <leader>ll :!latexmk -pdf -cd %<cr>
 nnoremap <leader>lt :LatexTOC<cr>
 
 " autocomplete shortcuts
@@ -221,6 +221,10 @@ inoremap <c-k> <c-x><c-k>
 inoremap <c-j> <c-x><c-n>
 inoremap <c-l> <c-x><c-l>
 inoremap <c-h> <c-x><c-f>
+inoremap <c-o> <c-x><c-o>
+
+" matching bracket step back
+inoremap <c-f> <esc>%a
 
 " easier movements on the line
 vnoremap H ^
