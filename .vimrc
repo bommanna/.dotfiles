@@ -2,6 +2,8 @@
 filetype off
 
 " PLUGIN CONF:
+let g:tex_flavor='latex'
+let g:Tex_DefaultTargetFormat='pdf'
 let g:LatexBox_no_mappings=1  " don't automatically create mappings for latex-box
 
 " PATHOGEN:
@@ -12,49 +14,51 @@ call pathogen#helptags()
 syntax enable
 filetype plugin on
 set shell=/bin/bash\ --rcfile\ ~/.bash_profile
-set hidden                " allow hidden buffers
-set number                " activate line numbers
-set noswapfile            " don't use swap files for saves
-set encoding=utf-8        " duh
-set nostartofline         " keeps cursor on current column for movements like H, M, ...
-set autoindent            " smarter indentation
-set lazyredraw            " don't redraw during macros, etc
-set scrolloff=5           " allow 5 lines below/above the cursor
-set showmatch             " briefly show matching bracket when inserting a new one
-set textwidth=0           " don't insert line breaks for long lines
-set wrap                  " wrap long lines
-set linebreak             " ? for latex
-set tabstop=2             " number of spaces a tab takes (displayed)
-set shiftwidth=2          " spaces used for indent keys (>>, ...) and for autoindent
-set expandtab             " insert spaces instead of a tab when tabbing
+set shellslash
+set hidden                      " allow hidden buffers
+set number                      " activate line numbers
+set noswapfile                  " don't use swap files for saves
+set encoding=utf-8              " duh
+set nostartofline               " keeps cursor on current column for movements like H, M, ...
+set autoindent                  " smarter indentation
+set lazyredraw                  " don't redraw during macros, etc
+set scrolloff=5                 " allow 5 lines below/above the cursor
+set showmatch                   " briefly show matching bracket when inserting a new one
+set textwidth=0                 " don't insert line breaks for long lines
+set wrap                        " wrap long lines
+set linebreak                   " ? for latex
+set tabstop=2                   " number of spaces a tab takes (displayed)
+set shiftwidth=2                " spaces used for indent keys (>>, ...) and for autoindent
+set expandtab                   " insert spaces instead of a tab when tabbing
 
 " AUTOCOMPLETE:
-set wildmenu              " allow autocompletion with c-n
-set wildignore=*.swp,*.bak,*.pyc,*.class          " don't show these files in autocompletion
-set completeopt=longest,menuone
+set wildmenu                    " allow autocompletion with c-n
+set wildignore=*.swp,*.bak      " don't show these files in autocompletion
+set wildignore=*.pyc,*.class    " 
+set completeopt=longest,menuone " only insert longest common strings of suggestions
 
 " FOLDS:
-set foldcolumn=2          " width of the fold column
-set foldnestmax=3         " maximum fold level
-set foldmethod=indent     " fold by indent
-set foldminlines=0        " allow folding of single lines
-set foldlevelstart=4      " open folds on open
-set fillchars="fold: "    " don't show hyphens after folds
+set foldcolumn=2                " width of the fold column
+set foldnestmax=3               " maximum fold level
+set foldmethod=indent           " fold by indent
+set foldminlines=0              " allow folding of single lines
+set foldlevelstart=4            " open folds on open
+set fillchars="fold: "          " don't show hyphens after folds
 
 " THEME:
-set cursorcolumn          " highlight the current column
-set cursorline            " highlight the current row
-set colorcolumn=80        " highlight 80th column
-set showbreak=>>\ \       " characters shown on display linebreak
-set t_Co=256              " terminal colors
-set background=dark       " theme
-colorscheme solarized     " colorscheme
+set cursorcolumn                " highlight the current column
+set cursorline                  " highlight the current row
+set colorcolumn=80              " highlight 80th column
+set showbreak=>>\ \             " characters shown on display linebreak
+set t_Co=256                    " terminal colors
+set background=dark             " theme
+colorscheme solarized           " colorscheme
 
 " SEARCH:
-set incsearch             " highlight potential matches as search query is being typed
-set hlsearch              " highlight all matches after executing search query
-set ignorecase            " if all lowercase in search query, ignore case
-set smartcase             " if some uppercase in search query, respect case
+set incsearch                   " highlight potential matches as search query is being typed
+set hlsearch                    " highlight all matches after executing search query
+set ignorecase                  " if all lowercase in search query, ignore case
+set smartcase                   " if some uppercase in search query, respect case
 
 " SPELLING:
 set dictionary=/usr/share/dict/words              " dictionary completion for use with <c-x><c-k>
@@ -63,20 +67,12 @@ set dictionary+=~/.vim/custom-dictionary.utf-8.add
 
 " STATUS LINE:
 " nicer status line
-set statusline=%f         " Path to the file
-set statusline+=%=        " Switch to the right side
-set statusline+=%l        " Current line
-set statusline+=/         " Separator
-set statusline+=%L        " Total lines
-set laststatus=2          " always show status line
-
-" LATEX:
-" To install, run the following command in VIM after downloading the files"
-" :helptags ~/.vim/doc
-set shellslash
-set grepprg=grep\ -nH\ $*
-let g:tex_flavor='latex'
-let g:Tex_DefaultTargetFormat='pdf'
+set statusline=%f               " Path to the file
+set statusline+=%=              " Switch to the right side
+set statusline+=%l              " Current line
+set statusline+=/               " Separator
+set statusline+=%L              " Total lines
+set laststatus=2                " always show status line
 
 " FUNCTIONS:
 
@@ -225,6 +221,15 @@ inoremap <c-k> <c-x><c-k>
 inoremap <c-j> <c-x><c-n>
 inoremap <c-l> <c-x><c-l>
 inoremap <c-h> <c-x><c-f>
+
+" easier movements on the line
+vnoremap H ^
+vnoremap J L
+vnoremap L $
+vnoremap K H
+
+" remap join lines
+vnoremap $ J
 
 " better indentation
 vnoremap > >gv
