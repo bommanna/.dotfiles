@@ -1,12 +1,21 @@
 [user]
-	name = Matthieu Monsch
-	email = ninecoast@gmail.com
+name = Matthieu Monsch
+email = ninecoast@gmail.com
 [alias]
-	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  co = checkout
-  st = status
-  up = remote -v update
+hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+co = checkout
+st = status
+up = remote -v update
 [github]
-  user = mtth
+user = mtth
 [core]
-	excludesfile = /Users/Matt/.gitignore_global
+excludesfile = /Users/Matt/.gitignore_global
+[push]
+default = current
+[color]
+branch = auto
+diff = auto
+interactive = auto
+status = auto
+[web]
+browser = open
