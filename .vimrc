@@ -1,3 +1,9 @@
+" SAFETY:
+filetype off
+
+" PLUGIN CONF:
+let g:LatexBox_no_mappings=1  " don't automatically create mappings for latex-box
+
 " PATHOGEN:
 call pathogen#infect()
 call pathogen#helptags()
@@ -5,16 +11,14 @@ call pathogen#helptags()
 " GENERAL:
 syntax enable
 filetype plugin on
+set shell=/bin/bash\ --rcfile\ ~/.bash_profile
 set hidden                " allow hidden buffers
 set number                " activate line numbers
-set shell=/bin/bash\ --rcfile\ ~/.bash_profile
+set noswapfile            " don't use swap files for saves
 set encoding=utf-8        " duh
 set nostartofline         " keeps cursor on current column for movements like H, M, ...
 set autoindent            " smarter indentation
-set wildmenu              " allow autocompletion with c-n
-set wildignore=*.swp,*.bak,*.pyc,*.class          " don't show these files in autocompletion
 set lazyredraw            " don't redraw during macros, etc
-set noswapfile            " don't use swap files for saves
 set scrolloff=5           " allow 5 lines below/above the cursor
 set showmatch             " briefly show matching bracket when inserting a new one
 set textwidth=0           " don't insert line breaks for long lines
@@ -23,6 +27,11 @@ set linebreak             " ? for latex
 set tabstop=2             " number of spaces a tab takes (displayed)
 set shiftwidth=2          " spaces used for indent keys (>>, ...) and for autoindent
 set expandtab             " insert spaces instead of a tab when tabbing
+
+" AUTOCOMPLETE:
+set wildmenu              " allow autocompletion with c-n
+set wildignore=*.swp,*.bak,*.pyc,*.class          " don't show these files in autocompletion
+set completeopt=longest,menuone
 
 " FOLDS:
 set foldcolumn=2          " width of the fold column
@@ -116,13 +125,11 @@ augroup END
 " COFFEE:
 augroup coffeegroup
   au!
-  au  FileType            coffee        setlocal colorcolumn=80
 augroup END
 
 " PYTHON:
 augroup pythongroup
   au!
-  au  FileType            python        setlocal colorcolumn=80
 augroup END
 
 " NERDTREE:
@@ -208,6 +215,20 @@ nnoremap <leader>gp :Git push<cr>
 
 " toggle spell checking
 nnoremap <leader>sp :set spell!<cr>
+
+" latex
+nnoremap <leader>ll :!latexmk -pdf %<cr>
+nnoremap <leader>lt :LatexTOC<cr>
+
+" autocomplete shortcuts
+inoremap <c-k> <c-x><c-k>
+inoremap <c-j> <c-x><c-n>
+inoremap <c-l> <c-x><c-l>
+inoremap <c-h> <c-x><c-f>
+
+" better indentation
+vnoremap > >gv
+vnoremap < <gv
 
 " execute selection using bash (no replacement)
 vnoremap <leader>bb :w !bash<cr>
