@@ -13,37 +13,44 @@ set nostartofline         " keeps cursor on current column for movements like H,
 set autoindent            " smarter indentation
 set wildmenu              " allow autocompletion with c-n
 set wildignore=*.swp,*.bak,*.pyc,*.class          " don't show these files in autocompletion
-set dictionary=/usr/share/dict/words              " dictionary completion for use with <c-x><c-k>
-set spellfile=~/.vim/custom-dictionary.utf-8.add  " file where to add new dict words
-set dictionary+=~/.vim/custom-dictionary.utf-8.add
 set lazyredraw            " don't redraw during macros, etc
 set noswapfile            " don't use swap files for saves
 set scrolloff=5           " allow 5 lines below/above the cursor
-set cursorcolumn          " highlight the current column
-set cursorline            " highlight the current row
 set showmatch             " briefly show matching bracket when inserting a new one
+set textwidth=0           " don't insert line breaks for long lines
+set wrap                  " wrap long lines
+set linebreak             " ? for latex
+set tabstop=2             " number of spaces a tab takes (displayed)
+set shiftwidth=2          " spaces used for indent keys (>>, ...) and for autoindent
+set expandtab             " insert spaces instead of a tab when tabbing
+
+" FOLDS:
 set foldcolumn=2          " width of the fold column
 set foldnestmax=3         " maximum fold level
 set foldmethod=indent     " fold by indent
 set foldminlines=0        " allow folding of single lines
 set foldlevelstart=4      " open folds on open
 set fillchars="fold: "    " don't show hyphens after folds
-set textwidth=0           " don't insert line breaks for long lines
-set wrap                  " wrap long lines
-set linebreak             " ? for latex
-set tabstop=2             " number of spaces a tab takes (displayed)
-set shiftwidth=2          " number of spaces used when using indent keys (>>, ...) and for autoindent
-set expandtab             " insert spaces instead of a tab when tabbing
+
+" THEME:
+set cursorcolumn          " highlight the current column
+set cursorline            " highlight the current row
 set colorcolumn=80        " highlight 80th column
-set showbreak=>>\ \ 
+set showbreak=>>\ \       " characters shown on display linebreak
 set t_Co=256              " terminal colors
 set background=dark       " theme
+colorscheme solarized     " colorscheme
+
+" SEARCH:
 set incsearch             " highlight potential matches as search query is being typed
 set hlsearch              " highlight all matches after executing search query
 set ignorecase            " if all lowercase in search query, ignore case
 set smartcase             " if some uppercase in search query, respect case
-set laststatus=2          " always show status line
-colorscheme solarized     " colorscheme
+
+" SPELLING:
+set dictionary=/usr/share/dict/words              " dictionary completion for use with <c-x><c-k>
+set spellfile=~/.vim/custom-dictionary.utf-8.add  " file where to add new dict words
+set dictionary+=~/.vim/custom-dictionary.utf-8.add
 
 " STATUS LINE:
 " nicer status line
@@ -52,6 +59,7 @@ set statusline+=%=        " Switch to the right side
 set statusline+=%l        " Current line
 set statusline+=/         " Separator
 set statusline+=%L        " Total lines
+set laststatus=2          " always show status line
 
 " LATEX:
 " To install, run the following command in VIM after downloading the files"

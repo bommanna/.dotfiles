@@ -13,9 +13,6 @@
 [submodule ".vim/bundle/vim-stylus"]
 	path = .vim/bundle/vim-stylus
 	url = git://github.com/wavded/vim-stylus.git
-[submodule ".vim/bundle/Latex-Suite"]
-	path = .vim/bundle/Latex-Suite
-	url = git://github.com/jcf/vim-latex.git
 [submodule ".vim/bundle/ctrlp.vim"]
 	path = .vim/bundle/ctrlp.vim
 	url = git://github.com/kien/ctrlp.vim.git
