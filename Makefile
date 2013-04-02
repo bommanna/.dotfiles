@@ -2,9 +2,14 @@ FILES = $(shell find . -maxdepth 1 \( -type f -o -type d \) \( ! -iname "Makefil
 
 all: safe
 
-safe: move link
+safe: move link submodules
 
-new: clear link
+new: clear link submodules
+
+# update/initialize submodules
+submodules:
+	@echo 'Updating submodules...'
+	git submodule update --init
 
 # renames all files that would be overwritten to filename.old
 move:
