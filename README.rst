@@ -7,7 +7,6 @@ Install
 .. code:: bash
 
   $ git clone git@github.com:mtth/.dotfiles.git
-  $ git submodule update --init
   $ make
 
 ``make`` creates the symlinks to the home directory. Any preexisting dotfiles

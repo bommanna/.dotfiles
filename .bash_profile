@@ -31,7 +31,7 @@ alias ta='python ~/.dotfiles/util/t/t.py --task-dir ~/Dropbox --list tasks'
 # Functions
 # ---------
 
-function my_ip() # Get IP adress on ethernet.
+function my_ip() # Get IP adress
 {
     MY_IP=$(/sbin/ifconfig en1 | awk '/inet / { print $2 } ')
     echo ${MY_IP:-"Not connected"}
