@@ -6,7 +6,9 @@ PATH=.:$PATH
 ## MySQL
 PATH=/usr/local/mysql/bin:$PATH
 ## EPD-7.2-2
-PATH="/Library/Frameworks/EPD64.framework/Versions/Current/bin:${PATH}"
+# PATH="/Library/Frameworks/EPD64.framework/Versions/Current/bin:${PATH}"
+## tmux paste wrapper
+PATH=$PATH:$HOME/.dotfiles/util/tmux-MacOSX-pasteboard
 ## 
 export PATH
 
