@@ -23,13 +23,13 @@ set nostartofline               " keeps cursor on current column for movements l
 set autoindent                  " smarter indentation
 set lazyredraw                  " don't redraw during macros, etc
 set scrolloff=5                 " allow 5 lines below/above the cursor
-set showmatch                   " briefly show matching bracket when inserting a new one
 set textwidth=0                 " don't insert line breaks for long lines
 set wrap                        " wrap long lines
 set linebreak                   " ? for latex
 set tabstop=2                   " number of spaces a tab takes (displayed)
 set shiftwidth=2                " spaces used for indent keys (>>, ...) and for autoindent
 set expandtab                   " insert spaces instead of a tab when tabbing
+" set showmatch                   " briefly show matching bracket when inserting a new one
 
 " AUTOCOMPLETE:
 set wildmenu                    " allow autocompletion with c-n
@@ -73,6 +73,9 @@ set statusline+=%l              " Current line
 set statusline+=/               " Separator
 set statusline+=%L              " Total lines
 set laststatus=2                " always show status line
+
+" SYNTAX:
+syntax sync fromstart           " otherwise folding messes up highlighting
 
 " FUNCTIONS:
 
@@ -190,15 +193,6 @@ nnoremap ? q?i
 nnoremap * *<c-o>
 nnoremap # #<c-o>
 
-" easier movements on the line
-nnoremap H ^
-nnoremap J L
-nnoremap L $
-nnoremap K H
-
-" remap join lines
-nnoremap $ J
-
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr><c-w>10+
@@ -225,15 +219,6 @@ inoremap <c-o> <c-x><c-o>
 
 " matching bracket step back
 inoremap <c-f> <esc>%a
-
-" easier movements on the line
-vnoremap H ^
-vnoremap J L
-vnoremap L $
-vnoremap K H
-
-" remap join lines
-vnoremap $ J
 
 " better indentation
 vnoremap > >gv
