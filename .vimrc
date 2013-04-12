@@ -172,8 +172,13 @@ nnoremap <leader>rr zz:set relativenumber<cr>q:i.,+
 " execute file using bash
 nnoremap <leader>bb :%w !bash<cr>
 
-" execute file using shell python
+" execute file using shell ipython or python
 nnoremap <leader>pp :%w !python<cr>
+
+" execute file using shell ipython or python and go in interactive mode
+" note that this saves the file first
+nnoremap <leader>pi :w<cr>:!ipython -i %<cr>
+nnoremap <leader>py :w<cr>:!python -i %<cr>
 
 " toggle search highlight off and restore numbers
 nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
