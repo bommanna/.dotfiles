@@ -37,6 +37,11 @@ set wildignore=*.swp,*.bak      " don't show these files in autocompletion
 set wildignore=*.pyc,*.class    " 
 set completeopt=longest,menuone " only insert longest common strings of suggestions
 
+" UNDOHISTORY:
+set undofile                    " allow persistence of undo history
+set undoreload=1000             " number of operations stored
+set undodir=~/.vim/tmp/undo     " saves directory
+
 " FOLDS:
 set foldcolumn=2                " width of the fold column
 set foldnestmax=3               " maximum fold level
@@ -66,7 +71,6 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add  " file where to add new 
 set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add
 
 " STATUS LINE:
-" nicer status line
 set statusline=%f               " Path to the file
 set statusline+=%=              " Switch to the right side
 set statusline+=%l              " Current line
