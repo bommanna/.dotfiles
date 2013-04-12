@@ -39,8 +39,9 @@ set completeopt=longest,menuone " only insert longest common strings of suggesti
 
 " UNDOHISTORY:
 set undofile                    " allow persistence of undo history
+set undolevels=1000             " number of operations used
 set undoreload=1000             " number of operations stored
-set undodir=~/.vim/tmp/undo     " saves directory
+set undodir=~/.vim/undo         " saves directory
 
 " FOLDS:
 set foldcolumn=2                " width of the fold column
