@@ -172,7 +172,7 @@ nnoremap <leader>rr zz:set relativenumber<cr>q:i.,+
 " execute file using bash
 nnoremap <leader>bb :%w !bash<cr>
 
-" execute file using shell ipython or python
+" execute file using shell python
 nnoremap <leader>pp :%w !python<cr>
 
 " execute file using shell ipython or python and go in interactive mode
@@ -187,9 +187,6 @@ nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
 nnoremap j gj
 nnoremap k gk
 
-" toggle paste mode
-nnoremap Q :set paste!<cr>
-
 " ctrlp plugin (search among files, buffers)
 nnoremap <leader>f :CtrlP<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
@@ -198,10 +195,14 @@ nnoremap <leader>b :CtrlPBuffer<cr>
 nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
+nnoremap Q q:i!
 
 " don't move on * and #
 nnoremap * *<c-o>
 nnoremap # #<c-o>
+
+" paste
+nnoremap <leader>pa :set paste!<cr>i
 
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
@@ -230,7 +231,7 @@ inoremap <c-o> <c-x><c-o>
 " matching bracket step back
 inoremap <c-f> <esc>%a
 
-" better indentation
+" easier indentation
 vnoremap > >gv
 vnoremap < <gv
 
@@ -258,4 +259,5 @@ vnoremap <silent> # :<C-U>
 
 " ABBREVIATIONS:
 iabbr MM Matthieu Monsch
+iabbr #! #!/usr/bin/env
 
