@@ -25,7 +25,7 @@ export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 alias la='ls -AFG'
 alias ll='ls -AFGl'
 alias fl='python -m flasker'
-alias ta='python ~/.dotfiles/util/t/t.py --task-dir ~/Dropbox --list tasks'
+alias t='python ~/.dotfiles/util/t/t.py --task-dir ~/Dropbox --list tasks'
 
 
 # Functions
