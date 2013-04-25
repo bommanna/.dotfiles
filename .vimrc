@@ -221,6 +221,10 @@ nnoremap <leader>sp :set spell!<cr>
 nnoremap <leader>ll :!latexmk -pdf -cd %<cr>
 nnoremap <leader>lt :LatexTOC<cr>
 
+" changing background color
+nnoremap <leader>bgd :set background=dark<cr>
+nnoremap <leader>bgl :set background=light<cr>
+
 " autocomplete shortcuts
 inoremap <c-k> <c-x><c-k>
 inoremap <c-j> <c-x><c-n>
@@ -234,6 +238,7 @@ inoremap <c-f> <esc>%a
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
+
 
 " execute selection using bash (no replacement)
 vnoremap <leader>bb :w !bash<cr>
