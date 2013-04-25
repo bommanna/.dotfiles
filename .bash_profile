@@ -31,9 +31,14 @@ alias t='python ~/.dotfiles/util/t/t.py --task-dir ~/Dropbox --list tasks'
 # Functions
 # ---------
 
-function my_ip() # Get IP adress
-{
-    MY_IP=$(/sbin/ifconfig en1 | awk '/inet / { print $2 } ')
-    echo ${MY_IP:-"Not connected"}
+my_ip(){
+  MY_IP=$(/sbin/ifconfig en1 | awk '/inet / { print $2 } ')
+  echo ${MY_IP:-"Not connected"}
 }
 
+# find all extensions in a directory, with counts
+# percent sign is because of vim undo files
+extensions(){
+  REGEXP='^.+[^/%]\.([^/.]+)$'
+  find $1 | sed -nE "s:${REGEXP}:\1:p" | sort | uniq -c | sort
+}
