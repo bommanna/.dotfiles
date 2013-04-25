@@ -1,4 +1,5 @@
-FILES = $(shell find . -maxdepth 1 \( -type f -o -type d \) \( ! -iname "Makefile" ! -iname "." ! -iname ".git" ! -iname "README.rst"  ! -iname "util" \)) 
+# FILES = $(shell find . -maxdepth 1 \( -type f -o -type d \) \( ! -iname "Makefile" ! -iname "." ! -iname ".git" ! -iname "README.rst"  ! -iname "util" \)) 
+FILES = .vim .bash_profile .editrc .inputrc .tmux.conf .vimrc .gitconfig .gitignore_global
 
 all: safe
 

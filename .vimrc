@@ -57,8 +57,8 @@ set cursorline                  " highlight the current row
 set colorcolumn=80              " highlight 80th column
 set showbreak=>>\ \             " characters shown on display linebreak
 set t_Co=256                    " terminal colors
-set background=dark             " theme
 colorscheme solarized           " colorscheme
+" set background=dark             " theme, autodetected
 
 " SEARCH:
 set incsearch                   " highlight potential matches as search query is being typed
