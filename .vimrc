@@ -4,7 +4,7 @@ filetype off
 " PLUGIN CONF:
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
-let g:LatexBox_no_mappings=1  " don't automatically create mappings for latex-box
+let g:LatexBox_no_mappings=1    " don't automatically create mappings for latex-box
 
 " PATHOGEN:
 call pathogen#infect()
@@ -34,7 +34,7 @@ set expandtab                   " insert spaces instead of a tab when tabbing
 " AUTOCOMPLETE:
 set wildmenu                    " allow autocompletion with c-n
 set wildignore=*.swp,*.bak      " don't show these files in autocompletion
-set wildignore=*.pyc,*.class    " 
+set wildignore+=*.pyc,*.class   " 
 set completeopt=longest,menuone " only insert longest common strings of suggestions
 
 " UNDOHISTORY:
@@ -95,6 +95,16 @@ function! Retab ()
 endfunction
 
 " autocompile coffeescript, haml, stylus on save using a comment on the first line
+" usage (coffee, stylus):
+" # AUTOCOMPILE destination
+" usage (haml):
+" # AUTOCOMPILE destination origin_directory
+" notes:
+" * destination path is relative to the current file's directory
+" * origin_folder is relative to vim's current work directory
+" * replace the hash sign by the language's comment symbol
+" * form haml, all the files in the origin_folder will be compiled into a
+"   single destination file
 function! AutoCompile ()
   let firstLine = split(getline(1))
   if len(firstLine) > 2
