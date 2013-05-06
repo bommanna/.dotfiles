@@ -191,12 +191,6 @@ nnoremap k gk
 nnoremap <leader>f :CtrlP<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
-" always use command line window
-nnoremap : q:i
-nnoremap / q/i
-nnoremap ? q?i
-nnoremap Q q:i!
-
 " don't move on * and #
 nnoremap * *<c-o>
 nnoremap # #<c-o>
@@ -225,6 +219,18 @@ nnoremap <leader>lt :LatexTOC<cr>
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
 
+" always use command line window
+nnoremap : q:i
+nnoremap / q/i
+nnoremap ? q?i
+nnoremap Q q:i!
+
+" always use command line window
+vnoremap : q:i
+vnoremap / q/i
+vnoremap ? q?i
+vnoremap Q q:i!
+
 " autocomplete shortcuts
 inoremap <c-k> <c-x><c-k>
 inoremap <c-j> <c-x><c-n>
@@ -238,7 +244,6 @@ inoremap <c-f> <esc>%a
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
-
 
 " execute selection using bash (no replacement)
 vnoremap <leader>bb :w !bash<cr>
