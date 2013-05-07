@@ -58,7 +58,7 @@ set colorcolumn=80              " highlight 80th column
 set showbreak=>>\ \             " characters shown on display linebreak
 set t_Co=256                    " terminal colors
 colorscheme solarized           " colorscheme
-" set background=dark             " theme, autodetected
+set background=dark             " theme, autodetected
 
 " SEARCH:
 set incsearch                   " highlight potential matches as search query is being typed
