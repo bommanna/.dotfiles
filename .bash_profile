@@ -15,6 +15,9 @@ export LSCOLORS=gxfxcxdxbxegedabagacad
 # Terminal prompt display
 export PS1='[ \u@\h ] \[\e[0;36m\]\W\[\e[m\] \$ '
 
+# Color grep results
+export GREP_OPTIONS='--color=auto'
+
 # MySQL python libraries import
 # export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 
