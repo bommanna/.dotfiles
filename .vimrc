@@ -136,14 +136,10 @@ augroup general
   au  BufWritePost        *           call AutoCompile()
 augroup END
 
-" COFFEE:
-augroup coffeegroup
+" LATEX:
+augroup latexgroup
   au!
-augroup END
-
-" PYTHON:
-augroup pythongroup
-  au!
+  au FileType             tex         setlocal colorcolumn=
 augroup END
 
 " NERDTREE:
