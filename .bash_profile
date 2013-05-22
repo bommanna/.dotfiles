@@ -16,7 +16,7 @@ export LSCOLORS=gxfxcxdxbxegedabagacad
 export PS1='[ \u@\h ] \[\e[0;36m\]\W\[\e[m\] \$ '
 
 # MySQL python libraries import
-export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
+# export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 
 
 # Aliases
