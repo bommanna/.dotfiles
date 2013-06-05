@@ -229,7 +229,9 @@ nnoremap <leader>bgl :set background=light<cr>
 nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
-nnoremap Q q:i!
+
+" quick open shell
+nnoremap Q q:ishell<cr>
 
 " always use command line window
 vnoremap : q:i
