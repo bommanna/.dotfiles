@@ -27,7 +27,6 @@ export GREP_OPTIONS='--color=auto'
 
 alias la='ls -AFG'
 alias ll='ls -AFGl'
-alias fl='python -m flasker'
 alias t='python ~/.dotfiles/util/t/t.py --task-dir ~/Dropbox --list tasks'
 
 
