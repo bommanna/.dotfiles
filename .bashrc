@@ -10,10 +10,31 @@ export PATH
 
 # Coloring for ls
 # cf http://blog.imzaid.com/color-terminal-bash-on-the-mac-iterm-included
+
 export LSCOLORS=exfxcxdxbxegedabagacad
 
 # Terminal prompt display
-export PS1='[ \u@\h ] \[\e[0;34m\]\W\[\e[m\] \$ '
+# Prompt indicates wall time (in seconds) of last command run along with
+# color indicator of success or failure (blue for success and orange for
+# failure)
+
+function timer_start {
+  TIMER=${TIMER:-$SECONDS}
+}
+
+function timer_stop {
+  if [ $? = 0 ];
+    then DOLLAR_COLOR="0;34";
+    else DOLLAR_COLOR="0;33";
+  fi;
+  WALLTIME=$(($SECONDS - $TIMER))
+  unset TIMER
+}
+
+trap 'timer_start' DEBUG
+PROMPT_COMMAND='timer_stop'
+
+export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\n\$ \[\e[m\]'
 
 # Color grep results
 export GREP_OPTIONS='--color=auto'
