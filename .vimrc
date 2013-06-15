@@ -13,7 +13,7 @@ call pathogen#helptags()
 " GENERAL:
 syntax enable
 filetype plugin on
-set shell=/bin/bash\ --rcfile\ ~/.bash_profile
+set shell=/bin/bash\ --rcfile\ ~/.bashrc
 set shellslash
 set hidden                      " allow hidden buffers
 set number                      " activate line numbers
