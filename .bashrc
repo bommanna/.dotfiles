@@ -34,7 +34,7 @@ function timer_stop {
 trap 'timer_start' DEBUG
 PROMPT_COMMAND='timer_stop'
 
-export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\n\$ \[\e[m\]'
+export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n\$ '
 
 # Color grep results
 export GREP_OPTIONS='--color=auto'
