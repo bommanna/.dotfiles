@@ -23,9 +23,10 @@ function timer_start {
 }
 
 function timer_stop {
-  if [ $? = 0 ];
-    then DOLLAR_COLOR="0;34";
-    else DOLLAR_COLOR="0;33";
+  if [ $? = 0 ]; then
+    DOLLAR_COLOR="0;34";
+  else
+    DOLLAR_COLOR="0;33";
   fi;
   WALLTIME=$(($SECONDS - $TIMER))
   unset TIMER
