@@ -4,7 +4,7 @@
 # Env variables
 # -------------
 
-PATH=.:$PATH                        # General purpose
+PATH=.:/usr/local/bin:$PATH                        # General purpose
 # PATH=$PATH:/usr/local/mysql/bin   # MySQL (not needed when using brew)
 export PATH
 
