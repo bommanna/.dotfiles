@@ -1,5 +1,6 @@
 # FILES = $(shell find . -maxdepth 1 \( -type f -o -type d \) \( ! -iname "Makefile" ! -iname "." ! -iname ".git" ! -iname "README.rst"  ! -iname "util" \)) 
-FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .gitconfig .gitignore_global
+FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc
+CONFIG_FOLDERS = git
 
 all: safe
 
@@ -29,6 +30,16 @@ link:
 	@for i in $(FILES); do \
 		SP="$(HOME)/$${i#\./}"; \
 		DP="$(CURDIR)/$${i#\./}"; \
+		ln -s $$DP $$SP; \
+	done
+	@if [ ! -d "$(HOME)/.config" ]; then \
+		echo "Creating .config directory"; \
+		mkdir "$(HOME)/.config"; \
+	fi;
+	@echo "$(CURDIR)";
+	@for i in $(CONFIG_FOLDERS); do \
+		SP="$(HOME)/.config/$${i#\./}"; \
+		DP="$(CURDIR)/.config/$${i#\./}"; \
 		ln -s $$DP $$SP; \
 	done
 
