@@ -43,6 +43,10 @@ export GREP_OPTIONS='--color=auto'
 # MySQL python libraries import
 # export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 
+# Pylint files
+export PYLINTHOME="${HOME}/.config/pylint"
+export PYLINTRC="${HOME}/.config/pylint/.pylintrc"
+
 
 # Aliases
 # -------
