@@ -4,15 +4,15 @@
 # Env variables
 # -------------
 
-PATH=.:/usr/local/bin:$PATH                        # General purpose
-# PATH=$PATH:/usr/local/mysql/bin   # MySQL (not needed when using brew)
-export PATH
+# General purpose and Homebrew 
+export PATH=.:/usr/local/bin:$PATH
 
 # Coloring for ls
 # cf http://blog.imzaid.com/color-terminal-bash-on-the-mac-iterm-included
-
 export LSCOLORS=exfxcxdxbxegedabagacad
 
+# IPython
+export IPYTHONDIR="$HOME/.config/ipython"
 
 # Terminal prompt display
 # Prompt indicates wall time (in seconds) of last command run along with
@@ -46,10 +46,11 @@ PROMPT_COMMAND='timer_stop'
 
 export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n${VENV_PROMPT}\$ '
 
-# Color grep results
+# Grep
 export GREP_OPTIONS='--color=auto'
 
-# MySQL python libraries import
+# MySQL
+# PATH=$PATH:/usr/local/mysql/bin   # MySQL (not needed when using brew)
 # export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 
 # Pylint
@@ -59,6 +60,7 @@ export PYLINTRC="$HOME/.config/pylint/.pylintrc"
 # Igloo
 export IGLOO_PROFILES_PATH="$HOME/.config/igloo/config"
 export IGLOO_DEFAULT_PROFILE='default'
+
 
 # Aliases
 # -------
