@@ -13,16 +13,25 @@ export PATH
 
 export LSCOLORS=exfxcxdxbxegedabagacad
 
+
 # Terminal prompt display
 # Prompt indicates wall time (in seconds) of last command run along with
 # color indicator of success or failure (blue for success and orange for
 # failure)
+
+# Disable virtualenv prompt (we show it differently)
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 function timer_start {
   TIMER=${TIMER:-$SECONDS}
 }
 
 function timer_stop {
+  if [ -z "$VIRTUAL_ENV" ]; then
+      VENV_PROMPT='';
+    else
+      VENV_PROMPT="(${VIRTUAL_ENV##*/}) ";
+  fi;
   if [ $? = 0 ]; then
     DOLLAR_COLOR="0;34";
   else
@@ -35,7 +44,7 @@ function timer_stop {
 trap 'timer_start' DEBUG
 PROMPT_COMMAND='timer_stop'
 
-export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n\$ '
+export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n${VENV_PROMPT}\$ '
 
 # Color grep results
 export GREP_OPTIONS='--color=auto'
@@ -43,10 +52,13 @@ export GREP_OPTIONS='--color=auto'
 # MySQL python libraries import
 # export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 
-# Pylint files
-export PYLINTHOME="${HOME}/.config/pylint"
-export PYLINTRC="${HOME}/.config/pylint/.pylintrc"
+# Pylint
+export PYLINTHOME="$HOME/.config/pylint"
+export PYLINTRC="$HOME/.config/pylint/.pylintrc"
 
+# Igloo
+export IGLOO_PROFILES_PATH="$HOME/.config/igloo/config"
+export IGLOO_DEFAULT_PROFILE='default'
 
 # Aliases
 # -------

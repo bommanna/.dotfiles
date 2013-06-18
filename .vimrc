@@ -140,6 +140,8 @@ augroup END
 augroup latexgroup
   au!
   au FileType             tex         setlocal colorcolumn=
+  au FileType             tex         nnoremap <buffer> <leader>ll :!latexmk -pdf -cd %<cr>
+  au FileType             tex         nnoremap <buffer> <leader>lt :LatexTOC<cr>
 augroup END
 
 " NERDTREE:
@@ -216,10 +218,6 @@ nnoremap <leader>gp :Git push<cr>
 
 " toggle spell checking
 nnoremap <leader>sp :set spell!<cr>
-
-" latex
-nnoremap <leader>ll :!latexmk -pdf -cd %<cr>
-nnoremap <leader>lt :LatexTOC<cr>
 
 " changing background color
 nnoremap <leader>bgd :set background=dark<cr>
