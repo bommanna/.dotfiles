@@ -65,6 +65,7 @@ export IGLOO_DEFAULT_PROFILE='default'
 # Aliases
 # -------
 
+alias eb='vim ~/.bashrc'
 alias la='ls -AFG'
 alias ll='ls -AFGl'
 
