@@ -9,7 +9,7 @@ up = remote -v update
 [github]
 user = mtth
 [core]
-excludesfile = /Users/Matt/.gitignore_global
+excludesfile = ~/.config/git/ignore_global
 [push]
 default = current
 [color]

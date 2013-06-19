@@ -59,6 +59,9 @@ Thumbs.db
 *.aux
 *.doc
 *.docx
+*.blg
+*.fdb_latexmk
+*.fls
 
 # Virtual environments #
 ########################
