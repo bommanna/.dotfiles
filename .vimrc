@@ -188,6 +188,9 @@ nnoremap <leader>pp :%w !python<cr>
 nnoremap <leader>pi :w<cr>:!ipython -i %<cr>
 nnoremap <leader>py :w<cr>:!python -i %<cr>
 
+" run pylint on file (this saves the file first)
+nnoremap <leader>pl :w<cr>:!pylint %<cr>
+
 " toggle search highlight off and restore numbers
 nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
 
