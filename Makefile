@@ -1,5 +1,5 @@
 # FILES = $(shell find . -maxdepth 1 \( -type f -o -type d \) \( ! -iname "Makefile" ! -iname "." ! -iname ".git" ! -iname "README.rst"  ! -iname "util" \)) 
-FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc
+FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .ctags
 CONFIG_FOLDERS = git
 
 all: safe

@@ -4,8 +4,8 @@
 # Env variables
 # -------------
 
-# General purpose and Homebrew 
-export PATH=.:/usr/local/bin:$PATH
+# General purpose, Homebrew and Node
+export PATH=.:/usr/local/bin:/usr/local/share/npm/bin:$PATH
 
 # Coloring for ls
 # cf http://blog.imzaid.com/color-terminal-bash-on-the-mac-iterm-included
@@ -66,6 +66,7 @@ export IGLOO_DEFAULT_PROFILE='default'
 # -------
 
 alias eb='vim ~/.bashrc'
+alias es='source ~/.bashrc'
 alias la='ls -AFG'
 alias ll='ls -AFGl'
 
