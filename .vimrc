@@ -2,6 +2,8 @@
 filetype off
 
 " PLUGIN CONF:
+
+" LATEXBOX:
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
 let g:LatexBox_no_mappings=1    " don't automatically create mappings for latex-box
@@ -30,6 +32,9 @@ set tabstop=2                   " number of spaces a tab takes (displayed)
 set shiftwidth=2                " spaces used for indent keys (>>, ...) and for autoindent
 set expandtab                   " insert spaces instead of a tab when tabbing
 " set showmatch                   " briefly show matching bracket when inserting a new one
+
+" TAGS:
+set tag=./tags;
 
 " AUTOCOMPLETE:
 set wildmenu                    " allow autocompletion with c-n
@@ -136,6 +141,14 @@ augroup general
   au  BufWritePost        *           call AutoCompile()
 augroup END
 
+fun! ColorLines()
+    " Don't strip on these filetypes
+    if &ft =~ 'taglist'
+        return
+    endif
+    set cursorline | set cursorcolumn
+endfun
+
 " LATEX:
 augroup latexgroup
   au!
@@ -152,6 +165,26 @@ augroup nerdtreegroup
   autocmd FileType nerdtree noremap <buffer> <silent> <space> :nohlsearch<cr>
 augroup END
 
+" TAGLIST:
+let Tlist_Auto_Highlight_Tag=1
+let Tlist_Auto_Update=1
+let Tlist_Compact_Format=1
+let Tlist_Enable_Fold_Column=0
+let Tlist_Exit_OnlyWindow=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=0
+let Tlist_Highlight_Tag_On_BufEnter=0
+let Tlist_Show_One_File=1
+let Tlist_Sort_Type="name"
+let Tlist_Use_Right_Window=1
+let Tlist_WinWidth=60
+augroup taglistgroup
+  au!
+  autocmd FileType      taglist   noremap <buffer> <silent> <leader>t <c-w>p
+  autocmd FileType      taglist   set nocursorline | set nocursorcolumn
+  autocmd BufWritePost  *         TlistUpdate
+augroup END
+
 " MAPPINGS:
 
 " easy movement around splits
@@ -166,7 +199,11 @@ nnoremap <leader>q :q<cr>
 nnoremap <leader>Q :q!<cr>
 
 " toggle NERDtree
-nnoremap <leader>t :NERDTreeToggle<cr><c-w>=<cr>
+nnoremap <leader>f :NERDTreeToggle<cr>
+
+" toggle taglist
+nnoremap <leader>t :TlistOpen<cr>
+nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
 
 " .vimrc sugar (open in horizontal split, source)
 nnoremap <leader>ev :split $MYVIMRC<cr>
@@ -197,10 +234,6 @@ nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
 " visual up, down (useful for long lines)
 nnoremap j gj
 nnoremap k gk
-
-" ctrlp plugin (search among files, buffers)
-nnoremap <leader>f :CtrlP<cr>
-nnoremap <leader>b :CtrlPBuffer<cr>
 
 " don't move on * and #
 nnoremap * *<c-o>
