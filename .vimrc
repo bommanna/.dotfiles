@@ -1,12 +1,10 @@
 " SAFETY:
 filetype off
 
-" PLUGIN CONF:
-
-" LATEXBOX:
+" GLOBAL VARIABLE PLUGIN CONF:
+let g:LatexBox_no_mappings=1    " don't automatically create mappings for latex-box
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
-let g:LatexBox_no_mappings=1    " don't automatically create mappings for latex-box
 
 " PATHOGEN:
 call pathogen#infect()
@@ -185,6 +183,11 @@ augroup taglistgroup
   autocmd BufWritePost  *         TlistUpdate
 augroup END
 
+augroup pythongroup
+  au!
+  autocmd FileType python set omnifunc=pythoncomplete#Complete
+augroup END
+
 " MAPPINGS:
 
 " easy movement around splits
@@ -202,7 +205,7 @@ nnoremap <leader>Q :q!<cr>
 nnoremap <leader>f :NERDTreeToggle<cr>
 
 " toggle taglist
-nnoremap <leader>t :TlistOpen<cr>
+nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
 nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
 
 " .vimrc sugar (open in horizontal split, source)
@@ -275,10 +278,9 @@ vnoremap Q q:i!
 
 " autocomplete shortcuts
 inoremap <c-k> <c-x><c-k>
-inoremap <c-j> <c-x><c-n>
+inoremap <c-j> <c-x><c-o>
 inoremap <c-l> <c-x><c-l>
 inoremap <c-h> <c-x><c-f>
-inoremap <c-o> <c-x><c-o>
 
 " matching bracket step back
 inoremap <c-f> <esc>%a
