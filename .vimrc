@@ -4,6 +4,9 @@ filetype off
 
 " GLOBAL VARIABLES:
 
+" EasyMotion
+let g:EasyMotion_leader_key = "'"                             " ' key is unbound in normal and visual mode below
+
 " Latex
 let g:LatexBox_no_mappings=1                                  " don't automatically create mappings for latex-box
 let g:tex_flavor='latex'                                      " 
@@ -335,6 +338,10 @@ vnoremap <silent> # :<C-U>
   \gvy?<C-R><C-R>=substitute(
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+" ' is used for easymotion, replaced by ` mark travel
+nnoremap ' <nop>
+vnoremap ' <nop>
 
 
 " ABBREVIATIONS:
