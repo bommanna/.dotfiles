@@ -14,6 +14,9 @@ export LSCOLORS=exfxcxdxbxegedabagacad
 # IPython
 export IPYTHONDIR="$HOME/.config/ipython"
 
+# Editor
+export VISUAL='vim'
+
 # Terminal prompt display
 # Prompt indicates wall time (in seconds) of last command run along with
 # color indicator of success or failure (blue for success and orange for
@@ -66,7 +69,7 @@ export IGLOO_DEFAULT_PROFILE='default'
 # -------
 
 alias eb='vim ~/.bashrc'
-alias es='source ~/.bashrc'
+alias sb='source ~/.bashrc'
 alias la='ls -AFG'
 alias ll='ls -AFGl'
 
