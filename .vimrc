@@ -95,12 +95,8 @@ set incsearch                                                 " highlight potent
 set smartcase                                                 " if some uppercase in search query, respect case
 
 " status line
-set statusline=%f                                             " Path to the file
-set statusline+=%=                                            " Switch to the right side
-set statusline+=%l                                            " Current line
-set statusline+=/                                             " Separator
-set statusline+=%L                                            " Total lines
 set laststatus=2                                              " always show status line
+set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%l/%L    " status bar format
 
 " spelling
 set dictionary=/usr/share/dict/words                          " files where to load word for dictionary
@@ -121,7 +117,9 @@ endfunction
 
 " refresh tags
 function! RefreshTags ()
-  call system('ctags -R --exclude=venv')
+  if exists('b:git_dir')
+    call system('ctags -R --exclude=venv')
+  endif
 endfunction
 
 " autocompile coffeescript, haml, stylus on save using a comment on the first line
