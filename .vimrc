@@ -281,9 +281,10 @@ nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gh :Gbrowse<cr>
+nnoremap <leader>go :Gbrowse<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gp :Git push<cr>
+nnoremap <leader>gP :Git pull<cr>
 
 " toggle spell checking
 nnoremap <leader>sp :set spell!<cr>
