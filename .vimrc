@@ -4,12 +4,6 @@ filetype off
 
 " GLOBAL VARIABLES:
 
-" Easytags configuration
-let g:easytags_dynamic_files = 1                              " write to vim tags file instead of globally
-let g:easytags_events = ['BufWritePost']                      " update tags on save
-let g:easytags_on_cursorhold = 0                              " update tags file automatically
-let g:easytags_auto_highlight = 0                             " tag highlighting
-
 " Latex
 let g:LatexBox_no_mappings=1                                  " don't automatically create mappings for latex-box
 let g:tex_flavor='latex'                                      " 
@@ -17,12 +11,18 @@ let g:Tex_DefaultTargetFormat='pdf'                           "
 
 " Python
 " let g:pymode = 1
-let g:pymode_run = 0                                          " load run code plugin
-let g:pymode_rope = 0                                         " load rope plugin
-let g:pymode_lint_checker = 'pylint'                          " pyflakes,pep8,mccable,pylint
 let g:pymode_folding = 0                                      " python folding
-let g:pymode_syntax = 1                                       " pymode's custom syntax highlighting
+let g:pymode_lint = 0                                         " load lint plugin for code checking
+let g:pymode_lint_checker = ''                                " pyflakes,pep8,mccable,pylint
 let g:pymode_motion = 0                                       " python objects and motion
+let g:pymode_rope = 0                                         " load rope plugin for code refactoring
+let g:pymode_run = 0                                          " load run code plugin
+let g:pymode_syntax = 0                                       " pymode's custom syntax highlighting
+let g:pymode_virtualenv = 1                                   " switch to virtualenv pythonpath if in a virtualenv
+
+" Rooter
+let g:rooter_patterns = ['.git/']
+let g:rooter_use_lcd = 1
 
 
 " PATHOGEN:
