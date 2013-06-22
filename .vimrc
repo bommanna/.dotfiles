@@ -21,6 +21,7 @@ let g:pymode_syntax = 0                                       " pymode's custom 
 let g:pymode_virtualenv = 1                                   " switch to virtualenv pythonpath if in a virtualenv
 
 " Rooter
+let g:rooter_manual_only = 1                                  " doing it below for all filetypes (otherwise only some activate rooting)
 let g:rooter_patterns = ['.git/']
 let g:rooter_use_lcd = 1
 
@@ -163,6 +164,7 @@ augroup general
   autocmd   InsertLeave   *             set cursorline
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
   autocmd   WinEnter      *             set cursorline | set cursorcolumn
+  autocmd   BufEnter      *             Rooter
   autocmd   BufWritePost  *             call AutoCompile()
 augroup END
 

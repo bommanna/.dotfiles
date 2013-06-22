@@ -1,3 +1,5 @@
 -f .tags
 --python-kinds=-i
 --exclude=.git
+--exclude=*.sql
+--exclude=*.csv
