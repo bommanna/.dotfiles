@@ -165,7 +165,6 @@ augroup general
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
   autocmd   WinEnter      *             set cursorline | set cursorcolumn
   autocmd   BufEnter      *             Rooter
-  autocmd   BufWritePost  *             call AutoCompile()
 augroup END
 
 augroup latexgroup
@@ -209,7 +208,9 @@ augroup END
 augroup coffeegroup
   autocmd!
   autocmd   FileType      coffee        setlocal colorcolumn=80
+  autocmd   BufWritePost  coffee        call AutoCompile()
 augroup END
+
 
 " MAPPINGS:
 
