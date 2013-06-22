@@ -239,7 +239,6 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 " ctags refresh tags
 nnoremap <leader>ct :call RefreshTags()<cr>
 
-
 " replace (all, on current line, from current line)
 nnoremap <leader>ra q:i%s/
 nnoremap <leader>re q:i.s/
