@@ -13,37 +13,24 @@ Install
 will be renamed by appending ``.old``.
 
 
+Package requirements
+--------------------
+
+Homebrew_ is the recommended way to install these packages. Below is the preferred instal order. Otherwise, for example, there might be issues of VIM linking with the system python instead of the brew installed python.
+
+* git
+* tmux
+* ctags
+* python
+* vim
+* node (optional: only if editing coffee script)
+
+
 Misc
 ----
 
-Installing TMUX
-***************
-
-Download libevent_ and tmux_ and run in the directory of each download the following commands:
-
-.. code:: bash
-
-  $ ./configure
-  $ sudo make
-  $ sudo make install
-
-
-Install coffee-script, haml-coffee and stylus
-*********************************************
-
-Download node.js_ and run:
-
-.. code:: bash
-
-  $ sudo npm install -g coffee-script
-  $ sudo npm install -g haml-coffee
-  $ sudo npm install -g stylus
-
-To autocompile one of those files, add a comment on the first line of the form AUTOCOMPILE <dest>.
-
-
-Setup the hostname
-******************
+Setting up the hostname
+***********************
 
 .. code:: bash
 
@@ -89,6 +76,12 @@ root crontab::
     MAILTO=<email>
     * * * * * /usr/sbin/ddclient
 
+Future directions
+-----------------
+
+* Python script to replace Makefile and better handle old file backup (e.g. storing them in a specific directory and having a command to reinstall them, uninstall-kind).
+
+
 .. _ddclient: http://sourceforge.net/apps/trac/ddclient
 .. _pathogen: https://github.com/tpope/vim-pathogen
 .. _vimtags: #
@@ -98,4 +91,4 @@ root crontab::
 .. _libevent: http://libevent.org/
 .. _tmux: http://tmux.sourceforge.net/
 .. _node.js: http://nodejs.org/
-
+.. _Homebrew: http://mxcl.github.io/homebrew/
