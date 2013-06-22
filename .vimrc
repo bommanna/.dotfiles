@@ -1,89 +1,111 @@
 " SAFETY:
 filetype off
 
-" GLOBAL VARIABLE PLUGIN CONF:
-let g:LatexBox_no_mappings=1    " don't automatically create mappings for latex-box
-let g:tex_flavor='latex'
-let g:Tex_DefaultTargetFormat='pdf'
+
+" GLOBAL VARIABLES:
+
+" Easytags configuration
+let g:easytags_dynamic_files = 1                              " write to vim tags file instead of globally
+let g:easytags_events = ['BufWritePost']                      " update tags on save
+let g:easytags_on_cursorhold = 0                              " update tags file automatically
+let g:easytags_auto_highlight = 0                             " tag highlighting
+
+" Latex
+let g:LatexBox_no_mappings=1                                  " don't automatically create mappings for latex-box
+let g:tex_flavor='latex'                                      " 
+let g:Tex_DefaultTargetFormat='pdf'                           "
+
+" Python
+" let g:pymode = 1
+let g:pymode_run = 0                                          " load run code plugin
+let g:pymode_rope = 0                                         " load rope plugin
+let g:pymode_lint_checker = 'pylint'                          " pyflakes,pep8,mccable,pylint
+let g:pymode_folding = 0                                      " python folding
+let g:pymode_syntax = 1                                       " pymode's custom syntax highlighting
+let g:pymode_motion = 0                                       " python objects and motion
+
 
 " PATHOGEN:
+
 call pathogen#infect()
 call pathogen#helptags()
 
-" GENERAL:
-syntax enable
-filetype plugin on
-set shell=/bin/bash\ --rcfile\ ~/.bashrc
-set shellslash
-set hidden                      " allow hidden buffers
-set number                      " activate line numbers
-set noswapfile                  " don't use swap files for saves
-set encoding=utf-8              " duh
-set nostartofline               " keeps cursor on current column for movements like H, M, ...
-set autoindent                  " smarter indentation
-set lazyredraw                  " don't redraw during macros, etc
-set scrolloff=5                 " allow 5 lines below/above the cursor
-set textwidth=0                 " don't insert line breaks for long lines
-set wrap                        " wrap long lines
-set linebreak                   " ? for latex
-set tabstop=2                   " number of spaces a tab takes (displayed)
-set shiftwidth=2                " spaces used for indent keys (>>, ...) and for autoindent
-set expandtab                   " insert spaces instead of a tab when tabbing
-" set showmatch                   " briefly show matching bracket when inserting a new one
 
-" TAGS:
-set tag=./tags;
+" SETTINGS:
 
-" AUTOCOMPLETE:
-set wildmenu                    " allow autocompletion with c-n
-set wildignore=*.swp,*.bak      " don't show these files in autocompletion
-set wildignore+=*.pyc,*.class   " 
-set completeopt=longest,menuone " only insert longest common strings of suggestions
+" magic
+filetype plugin on                                            " enable loading of plugins per filetype
+syntax enable                                                 " activate syntax highlighting
+syntax sync fromstart                                         " otherwise folding messes up highlighting
 
-" UNDOHISTORY:
-set undofile                    " allow persistence of undo history
-set undolevels=1000             " number of operations used
-set undoreload=1000             " number of operations stored
-set undodir=~/.vim/undo         " saves directory
+" general
+set autoindent                                                " smarter indentation
+set backspace=indent,eol,start                                " allow backspace to delete new lines, etc.
+set encoding=utf-8                                            " duh
+set expandtab                                                 " insert spaces instead of a tab when tabbing
+set hidden                                                    " allow hidden buffers
+set lazyredraw                                                " don't redraw during macros, etc
+set linebreak                                                 " ? for latex
+set nostartofline                                             " keeps cursor on current column for movements like H, M, ...
+set noswapfile                                                " don't use swap files for saves
+set number                                                    " activate line numbers
+set omnifunc=syntaxcomplete#Complete                          " omnicompletion using syntax keywords
+set scrolloff=5                                               " allow 5 lines below/above the cursor
+set shell=/bin/bash\ --rcfile\ ~/.bashrc                      " load .bashrc when starting shell from vim
+set shellslash                                                " use forward slashes for paths, always
+set shiftwidth=2                                              " spaces used for indent keys (>>, ...) and for autoindent
+set tabstop=2                                                 " number of spaces a tab takes (displayed)
+set tag=./tags;,./venvtags;                                   " tags file
+set textwidth=0                                               " don't insert line breaks for long lines
+set wrap                                                      " wrap long lines
 
-" FOLDS:
-set foldcolumn=2                " width of the fold column
-set foldnestmax=3               " maximum fold level
-set foldmethod=indent           " fold by indent
-set foldminlines=0              " allow folding of single lines
-set foldlevelstart=4            " open folds on open
-set fillchars="fold: "          " don't show hyphens after folds
+" autocomplete
+set completeopt=longest,menuone                               " only insert longest common strings of suggestions
+set wildignore=*.swp,*.bak                                    " don't show these files in autocompletion
+set wildignore+=*.pyc,*.class                                 " 
+set wildmenu                                                  " allow autocompletion with c-n
 
-" THEME:
-set cursorcolumn                " highlight the current column
-set cursorline                  " highlight the current row
-set colorcolumn=80              " highlight 80th column
-set showbreak=>>\ \             " characters shown on display linebreak
-set t_Co=256                    " terminal colors
-colorscheme solarized           " colorscheme
-set background=dark             " theme, autodetected
+" undohistory
+set undodir=~/.vim/undo                                       " saves directory
+set undofile                                                  " allow persistence of undo history
+set undolevels=1000                                           " number of operations used
+set undoreload=1000                                           " number of operations stored
 
-" SEARCH:
-set incsearch                   " highlight potential matches as search query is being typed
-set hlsearch                    " highlight all matches after executing search query
-set ignorecase                  " if all lowercase in search query, ignore case
-set smartcase                   " if some uppercase in search query, respect case
+" folds
+set fillchars="fold: "                                        " don't show hyphens after folds
+set foldcolumn=2                                              " width of the fold column
+set foldlevelstart=4                                          " open folds on open
+set foldmethod=indent                                         " fold by indent
+set foldminlines=0                                            " allow folding of single lines
+set foldnestmax=3                                             " maximum fold level
 
-" SPELLING:
-set dictionary=/usr/share/dict/words                    " dictionary completion for use with <c-x><c-k>
-set spellfile=~/.vim/spell/custom-dictionary.utf-8.add  " file where to add new dict words
-set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add
+" theme
+colorscheme solarized                                         " colorscheme
+set background=dark                                           " theme, autodetected
+set colorcolumn=                                              " don't highlight any columns
+set cursorcolumn                                              " highlight the current column
+set cursorline                                                " highlight the current row
+set showbreak=>>\ \                                           " characters shown on display linebreak
+set t_Co=256                                                  " terminal colors
 
-" STATUS LINE:
-set statusline=%f               " Path to the file
-set statusline+=%=              " Switch to the right side
-set statusline+=%l              " Current line
-set statusline+=/               " Separator
-set statusline+=%L              " Total lines
-set laststatus=2                " always show status line
+" search
+set hlsearch                                                  " highlight all matches after executing search query
+set ignorecase                                                " if all lowercase in search query, ignore case
+set incsearch                                                 " highlight potential matches as search query is being typed
+set smartcase                                                 " if some uppercase in search query, respect case
 
-" SYNTAX:
-syntax sync fromstart           " otherwise folding messes up highlighting
+" status line
+set statusline=%f                                             " Path to the file
+set statusline+=%=                                            " Switch to the right side
+set statusline+=%l                                            " Current line
+set statusline+=/                                             " Separator
+set statusline+=%L                                            " Total lines
+set laststatus=2                                              " always show status line
+
+" spelling
+set dictionary=/usr/share/dict/words                          " files where to load word for dictionary
+set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add      "   completion for use with <c-x><c-k>
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to add new dict words
 
 " FUNCTIONS:
 
@@ -129,41 +151,31 @@ function! AutoCompile ()
   endif
 endfunction
 
-" GENERAL AUTOCOMMANDS:
+
+" AUTOCOMMANDS AND PLUGIN VARIABLES:
+
 augroup general
-  au!
-  au  InsertEnter         *           set nocursorline
-  au  InsertLeave         *           set cursorline
-  au  WinLeave            *           set nocursorline | set nocursorcolumn
-  au  WinEnter            *           set cursorline | set cursorcolumn
-  au  BufWritePost        *           call AutoCompile()
+  autocmd!
+  autocmd   InsertEnter   *             set nocursorline
+  autocmd   InsertLeave   *             set cursorline
+  autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
+  autocmd   WinEnter      *             set cursorline | set cursorcolumn
+  autocmd   BufWritePost  *             call AutoCompile()
 augroup END
 
-fun! ColorLines()
-    " Don't strip on these filetypes
-    if &ft =~ 'taglist'
-        return
-    endif
-    set cursorline | set cursorcolumn
-endfun
-
-" LATEX:
 augroup latexgroup
-  au!
-  au FileType             tex         setlocal colorcolumn=
-  au FileType             tex         nnoremap <buffer> <leader>ll :!latexmk -pdf -cd %<cr>
-  au FileType             tex         nnoremap <buffer> <leader>lt :LatexTOC<cr>
+  autocmd!
+  autocmd   FileType      tex           nnoremap <buffer> <leader>ll :!latexmk -pdf -cd %<cr>
+  autocmd   FileType      tex           nnoremap <buffer> <leader>lt :LatexTOC<cr>
 augroup END
 
-" NERDTREE:
-let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']
 let NERDTreeQuitOnOpen = 1
 augroup nerdtreegroup
-  au!
-  autocmd FileType nerdtree noremap <buffer> <silent> <space> :nohlsearch<cr>
+  autocmd!
+  autocmd   FileType      nerdtree      noremap <buffer> <silent> <space> :nohlsearch<cr>
 augroup END
 
-" TAGLIST:
 let Tlist_Auto_Highlight_Tag=1
 let Tlist_Auto_Update=1
 let Tlist_Compact_Format=1
@@ -177,15 +189,21 @@ let Tlist_Sort_Type="name"
 let Tlist_Use_Right_Window=1
 let Tlist_WinWidth=60
 augroup taglistgroup
-  au!
-  autocmd FileType      taglist   noremap <buffer> <silent> <leader>t <c-w>p
-  autocmd FileType      taglist   set nocursorline | set nocursorcolumn
-  autocmd BufWritePost  *         TlistUpdate
+  autocmd!
+  autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
+  autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
+  autocmd   BufWritePost  *             TlistUpdate
 augroup END
 
 augroup pythongroup
-  au!
-  autocmd FileType python set omnifunc=pythoncomplete#Complete
+  autocmd!
+  autocmd   FileType      python        setlocal colorcolumn=80
+  autocmd   FileType      python        setlocal omnifunc=pythoncomplete#Complete
+augroup END
+
+augroup coffeegroup
+  autocmd!
+  autocmd   FileType      coffee        setlocal colorcolumn=80
 augroup END
 
 " MAPPINGS:
@@ -209,7 +227,7 @@ nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
 nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
 
 " .vimrc sugar (open in horizontal split, source)
-nnoremap <leader>ev :split $MYVIMRC<cr>
+nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " replace (all, on current line, from current line)
@@ -234,9 +252,11 @@ nnoremap <leader>pl :w<cr>:!pylint %<cr>
 " toggle search highlight off and restore numbers
 nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
 
-" visual up, down (useful for long lines)
+" visual up, down, end of line, start of line (useful for long lines)
 nnoremap j gj
 nnoremap k gk
+nnoremap $ g$
+nnoremap 0 g0
 
 " don't move on * and #
 nnoremap * *<c-o>
@@ -292,7 +312,7 @@ vnoremap < <gv
 " execute selection using bash (no replacement)
 vnoremap <leader>bb :w !bash<cr>
 
-" execute selection with shell python (without, with replacing selection)
+" execute selection with shell python (without replacing selection)
 vnoremap <leader>pp :w !python<cr>
 
 " replace selection (all, one occurrence on current line)
@@ -311,7 +331,8 @@ vnoremap <silent> # :<C-U>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
+
 " ABBREVIATIONS:
+
 iabbr MM Matthieu Monsch
 iabbr #! #!/usr/bin/env
-
