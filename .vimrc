@@ -107,6 +107,7 @@ set dictionary=/usr/share/dict/words                          " files where to l
 set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add      "   completion for use with <c-x><c-k>
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to add new dict words
 
+
 " FUNCTIONS:
 
 " retab file using 2 spaces instead of 4 per tab
@@ -120,9 +121,16 @@ function! Retab ()
 endfunction
 
 " refresh tags
+" this function only does something if the taglist window is open
+" this will also run ctags recursively if the file is in a git repository
 function! RefreshTags ()
-  if exists('b:git_dir')
-    call system('ctags -R --exclude=venv')
+  if bufloaded('__Tag_List__')
+    TlistUpdate
+    if ! empty(finddir('.git'))
+      call system('ctags -R --exclude=venv')
+    else
+      echo "Can't compile project tags, git repository not found in root"
+    endif
   endif
 endfunction
 
@@ -199,7 +207,7 @@ augroup taglistgroup
   autocmd!
   autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
   autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
-  autocmd   BufWritePost  *             TlistUpdate | call RefreshTags()
+  autocmd   BufWritePost  *             call RefreshTags()
 augroup END
 
 augroup pythongroup
