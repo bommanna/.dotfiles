@@ -274,7 +274,7 @@ nnoremap <leader>pa :set paste!<cr>i
 
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>gs :Gstatus<cr><c-w>10+
+nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gc :Gcommit<cr>
@@ -290,18 +290,13 @@ nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
 
 " always use command line window
-nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
+nnoremap Q q:i
 
-" quick open shell
-nnoremap Q q:ishell<cr>
-
-" always use command line window
-vnoremap : q:i
 vnoremap / q/i
 vnoremap ? q?i
-vnoremap Q q:i!
+vnoremap Q q:i
 
 " autocomplete shortcuts
 inoremap <c-k> <c-x><c-k>
