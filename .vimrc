@@ -55,7 +55,7 @@ set shell=/bin/bash\ --rcfile\ ~/.bashrc                      " load .bashrc whe
 set shellslash                                                " use forward slashes for paths, always
 set shiftwidth=2                                              " spaces used for indent keys (>>, ...) and for autoindent
 set tabstop=2                                                 " number of spaces a tab takes (displayed)
-set tag=./tags;,./venvtags;                                   " tags file
+set tag=./.tags;,.venvtags                                    " tags file
 set textwidth=0                                               " don't insert line breaks for long lines
 set wrap                                                      " wrap long lines
 
@@ -117,6 +117,11 @@ function! Retab ()
   set tabstop=2
   set expandtab
   %retab
+endfunction
+
+" refresh tags
+function! RefreshTags ()
+  call system('ctags -R --exclude=venv')
 endfunction
 
 " autocompile coffeescript, haml, stylus on save using a comment on the first line
@@ -192,7 +197,7 @@ augroup taglistgroup
   autocmd!
   autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
   autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
-  autocmd   BufWritePost  *             TlistUpdate
+  autocmd   BufWritePost  *             TlistUpdate | call RefreshTags()
 augroup END
 
 augroup pythongroup
@@ -229,6 +234,10 @@ nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
 " .vimrc sugar (open in horizontal split, source)
 nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" ctags refresh tags
+nnoremap <leader>ct :call RefreshTags()<cr>
+
 
 " replace (all, on current line, from current line)
 nnoremap <leader>ra q:i%s/

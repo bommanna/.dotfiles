@@ -1,1 +1,3 @@
+-f .tags
 --python-kinds=-i
+--exclude=.git
