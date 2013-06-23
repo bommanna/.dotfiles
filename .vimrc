@@ -322,9 +322,6 @@ inoremap <c-j> <c-x><c-o>
 inoremap <c-l> <c-x><c-l>
 inoremap <c-h> <c-x><c-f>
 
-" matching bracket step back
-inoremap <c-f> <esc>%a
-
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
