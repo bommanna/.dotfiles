@@ -7,7 +7,7 @@ Install
 
 .. code:: bash
 
-  $ git clone git@github.com:mtth/.dotfiles.git
+  $ git clone https://github.com/mtth/.dotfiles.git
   $ cd .dotfiles
   $ make install
 
