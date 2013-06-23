@@ -1,60 +1,132 @@
-# FILES = $(shell find . -maxdepth 1 \( -type f -o -type d \) \( ! -iname "Makefile" ! -iname "." ! -iname ".git" ! -iname "README.rst"  ! -iname "util" \)) 
+# List of commands
+# ================
+#
+#	* install
+#		installation
+#
+# * update
+# 	update the git submodules
+#
+# * uninstall
+# 	restore previous dotfiles
+#		
+#
+# Subcommands
+#
+# * save
+# 	copy all files that would be overwritten by linking
+# 	into $CURDIR/.save/ . only non symbolic links
+# 	are saved. later saves that might overwrite
+# 	previous ones will raise an error
+#
+#	* clean
+#		removes all symbolic links that correspond to tracked
+#		files here
+#
+# * link
+# 	create symlinks for the relevant files in this directory
+# 	from $HOME
+#
+# * create
+# 	creates the directories necessary for the makefile to work
+# 	(~/.config, .save/, .save/.config/)
+#
+# * restore
+# 	will restore previous dotfiles (keeping any non overlapping
+# 	ones in place)
+
 FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .ctags
 CONFIG_FOLDERS = git
 
-all: safe
+install: create save clean link update
 
-safe: move link submodules
+uninstall: clean restore
 
-new: clear link submodules
-
-# update/initialize submodules
-submodules:
+update:
 	@echo 'Updating submodules...'
 	git submodule update --init
 
-# renames all files that would be overwritten to filename.old
-move:
-	@echo 'Moving old dotfiles...'
-	@for i in $(FILES); do \
-		FP="$(HOME)/$${i#\./}"; \
-		if [ -e $$FP ]; then \
-			echo "$$FP -> $$FP.old"; \
-			mv $$FP "$$FP.old"; \
-		fi; \
-	done
-
-# creates the symlinks
-link:
-	@echo 'Creating new symlinks...'
-	@for i in $(FILES); do \
-		SP="$(HOME)/$${i#\./}"; \
-		DP="$(CURDIR)/$${i#\./}"; \
-		ln -s $$DP $$SP; \
-	done
+create:
 	@if [ ! -d "$(HOME)/.config" ]; then \
 		echo "Creating .config directory"; \
 		mkdir "$(HOME)/.config"; \
 	fi;
-	@echo "$(CURDIR)";
+	@if [ ! -d  .save ]; then \
+		echo "Save directory created at $(CURDIR)/.save"; \
+		mkdir .save; \
+		mkdir .save/.config; \
+	fi;
+
+save:
+	@echo 'Saving old dotfiles...'
+	@for i in $(FILES); do \
+		FP="$(HOME)/$$i"; \
+		if [ ! -h $$FP ] && [ -e $$FP ]; then \
+			echo "$$i -> .save/$$i"; \
+			mv "$$FP" ".save/$$i"; \
+		fi; \
+	done;
+	@for j in $(CONFIG_FOLDERS); do \
+		FP="$(HOME)/.config/$$j"; \
+		if [ ! -h $$FP ] && [ -e $$FP ]; then \
+			echo ".config/$$j -> .save/.config/$$j"; \
+			mv "$$FP" ".save/.config/$$j"; \
+		fi; \
+	done;
+
+clean:
+	@echo 'Cleaning up...'
+	@for i in $(FILES); do \
+		FP="$(HOME)/$$i"; \
+		if [ -h $$FP ]; then \
+			rm "$$FP"; \
+			echo "$$FP deleted"; \
+		fi; \
+	done;
 	@for i in $(CONFIG_FOLDERS); do \
-		SP="$(HOME)/.config/$${i#\./}"; \
-		DP="$(CURDIR)/.config/$${i#\./}"; \
+		FP="$(HOME)/.config/$$i"; \
+		if [ -h $$FP ]; then \
+			rm "$$FP"; \
+			echo "$$FP deleted"; \
+		fi; \
+	done;
+
+link:
+	@echo 'Creating new symlinks...'
+	@for i in $(FILES); do \
+		SP="$(HOME)/$$i"; \
+		DP="$(CURDIR)/$$i"; \
 		ln -s $$DP $$SP; \
+		echo "$$SP symlink created"; \
+	done
+	@for i in $(CONFIG_FOLDERS); do \
+		SP="$(HOME)/.config/$$i"; \
+		DP="$(CURDIR)/.config/$$i"; \
+		ln -s $$DP $$SP; \
+		echo "$$SP symlink created"; \
 	done
 
-# removes all files that where moved
-clear:
-	@echo 'Deleting old dotfiles...'
+restore:
+	@echo 'Restoring dotfiles...'
 	@for i in $(FILES); do \
-		FP="$(HOME)/$${i#\./}"; \
-		if [ -e $$FP ]; then \
-			rm "$$FP"; \
-			echo "$$FP deleted"; \
+		SP=".save/$$i"; \
+		DP="$(HOME)/$$i"; \
+		if [ -e $$SP ]; then \
+			if [ -h $$DP ]; then \
+				rm "$$DP"; \
+			fi; \
+			mv "$$SP" "$$DP"; \
+			echo "$$DP restored"; \
 		fi; \
-		FP="$(HOME)/$${i#\./}.old"; \
-		if [ -e $$FP ]; then \
-			rm "$$FP"; \
-			echo "$$FP deleted"; \
+	done;
+	@for i in $(CONFIG_FOLDERS); do \
+		SP=".save/.config/$$i"; \
+		DP="$(HOME)/.config/$$i"; \
+		if [ -e $$SP ]; then \
+			if [ -h $$DP ]; then \
+				rm "$$DP"; \
+			fi; \
+			mv "$$SP" "$$DP"; \
+			echo "$$DP restored"; \
 		fi; \
-	done
+	done;
