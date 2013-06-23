@@ -1,8 +1,8 @@
 # List of commands
 # ================
 #
-#	* install
-#		installation
+# * install
+# 	installation
 #
 # * update
 # 	update the git submodules
@@ -19,9 +19,9 @@
 # 	are saved. later saves that might overwrite
 # 	previous ones will raise an error
 #
-#	* clean
-#		removes all symbolic links that correspond to tracked
-#		files here
+# * clean
+#	removes all symbolic links that correspond to tracked
+#	files here
 #
 # * link
 # 	create symlinks for the relevant files in this directory
