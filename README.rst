@@ -8,10 +8,10 @@ Install
 .. code:: bash
 
   $ git clone git@github.com:mtth/.dotfiles.git
-  $ make
+  $ cd .dotfiles
+  $ make install
 
-``make`` creates the symlinks to the home directory. Any preexisting dotfiles
-will be renamed by appending ``.old``.
+This will create symbolic links to all tracked dotfiles in your home directory. Any files that would be overwritten are saved in the ``.save/`` directory. To restore these, simply run ``make uninstall``.
 
 
 Package requirements
