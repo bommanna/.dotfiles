@@ -28,6 +28,10 @@ let g:rooter_manual_only = 1                                  " doing it below f
 let g:rooter_patterns = ['.git/']
 let g:rooter_use_lcd = 1
 
+" Ctrlp
+" much faster initial caching
+let g:ctrlp_user_command = 'find %s -type f | grep -v -E -e "\.DS_Store" -e "\.git" -e "\.pyc$"'
+
 
 " PATHOGEN:
 
