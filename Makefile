@@ -10,6 +10,8 @@
 # * uninstall
 # 	restore previous dotfiles
 #		
+# * brew
+# 	install important brew formulae
 #
 # Subcommands
 #
@@ -45,6 +47,13 @@ uninstall: clean restore
 update:
 	@echo 'Updating submodules...'
 	git submodule update --init
+
+brew:
+	brew install tmux
+	brew install reattach-to-user-namespace
+	brew install ctags
+	brew install python
+	brew install vim
 
 create:
 	@if [ ! -d "$(HOME)/.config" ]; then \

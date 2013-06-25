@@ -1,6 +1,7 @@
 # .bashrc
 # =======
 
+
 # Env variables
 # -------------
 
@@ -77,7 +78,7 @@ alias ll='ls -AFGl'
 # Functions
 # ---------
 
-my_ip(){
+my-ip(){
   MY_IP=$(/sbin/ifconfig en1 | awk '/inet / { print $2 } ')
   echo ${MY_IP:-"Not connected"}
 }
@@ -87,4 +88,11 @@ my_ip(){
 extensions(){
   REGEXP='^.+[^/%]\.([^/.]+)$'
   find $1 | sed -nE "s:${REGEXP}:\1:p" | sort | uniq -c | sort
+}
+
+reattach-tmux(){
+  # reattach tmux if the command is available
+  if which reattach-to-user-namespace 2>&1 >/dev/null; then
+    reattach-to-user-namespace -l bash
+  fi
 }
