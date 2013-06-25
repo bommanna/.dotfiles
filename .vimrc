@@ -44,7 +44,6 @@ call pathogen#helptags()
 " magic
 filetype plugin on                                            " enable loading of plugins per filetype
 syntax enable                                                 " activate syntax highlighting
-syntax sync fromstart                                         " otherwise folding messes up highlighting
 
 " general
 set autoindent                                                " smarter indentation
@@ -110,6 +109,9 @@ set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%l/%L    " status bar forma
 set dictionary=/usr/share/dict/words                          " files where to load word for dictionary
 set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add      "   completion for use with <c-x><c-k>
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to add new dict words
+
+" disabled
+" syntax sync fromstart                                         " otherwise folding messes up highlighting
 
 
 " FUNCTIONS:
@@ -257,7 +259,6 @@ nnoremap <leader>ct :call RefreshTags()<cr>
 " replace (all, on current line, from current line)
 nnoremap <leader>ra q:i%s/
 nnoremap <leader>re q:i.s/
-nnoremap <leader>rr zz:set relativenumber<cr>q:i.,+
 
 " execute file using bash
 nnoremap <leader>bb :%w !bash<cr>
@@ -274,7 +275,7 @@ nnoremap <leader>py :w<cr>:!python -i %<cr>
 nnoremap <leader>pl :w<cr>:!pylint %<cr>
 
 " toggle search highlight off and restore numbers
-nnoremap <silent> <space> :nohlsearch<cr>:set number<cr>
+nnoremap <silent> <space> :nohlsearch<cr>
 
 " visual up, down, end of line, start of line (useful for long lines)
 nnoremap j gj
