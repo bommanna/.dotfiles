@@ -245,6 +245,12 @@ nnoremap <leader>Q :q!<cr>
 " toggle NERDtree
 nnoremap <leader>f :NERDTreeToggle<cr>
 
+" toggle marks
+nnoremap <leader>m :marks<cr>
+
+" toggle registers
+nnoremap <leader>r :reg<cr>
+
 " toggle taglist
 nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
 nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
@@ -308,7 +314,7 @@ nnoremap <leader>sp :set spell!<cr>
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
 
-" always use command line window
+" always use command line window for searches
 nnoremap / q/i
 nnoremap ? q?i
 nnoremap Q q:i
@@ -316,12 +322,6 @@ nnoremap Q q:i
 vnoremap / q/i
 vnoremap ? q?i
 vnoremap Q q:i
-
-" autocomplete shortcuts
-inoremap <c-k> <c-x><c-k>
-inoremap <c-j> <c-x><c-o>
-inoremap <c-l> <c-x><c-l>
-inoremap <c-h> <c-x><c-f>
 
 " easier indentation
 vnoremap > >gv

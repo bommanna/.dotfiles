@@ -25,6 +25,7 @@ Homebrew_ is the recommended way to install these packages. Below is the preferr
 * python
 * vim
 * node (optional: only if editing coffee script)
+* reattach-to-user-namespace (optional: to enable pbcopy and pbpaste in tmux)
 
 
 Misc
