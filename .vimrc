@@ -267,6 +267,20 @@ vnoremap : q:i
 vnoremap / q/i
 vnoremap ? q?i
 vnoremap Q q:i
+" don't move on * and #
+nnoremap * *<c-o>
+nnoremap # #<c-o>
+" enable search for selected text, forwards (*) or backwards (#)
+vnoremap <silent> * :<c-u>
+  \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
+  \gvy/<c-r><c-r>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
+  \gv:call setreg('"', old_reg, old_regtype)<cr><c-o>
+vnoremap <silent> # :<c-u>
+  \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
+  \gvy?<c-r><c-r>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
+  \gv:call setreg('"', old_reg, old_regtype)<cr><c-o>
 
 " misc
 
@@ -307,23 +321,6 @@ nnoremap <leader>go :Gbrowse<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gP :Git pull<cr>
-
-" search
-
-" don't move on * and #
-nnoremap * *<c-o>
-nnoremap # #<c-o>
-" enable search for selected text, forwards (*) or backwards (#)
-vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " file execution
 
