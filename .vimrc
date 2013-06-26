@@ -188,7 +188,7 @@ augroup END
 
 augroup latexgroup
   autocmd!
-  autocmd   FileType      tex           nnoremap <buffer> <leader>ll :!latexmk -pdf -cd %<cr>
+  autocmd   FileType      tex           nnoremap <buffer> <leader>ll :w<cr>:!latexmk -pdf -cd %<cr>
   autocmd   FileType      tex           nnoremap <buffer> <leader>lt :LatexTOC<cr>
 augroup END
 
@@ -233,67 +233,70 @@ augroup END
 
 " MAPPINGS:
 
-" easy movement around splits
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
-
-" toggle NERDtree
-nnoremap <leader>f :NERDTreeToggle<cr>
-
-" toggle marks
-nnoremap <leader>m :marks<cr>
-
-" toggle registers
-nnoremap <leader>r :reg<cr>
-
-" toggle taglist
-nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
-
-" .vimrc sugar (open in horizontal split, source)
-nnoremap <leader>ev :tabnew $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-
-" ctags refresh tags
-nnoremap <leader>ct :call RefreshTags()<cr>
-
-" execute file using bash
-nnoremap <leader>bb :%w !bash<cr>
-
-" execute file using shell python
-nnoremap <leader>pp :%w !python<cr>
-
-" execute file using shell ipython or python and go in interactive mode
-" note that this saves the file first
-nnoremap <leader>pi :w<cr>:!ipython -i %<cr>
-nnoremap <leader>py :w<cr>:!python -i %<cr>
-
-" run pylint on file (this saves the file first)
-nnoremap <leader>pl :w<cr>:!pylint %<cr>
-
-" toggle search highlight off
-nnoremap <silent> <space> :nohlsearch<cr>
+" movements
 
 " visual up, down, end of line, start of line (useful for long lines)
 nnoremap j gj
 nnoremap k gk
 nnoremap $ g$
 nnoremap 0 g0
-
 vnoremap j gj
 vnoremap k gk
 vnoremap $ g$
 vnoremap 0 g0
+" easy movement around splits
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
+" easier indentation
+vnoremap > >gv
+vnoremap < <gv
 
-" don't move on * and #
-nnoremap * *<c-o>
-nnoremap # #<c-o>
+" commands and searches
 
+" remap enter to command line
+nnoremap <cr> :
+vnoremap <cr> :
+" always use command line window otherwise
+nnoremap : q:i
+nnoremap / q/i
+nnoremap ? q?i
+nnoremap Q q:i
+vnoremap : q:i
+vnoremap / q/i
+vnoremap ? q?i
+vnoremap Q q:i
+
+" misc
+
+" changing background color
+nnoremap <leader>bgd :set background=dark<cr>
+nnoremap <leader>bgl :set background=light<cr>
+" toggle marks
+nnoremap <leader>m :marks<cr>
 " paste toggle
 nnoremap <leader>pa :set paste!<cr>:set paste?<cr>
+" toggle spell checking
+nnoremap <leader>sp :set spell!<cr>
+" toggle registers
+nnoremap <leader>r :reg<cr>
+" .vimrc sugar (open in new tab, source)
+nnoremap <leader>ve :tabnew $MYVIMRC<cr>
+nnoremap <leader>vs :source $MYVIMRC<cr>
+" toggle search highlight off
+nnoremap <silent> <space> :nohlsearch<cr>
 
+" plugins
+
+" ' is used for easymotion, replaced by ` mark travel
+nnoremap ' <nop>
+vnoremap ' <nop>
+" toggle NERDtree
+nnoremap <leader>f :NERDTreeToggle<cr>
+" toggle taglist
+nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
+nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
@@ -305,38 +308,11 @@ nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gP :Git pull<cr>
 
-" toggle spell checking
-nnoremap <leader>sp :set spell!<cr>
+" search
 
-" changing background color
-nnoremap <leader>bgd :set background=dark<cr>
-nnoremap <leader>bgl :set background=light<cr>
-
-" remap enter to command line
-nnoremap <cr> :
-vnoremap <cr> :
-
-" always use command line window for searches
-nnoremap : q:i
-nnoremap / q/i
-nnoremap ? q?i
-nnoremap Q q:i
-
-vnoremap : q:i
-vnoremap / q/i
-vnoremap ? q?i
-vnoremap Q q:i
-
-" easier indentation
-vnoremap > >gv
-vnoremap < <gv
-
-" execute selection using bash (no replacement)
-vnoremap <leader>bb :w !bash<cr>
-
-" execute selection with shell python (without replacing selection)
-vnoremap <leader>pp :w !python<cr>
-
+" don't move on * and #
+nnoremap * *<c-o>
+nnoremap # #<c-o>
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
@@ -349,9 +325,21 @@ vnoremap <silent> # :<C-U>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-" ' is used for easymotion, replaced by ` mark travel
-nnoremap ' <nop>
-vnoremap ' <nop>
+" file execution
+
+" execute file using bash
+nnoremap <leader>bb :%w !bash<cr>
+" execute file using shell python
+nnoremap <leader>pp :%w !python<cr>
+" execute file using shell ipython or python and go in interactive mode, note that this saves the file first
+nnoremap <leader>pi :w<cr>:!ipython -i %<cr>
+nnoremap <leader>py :w<cr>:!python -i %<cr>
+" run pylint on file (this saves the file first)
+nnoremap <leader>pl :w<cr>:!pylint %<cr>
+" execute selection using bash (no replacement)
+vnoremap <leader>bb :w !bash<cr>
+" execute selection with shell python (without replacing selection)
+vnoremap <leader>pp :w !python<cr>
 
 
 " ABBREVIATIONS:
