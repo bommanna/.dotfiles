@@ -237,11 +237,6 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
-" buffer operations (save, close, delete)
-nnoremap <leader>w :w<cr>
-nnoremap <leader>q :q<cr>
-nnoremap <leader>Q :q!<cr>
-
 " toggle NERDtree
 nnoremap <leader>f :NERDTreeToggle<cr>
 
@@ -262,10 +257,6 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 " ctags refresh tags
 nnoremap <leader>ct :call RefreshTags()<cr>
 
-" replace (all, on current line, from current line)
-nnoremap <leader>ra q:i%s/
-nnoremap <leader>re q:i.s/
-
 " execute file using bash
 nnoremap <leader>bb :%w !bash<cr>
 
@@ -280,7 +271,7 @@ nnoremap <leader>py :w<cr>:!python -i %<cr>
 " run pylint on file (this saves the file first)
 nnoremap <leader>pl :w<cr>:!pylint %<cr>
 
-" toggle search highlight off and restore numbers
+" toggle search highlight off
 nnoremap <silent> <space> :nohlsearch<cr>
 
 " visual up, down, end of line, start of line (useful for long lines)
@@ -289,12 +280,17 @@ nnoremap k gk
 nnoremap $ g$
 nnoremap 0 g0
 
+vnoremap j gj
+vnoremap k gk
+vnoremap $ g$
+vnoremap 0 g0
+
 " don't move on * and #
 nnoremap * *<c-o>
 nnoremap # #<c-o>
 
-" paste
-nnoremap <leader>pa :set paste!<cr>i
+" paste toggle
+nnoremap <leader>pa :set paste!<cr>:set paste?<cr>
 
 " fugitive
 nnoremap <leader>gd :Gdiff<cr>
@@ -314,11 +310,17 @@ nnoremap <leader>sp :set spell!<cr>
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
 
+" remap enter to command line
+nnoremap <cr> :
+vnoremap <cr> :
+
 " always use command line window for searches
+nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
 nnoremap Q q:i
 
+vnoremap : q:i
 vnoremap / q/i
 vnoremap ? q?i
 vnoremap Q q:i
@@ -332,10 +334,6 @@ vnoremap <leader>bb :w !bash<cr>
 
 " execute selection with shell python (without replacing selection)
 vnoremap <leader>pp :w !python<cr>
-
-" replace selection (all, one occurrence on current line)
-vnoremap <leader>ra "hy/<c-r>h<cr>q:i%s/<c-r>h/
-vnoremap <leader>re "hyq:i.s/<c-r>h/
 
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<C-U>
