@@ -177,11 +177,13 @@ endfunction
 
 augroup general
   autocmd!
+  autocmd   BufEnter      *             Rooter
+  autocmd   BufReadPost   quickfix      nnoremap <buffer> <cr> <cr>
+  autocmd   CmdwinEnter   *             nnoremap <buffer> <cr> <cr>
   autocmd   InsertEnter   *             set nocursorline
   autocmd   InsertLeave   *             set cursorline
-  autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
   autocmd   WinEnter      *             set cursorline | set cursorcolumn
-  autocmd   BufEnter      *             Rooter
+  autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
 
 augroup latexgroup
@@ -211,9 +213,9 @@ let Tlist_Use_Right_Window=1
 let Tlist_WinWidth=60
 augroup taglistgroup
   autocmd!
+  autocmd   BufWritePost  *             call RefreshTags()
   autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
   autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
-  autocmd   BufWritePost  *             call RefreshTags()
 augroup END
 
 augroup pythongroup
@@ -224,8 +226,8 @@ augroup END
 
 augroup coffeegroup
   autocmd!
-  autocmd   FileType      coffee        setlocal colorcolumn=80
   autocmd   BufWritePost  coffee        call AutoCompile()
+  autocmd   FileType      coffee        setlocal colorcolumn=80
 augroup END
 
 
