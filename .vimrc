@@ -61,6 +61,7 @@ set scrolloff=5                                               " allow 5 lines be
 set shell=/bin/bash\ --rcfile\ ~/.bashrc                      " load .bashrc when starting shell from vim
 set shellslash                                                " use forward slashes for paths, always
 set shiftwidth=2                                              " spaces used for indent keys (>>, ...) and for autoindent
+set showcmd                                                   " show partial command and number of lines/columns selected
 set tabstop=2                                                 " number of spaces a tab takes (displayed)
 set tag=./.tags;,.venvtags                                    " tags file
 set textwidth=0                                               " don't insert line breaks for long lines
@@ -84,7 +85,7 @@ set foldcolumn=2                                              " width of the fol
 set foldlevelstart=4                                          " open folds on open
 set foldmethod=indent                                         " fold by indent
 set foldminlines=0                                            " allow folding of single lines
-set foldnestmax=3                                             " maximum fold level
+set foldnestmax=5                                             " maximum fold level
 
 " theme
 colorscheme solarized                                         " colorscheme
@@ -238,12 +239,8 @@ augroup END
 " visual up, down, end of line, start of line (useful for long lines)
 nnoremap j gj
 nnoremap k gk
-nnoremap $ g$
-nnoremap 0 g0
 vnoremap j gj
 vnoremap k gk
-vnoremap $ g$
-vnoremap 0 g0
 " easy movement around splits
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
