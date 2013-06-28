@@ -2,8 +2,8 @@ Configuration files
 ===================
 
 
-Install
--------
+Installation
+------------
 
 .. code:: bash
 
@@ -14,22 +14,25 @@ Install
 This will create symbolic links to all tracked dotfiles in your home directory. Any files that would be overwritten are saved in the ``.save/`` directory. To restore these, simply run ``make uninstall``.
 
 
-Package requirements
+Recommended packages
 --------------------
 
-Homebrew_ is the recommended way to install these packages. Below is the preferred instal order. Otherwise, for example, there might be issues of VIM linking with the system python instead of the brew installed python.
+Homebrew_ is the supported way to install these packages. Below is the preferred instal order. Otherwise, for example, there might be issues of VIM linking with the system python instead of the brew installed python.  They can be installed in one command by running ``make brew``.
 
-* git
+* git (should already be installed)
 * tmux
 * ctags
 * python
 * vim
+
+The following packages are optional but potentially useful:
+
 * node (optional: only if editing coffee script)
 * reattach-to-user-namespace (optional: to enable pbcopy and pbpaste in tmux)
 
 
-Misc
-----
+Miscellaneous
+-------------
 
 Setting up the hostname
 ***********************
@@ -77,11 +80,6 @@ root crontab::
 
     MAILTO=<email>
     * * * * * /usr/sbin/ddclient
-
-Future directions
------------------
-
-* Python script to replace Makefile and better handle old file backup (e.g. storing them in a specific directory and having a command to reinstall them, uninstall-kind).
 
 
 .. _ddclient: http://sourceforge.net/apps/trac/ddclient
