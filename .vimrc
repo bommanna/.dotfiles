@@ -173,14 +173,28 @@ function! AutoCompile ()
   endif
 endfunction
 
+" Open full width quickfix window with extra mappings
+function! OpenQuickfix ()
+  botright copen
+  exec "nnoremap <silent> <buffer> q :ccl<CR>"
+  exec "nnoremap <silent> <buffer> t <C-W><CR><C-W>T"
+  exec "nnoremap <silent> <buffer> T <C-W><CR><C-W>TgT<C-W><C-W>"
+  exec "nnoremap <silent> <buffer> o <CR>"
+  exec "nnoremap <silent> <buffer> go <CR><C-W><C-W>"
+  exec "nnoremap <silent> <buffer> h <C-W><CR><C-W>K"
+  exec "nnoremap <silent> <buffer> H <C-W><CR><C-W>K<C-W>b"
+  exec "nnoremap <silent> <buffer> v <C-W><CR><C-W>H<C-W>b<C-W>J<C-W>t"
+  exec "nnoremap <silent> <buffer> gv <C-W><CR><C-W>H<C-W>b<C-W>J"
+endfunction
+
 
 " AUTOCOMMANDS AND PLUGIN VARIABLES:
 
 augroup general
   autocmd!
   autocmd   BufEnter      *             Rooter
-  autocmd   BufReadPost   quickfix      nnoremap <buffer> <cr> <cr>
   autocmd   CmdwinEnter   *             nnoremap <buffer> <cr> <cr>
+  autocmd   FileType      *             set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertEnter   *             set nocursorline
   autocmd   InsertLeave   *             set cursorline
   autocmd   WinEnter      *             set cursorline | set cursorcolumn
@@ -288,6 +302,13 @@ nnoremap <leader>bgl :set background=light<cr>
 nnoremap <leader>m :marks<cr>
 " paste toggle
 nnoremap <leader>pa :set paste!<cr>:set paste?<cr>
+" quickfix window
+nnoremap <leader>qo :call OpenQuickfix()<cr>
+nnoremap <leader>qc :cclose<cr>
+nnoremap <leader>qp :cprevious<cr>
+nnoremap <leader>qn :cnext<cr>
+nnoremap <leader>qP :colder<cr>
+nnoremap <leader>qN :cnewer<cr>
 " toggle spell checking
 nnoremap <leader>sp :set spell!<cr>
 " toggle registers

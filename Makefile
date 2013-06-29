@@ -37,7 +37,7 @@
 # 	will restore previous dotfiles (keeping any non overlapping
 # 	ones in place)
 
-FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .ctags
+FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .ctags .ackrc
 CONFIG_FOLDERS = git
 
 install: create save clean link update
@@ -50,10 +50,10 @@ update:
 
 brew:
 	brew install tmux
-	brew install reattach-to-user-namespace
 	brew install ctags
 	brew install python
 	brew install vim
+	brew install ack
 
 create:
 	@if [ ! -d "$(HOME)/.config" ]; then \

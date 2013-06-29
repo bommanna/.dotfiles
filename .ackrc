@@ -1,0 +1,3 @@
+# ignore tag files
+--type-set=tags=.tags,.venvtags
+--notags
