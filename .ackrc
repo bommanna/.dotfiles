@@ -1,3 +1,8 @@
+# ack configuration options
+
 # ignore tag files
 --type-set=tags=.tags,.venvtags
 --notags
+
+# page results
+--pager=less -r

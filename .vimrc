@@ -8,7 +8,6 @@ filetype off
 let g:EasyMotion_leader_key = "'"                             " ' key is unbound in normal and visual mode below
 
 " Latex
-let g:LatexBox_no_mappings=1                                  " don't automatically create mappings for latex-box
 let g:tex_flavor='latex'                                      " 
 let g:Tex_DefaultTargetFormat='pdf'                           "
 
@@ -174,8 +173,7 @@ function! AutoCompile ()
 endfunction
 
 " Open full width quickfix window with extra mappings
-function! OpenQuickfix ()
-  botright copen
+function! OnOpenQuickfix ()
   exec "nnoremap <silent> <buffer> q :ccl<CR>"
   exec "nnoremap <silent> <buffer> t <C-W><CR><C-W>T"
   exec "nnoremap <silent> <buffer> T <C-W><CR><C-W>TgT<C-W><C-W>"
@@ -201,10 +199,14 @@ augroup general
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
 
+augroup quickfixgroup
+  autocmd   FileType      qf            call OnOpenQuickfix()
+augroup END
+
 augroup latexgroup
   autocmd!
+  autocmd   BufWritePost  tex           Latexmk
   autocmd   FileType      tex           nnoremap <buffer> <leader>ll :w<cr>:!latexmk -pdf -cd %<cr>
-  autocmd   FileType      tex           nnoremap <buffer> <leader>lt :LatexTOC<cr>
 augroup END
 
 let NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']
@@ -298,17 +300,17 @@ vnoremap <silent> # :<c-u>
 " changing background color
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
+" quickfix window
+nnoremap <leader>co :botright copen<cr>
+nnoremap <leader>cc :cclose<cr>
+nnoremap <leader>cp :cprevious<cr>
+nnoremap <leader>cn :cnext<cr>
+nnoremap <leader>cP :colder<cr>
+nnoremap <leader>cN :cnewer<cr>
 " toggle marks
 nnoremap <leader>m :marks<cr>
 " paste toggle
 nnoremap <leader>pa :set paste!<cr>:set paste?<cr>
-" quickfix window
-nnoremap <leader>qo :call OpenQuickfix()<cr>
-nnoremap <leader>qc :cclose<cr>
-nnoremap <leader>qp :cprevious<cr>
-nnoremap <leader>qn :cnext<cr>
-nnoremap <leader>qP :colder<cr>
-nnoremap <leader>qN :cnewer<cr>
 " toggle spell checking
 nnoremap <leader>sp :set spell!<cr>
 " toggle registers
