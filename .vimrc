@@ -81,7 +81,7 @@ set undoreload=1000                                           " number of operat
 " folds
 set fillchars="fold: "                                        " don't show hyphens after folds
 set foldcolumn=2                                              " width of the fold column
-set foldlevelstart=4                                          " open folds on open
+set foldlevelstart=6                                          " open folds on open
 set foldmethod=indent                                         " fold by indent
 set foldminlines=0                                            " allow folding of single lines
 set foldnestmax=5                                             " maximum fold level
