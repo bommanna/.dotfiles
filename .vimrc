@@ -195,11 +195,20 @@ endfunction
 " V previews file in vertical split
 " q closes quickfix window
 function! s:OnOpenQuickfix ()
+  setlocal nocursorline
   exec "nnoremap <silent> <buffer> q :ccl<cr>"
   exec "nnoremap <silent> <buffer> o <cr>"
   exec "nnoremap <silent> <buffer> O <cr><c-w><c-j>"
-  exec "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:bo copen<cr><cr>"
-  exec "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:bo copen<cr>"
+  exec "nnoremap <silent> <buffer> s <c-w><cr>:ccl<cr><c-w>H:bo copen<cr><cr>"
+  exec "nnoremap <silent> <buffer> S <c-w><cr>:ccl<cr><c-w>H:bo copen<cr>"
+endfunction
+
+" activate cursorline and cursorcolumn only if buffer is modifiable
+function! s:CursorCross ()
+  if &modifiable
+    set cursorline
+    set cursorcolumn
+  endif
 endfunction
 
 " Ack command
@@ -237,7 +246,7 @@ augroup general
   autocmd   FileType      *             set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertEnter   *             set nocursorline
   autocmd   InsertLeave   *             set cursorline
-  autocmd   WinEnter      *             set cursorline | set cursorcolumn
+  autocmd   WinEnter      *             call s:CursorCross()
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
 
