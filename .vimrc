@@ -18,7 +18,6 @@ let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']              " don't show these
 let g:NERDTreeQuitOnOpen = 1                                  " quit vim in nerdtree is the only buffer open
 
 " Python
-" let g:pymode = 1
 let g:pymode_folding = 0                                      " python folding
 let g:pymode_lint = 0                                         " load lint plugin for code checking
 let g:pymode_lint_checker = ''                                " pyflakes,pep8,mccable,pylint
@@ -196,11 +195,10 @@ endfunction
 " q closes quickfix window
 function! s:OnOpenQuickfix ()
   setlocal nocursorline
+  exec "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow()"
   exec "nnoremap <silent> <buffer> q :ccl<cr>"
-  exec "nnoremap <silent> <buffer> o <cr>"
-  exec "nnoremap <silent> <buffer> O <cr><c-w><c-j>"
-  exec "nnoremap <silent> <buffer> s <c-w><cr>:ccl<cr><c-w>H:bo copen<cr><cr>"
-  exec "nnoremap <silent> <buffer> S <c-w><cr>:ccl<cr><c-w>H:bo copen<cr>"
+  exec "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
+  exec "nnoremap <silent> <buffer> O :OpenInPreviousWindow<cr>zz:copen<cr>"
 endfunction
 
 " activate cursorline and cursorcolumn only if buffer is modifiable
@@ -233,6 +231,22 @@ function! s:Ack (args)
     echo 'No results found'
   endif
 endfunction
+
+" open quickfix link in previous window (instead of rightmost one)
+function! s:OpenInPreviousWindow ()
+  let l:pwnr = winnr('#')
+  .cc
+  let l:cwnr = winnr()
+  if l:cwnr !=# l:pwnr
+    let l:cbnr = bufnr('%')
+    let l:view = winsaveview()
+    execute "normal! \<c-o>"
+    execute l:pwnr . 'wincmd w'
+    execute 'hide buf' l:cbnr
+    call winrestview(l:view)
+  endif
+endfunction
+
 
 
 " COMMANDS AND AUTOCOMMANDS:
