@@ -51,9 +51,9 @@ update:
 brew:
 	brew install tmux
 	brew install ctags
+	brew install ack
 	brew install python
 	brew install vim
-	brew install ack
 
 create:
 	@if [ ! -d "$(HOME)/.config" ]; then \
