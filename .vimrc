@@ -2,7 +2,7 @@
 filetype off
 
 
-" GLOBAL VARIABLES:
+" GLOBAL PLUGIN VARIABLES:
 
 " Ctrlp
 let g:ctrlp_user_command = 'ack %s -f'                        " use ack as search index
