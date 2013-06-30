@@ -30,8 +30,8 @@ let g:pymode_virtualenv = 1                                   " switch to virtua
 
 " Rooter
 let g:rooter_manual_only = 1                                  " doing it below for all filetypes (otherwise only some activate rooting)
-let g:rooter_patterns = ['.git/']
-let g:rooter_use_lcd = 1
+let g:rooter_patterns = ['.git/']                             " patterns indicating root directory
+let g:rooter_use_lcd = 1                                      " use buffer local directory
 
 " Taglist
 let g:Tlist_Auto_Highlight_Tag = 1                            " highlight active tag (after a small inactivity period)
@@ -130,7 +130,7 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to ad
 " syntax sync fromstart                                         " otherwise folding messes up highlighting
 
 
-" COMMANDS AND FUNCTIONS:
+" FUNCTIONS:
 
 " retab file using 2 spaces instead of 4 per tab
 function! Retab ()
@@ -225,10 +225,10 @@ function! s:Ack (args)
   endif
 endfunction
 
+
+" COMMANDS AND AUTOCOMMANDS:
+
 command! -bang -nargs=* -complete=file Ack call s:Ack(<q-args>)
-
-
-" AUTOCOMMANDS:
 
 augroup general
   autocmd!
@@ -243,11 +243,6 @@ augroup END
 
 augroup quickfixgroup
   autocmd   FileType      qf            call s:OnOpenQuickfix()
-augroup END
-
-augroup nerdtreegroup
-  autocmd!
-  autocmd   FileType      nerdtree      noremap <buffer> <silent> <space> :nohlsearch<cr>
 augroup END
 
 augroup taglistgroup
