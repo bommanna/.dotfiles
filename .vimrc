@@ -114,7 +114,7 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to ad
 " syntax sync fromstart                                         " otherwise folding messes up highlighting
 
 
-" FUNCTIONS:
+" COMMANDS AND FUNCTIONS:
 
 " retab file using 2 spaces instead of 4 per tab
 function! Retab ()
@@ -151,7 +151,7 @@ endfunction
 " * replace the hash sign by the language's comment symbol
 " * form haml, all the files in the origin_folder will be compiled into a
 "   single destination file
-function! AutoCompile ()
+function! s:AutoCompile ()
   let firstLine = split(getline(1))
   if len(firstLine) > 2
     if firstLine[1] ==# 'AUTOCOMPILE'
@@ -172,8 +172,8 @@ function! AutoCompile ()
   endif
 endfunction
 
-" Open quickfix window with extra mappings
-function! OnOpenQuickfix ()
+" Add mappings when opening quickfix window
+function! s:OnOpenQuickfix ()
   exec "nnoremap <silent> <buffer> q :ccl<cr>"
   exec "nnoremap <silent> <buffer> o <cr>"
   exec "nnoremap <silent> <buffer> O <cr><c-w><c-j>"
@@ -181,12 +181,8 @@ function! OnOpenQuickfix ()
   exec "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H<c-w>x:bo copen<cr>"
 endfunction
 
-
-" COMMANDS:
-
 " Ack command
 " simpler than ack.vim and isn't a ghetto grep hack
-
 function! s:Ack(args)
   echo 'Acking...'
   if empty(a:args)
@@ -216,7 +212,7 @@ augroup general
 augroup END
 
 augroup quickfixgroup
-  autocmd   FileType      qf            call OnOpenQuickfix()
+  autocmd   FileType      qf            call s:OnOpenQuickfix()
 augroup END
 
 augroup latexgroup
@@ -259,7 +255,7 @@ augroup END
 
 augroup coffeegroup
   autocmd!
-  autocmd   BufWritePost  coffee        call AutoCompile()
+  autocmd   BufWritePost  coffee        call s:AutoCompile()
   autocmd   FileType      coffee        setlocal colorcolumn=80
 augroup END
 
