@@ -4,12 +4,18 @@ filetype off
 
 " GLOBAL VARIABLES:
 
+" Ctrlp
+let g:ctrlp_user_command = 'ack %s -f'                        " use ack as search index
+
 " EasyMotion
 let g:EasyMotion_leader_key = "'"                             " ' key is unbound in normal and visual mode below
 
-" Latex
-let g:tex_flavor='latex'                                      " 
-let g:Tex_DefaultTargetFormat='pdf'                           "
+" LatexBox
+let g:LatexBox_autosave = 1                                   " save before compiling
+
+" NerdTree
+let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']              " don't show these files
+let g:NERDTreeQuitOnOpen = 1                                  " quit vim in nerdtree is the only buffer open
 
 " Python
 " let g:pymode = 1
@@ -27,9 +33,19 @@ let g:rooter_manual_only = 1                                  " doing it below f
 let g:rooter_patterns = ['.git/']
 let g:rooter_use_lcd = 1
 
-" Ctrlp
-" much faster initial caching
-let g:ctrlp_user_command = 'find %s -type f | grep -v -E -e "\.DS_Store" -e "\.git" -e "\.pyc$"'
+" Taglist
+let g:Tlist_Auto_Highlight_Tag = 1                            " highlight active tag (after a small inactivity period)
+let g:Tlist_Auto_Update = 1                                   " process new files as they are opened
+let g:Tlist_Compact_Format = 1                                " don't put line breaks between categories
+let g:Tlist_Enable_Fold_Column = 0                            " show fold column in taglist window
+let g:Tlist_Exit_OnlyWindow = 1                               " quit vim when taglist is the only window open
+let g:Tlist_File_Fold_Auto_Close = 1                          " automatically close folds corresponding to non active windows
+let g:Tlist_GainFocus_On_ToggleOpen = 0                       " move cursor to taglist window when opening it
+let g:Tlist_Highlight_Tag_On_BufEnter = 0                     " highlight active tag when entering a buffer
+let g:Tlist_Show_One_File = 1                                 " only show tags from active window
+let g:Tlist_Sort_Type = "name"                                " tag sort order
+let g:Tlist_Use_Right_Window = 1                              " put taglist window on the right
+let g:Tlist_WinWidth = 60                                     " width of taglist window
 
 
 " PATHOGEN:
@@ -173,32 +189,46 @@ function! s:AutoCompile ()
 endfunction
 
 " Add mappings when opening quickfix window
+" o opens file (<cr> is remapped to :)
+" O previews file
+" v opens file in vertical split
+" V previews file in vertical split
+" q closes quickfix window
 function! s:OnOpenQuickfix ()
   exec "nnoremap <silent> <buffer> q :ccl<cr>"
   exec "nnoremap <silent> <buffer> o <cr>"
   exec "nnoremap <silent> <buffer> O <cr><c-w><c-j>"
-  exec "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H<c-w>x:bo copen<cr><cr>"
-  exec "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H<c-w>x:bo copen<cr>"
+  exec "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:bo copen<cr><cr>"
+  exec "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:bo copen<cr>"
 endfunction
 
 " Ack command
+" opens a quickfix window with the results
 " simpler than ack.vim and isn't a ghetto grep hack
-function! s:Ack(args)
+" any arguments to the command get passed through to command line ack
+function! s:Ack (args)
   echo 'Acking...'
   if empty(a:args)
-    let l:ackargs = expand("<cword>")
+    let l:ack_args = expand("<cword>")
   else
-    let l:ackargs = a:args
+    let l:ack_args = a:args
   end
-  cgete system('ack ' . l:ackargs)
-  botright copen
-  redraw!
+  let l:ack_results = system('ack ' . l:ack_args)
+  if strlen(l:ack_results)
+    cgete l:ack_results
+    botright copen
+    redraw!
+    echo line('$') . ' result(s) found'
+  else
+    redraw!
+    echo 'No results found'
+  endif
 endfunction
 
 command! -bang -nargs=* -complete=file Ack call s:Ack(<q-args>)
 
 
-" AUTOCOMMANDS AND PLUGIN VARIABLES:
+" AUTOCOMMANDS:
 
 augroup general
   autocmd!
@@ -215,31 +245,11 @@ augroup quickfixgroup
   autocmd   FileType      qf            call s:OnOpenQuickfix()
 augroup END
 
-augroup latexgroup
-  autocmd!
-  autocmd   BufWritePost  tex           Latexmk
-  autocmd   FileType      tex           nnoremap <buffer> <leader>ll :w<cr>:!latexmk -pdf -cd %<cr>
-augroup END
-
-let NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']
-let NERDTreeQuitOnOpen = 1
 augroup nerdtreegroup
   autocmd!
   autocmd   FileType      nerdtree      noremap <buffer> <silent> <space> :nohlsearch<cr>
 augroup END
 
-let Tlist_Auto_Highlight_Tag=1
-let Tlist_Auto_Update=1
-let Tlist_Compact_Format=1
-let Tlist_Enable_Fold_Column=0
-let Tlist_Exit_OnlyWindow=1
-let Tlist_File_Fold_Auto_Close=1
-let Tlist_GainFocus_On_ToggleOpen=0
-let Tlist_Highlight_Tag_On_BufEnter=0
-let Tlist_Show_One_File=1
-let Tlist_Sort_Type="name"
-let Tlist_Use_Right_Window=1
-let Tlist_WinWidth=60
 augroup taglistgroup
   autocmd!
   autocmd   BufWritePost  *             call RefreshTags()
