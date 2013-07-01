@@ -40,7 +40,7 @@ let g:Tlist_Enable_Fold_Column = 0                            " show fold column
 let g:Tlist_Exit_OnlyWindow = 1                               " quit vim when taglist is the only window open
 let g:Tlist_File_Fold_Auto_Close = 1                          " automatically close folds corresponding to non active windows
 let g:Tlist_GainFocus_On_ToggleOpen = 0                       " move cursor to taglist window when opening it
-let g:Tlist_Highlight_Tag_On_BufEnter = 0                     " highlight active tag when entering a buffer
+let g:Tlist_Highlight_Tag_On_BufEnter = 1                     " highlight active tag when entering a buffer
 let g:Tlist_Show_One_File = 1                                 " only show tags from active window
 let g:Tlist_Sort_Type = "name"                                " tag sort order
 let g:Tlist_Use_Right_Window = 1                              " put taglist window on the right
@@ -195,10 +195,13 @@ endfunction
 " q closes quickfix window
 function! s:OnOpenQuickfix ()
   setlocal nocursorline
-  exec "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow()"
-  exec "nnoremap <silent> <buffer> q :ccl<cr>"
-  exec "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
-  exec "nnoremap <silent> <buffer> O :OpenInPreviousWindow<cr>zz:copen<cr>"
+  execute "wincmd J"
+  execute "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow()"
+  execute "nnoremap <silent> <buffer> q :ccl<cr>"
+  execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
+  execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow<cr>zz:copen<cr>"
+  execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><cr>"
+  execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
 endfunction
 
 " activate cursorline and cursorcolumn only if buffer is modifiable
@@ -341,7 +344,7 @@ vnoremap <silent> # :<c-u>
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
 " quickfix window
-nnoremap <leader>co :botright copen<cr>
+nnoremap <leader>co :copen<cr>
 nnoremap <leader>cc :cclose<cr>
 nnoremap <leader>cp :cprevious<cr>
 nnoremap <leader>cn :cnext<cr>
