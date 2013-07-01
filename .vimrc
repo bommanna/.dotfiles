@@ -1,4 +1,5 @@
 " SAFETY:
+
 filetype off
 
 
@@ -224,7 +225,7 @@ endfunction
 " opens a quickfix window with the results
 " simpler than ack.vim and isn't a ghetto grep hack
 " any arguments to the command get passed through to command line ack
-function! s:Ack (args)
+function! s:Ack (force, args)
   echo 'Acking...'
   if empty(a:args)
     let l:ack_args = expand("<cword>")
@@ -235,6 +236,9 @@ function! s:Ack (args)
   if strlen(l:ack_results)
     cgete l:ack_results
     botright copen
+    if a:force
+      .cc
+    endif
     redraw!
     echo line('$') . ' result(s) found'
   else
@@ -262,7 +266,7 @@ endfunction
 
 " COMMANDS AND AUTOCOMMANDS:
 
-command! -bang -nargs=* -complete=file Ack call s:Ack(<q-args>)
+command! -bang -nargs=* -complete=file Ack call s:Ack(<bang>0, <q-args>)
 
 augroup general
   autocmd!
