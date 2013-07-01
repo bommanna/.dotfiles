@@ -346,10 +346,6 @@ nnoremap <leader>bgl :set background=light<cr>
 " quickfix window
 nnoremap <leader>co :copen<cr>
 nnoremap <leader>cc :cclose<cr>
-nnoremap <leader>cp :cprevious<cr>
-nnoremap <leader>cn :cnext<cr>
-nnoremap <leader>cP :colder<cr>
-nnoremap <leader>cN :cnewer<cr>
 " toggle marks
 nnoremap <leader>m :marks<cr>
 " paste toggle
