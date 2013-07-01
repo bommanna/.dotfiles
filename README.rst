@@ -24,6 +24,7 @@ Homebrew_ is the supported way to install these packages. Below is the preferred
 * ctags
 * python
 * vim
+* ack
 
 The following packages are optional but potentially useful:
 
