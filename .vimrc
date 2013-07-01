@@ -15,6 +15,7 @@ let g:EasyMotion_leader_key = "'"                             " ' key is unbound
 
 " LatexBox
 let g:LatexBox_autosave = 1                                   " save before compiling
+let g:LatexBox_Folding = 0                                    " special folding for latex
 let g:LatexBox_split_width = 60                               " width of table of contents
 
 " NerdTree
@@ -202,7 +203,7 @@ endfunction
 function! s:OnOpenQuickfix ()
   setlocal nocursorline
   execute "wincmd J"
-  execute "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow()"
+  execute "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow('.cc')"
   execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow<cr>zz:copen<cr>"
   execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
   execute "nnoremap <silent> <buffer> j j"
@@ -225,7 +226,7 @@ endfunction
 
 " Ack command
 " opens a quickfix window with the results
-" simpler than ack.vim and isn't a ghetto grep hack
+" simpler than ack.vim (https://github.com/mileszs/ack.vim) and isn't a ghetto grep hack
 " any arguments to the command get passed through to command line ack
 function! s:Ack (force, args)
   echo 'Acking...'
@@ -249,10 +250,65 @@ function! s:Ack (force, args)
   endif
 endfunction
 
-" open quickfix link in previous window (instead of rightmost one)
-function! s:OpenInPreviousWindow ()
+" previous and next mappings
+" copied from unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
+" didn't like that quickfix was remapped to q
+function! s:MapNextFamily(map,cmd)
+  let map = '<Plug>unimpaired'.toupper(a:map)
+  let end = ' ".(v:count ? v:count : "")<CR>'
+  execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.a:cmd.'previous'.end
+  execute 'nnoremap <silent> '.map.'Next     :<C-U>exe "'.a:cmd.'next'.end
+  execute 'nnoremap <silent> '.map.'First    :<C-U>exe "'.a:cmd.'first'.end
+  execute 'nnoremap <silent> '.map.'Last     :<C-U>exe "'.a:cmd.'last'.end
+  execute 'nmap <silent> ['.        a:map .' '.map.'Previous'
+  execute 'nmap <silent> ]'.        a:map .' '.map.'Next'
+  execute 'nmap <silent> ['.toupper(a:map).' '.map.'First'
+  execute 'nmap <silent> ]'.toupper(a:map).' '.map.'Last'
+  if exists(':'.a:cmd.'nfile')
+    execute 'nnoremap <silent> '.map.'PFile :<C-U>exe "'.a:cmd.'pfile'.end
+    execute 'nnoremap <silent> '.map.'NFile :<C-U>exe "'.a:cmd.'nfile'.end
+    execute 'nmap <silent> [<C-'.a:map.'> '.map.'PFile'
+    execute 'nmap <silent> ]<C-'.a:map.'> '.map.'NFile'
+  endif
+endfunction
+
+call s:MapNextFamily('a','')
+call s:MapNextFamily('b','b')
+call s:MapNextFamily('c','c')
+call s:MapNextFamily('l','l')
+call s:MapNextFamily('t','t')
+
+" paste toggling
+" also copied from unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
+function! s:setup_paste() abort
+  let s:paste = &paste
+  set paste
+endfunction
+
+nnoremap <silent> yp  :call <SID>setup_paste()<CR>a
+nnoremap <silent> yP  :call <SID>setup_paste()<CR>i
+nnoremap <silent> yo  :call <SID>setup_paste()<CR>o
+nnoremap <silent> yO  :call <SID>setup_paste()<CR>O
+nnoremap <silent> yA  :call <SID>setup_paste()<CR>A
+nnoremap <silent> yI  :call <SID>setup_paste()<CR>I
+
+augroup unimpaired_paste
+  autocmd!
+  autocmd InsertLeave *
+        \ if exists('s:paste') |
+        \   let &paste = s:paste |
+        \   unlet s:paste |
+        \ endif
+augroup END
+
+" force command to load in previous window
+" useful in particular for quickfix (which otherwise always uses the rightmost one)
+" nb: the cursor in the window the command would have loaded in will be in the
+" same position in the text but its position relative to the window might be
+" different
+function! s:OpenInPreviousWindow (cmd)
   let l:pwnr = winnr('#')
-  .cc
+  execute a:cmd
   let l:cwnr = winnr()
   if l:cwnr !=# l:pwnr
     let l:cbnr = bufnr('%')
