@@ -1,7 +1,14 @@
 # ack configuration options
 
-# ignore tag files
+# custom types
+--type-set=csv=.csv
+--type-set=json=.json
 --type-set=tags=.tags,.venvtags
+
+# ignore some types by default
+--nocsv
+--nojson
+--nosql
 --notags
 
 # page results
