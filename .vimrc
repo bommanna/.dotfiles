@@ -203,11 +203,13 @@ function! s:OnOpenQuickfix ()
   setlocal nocursorline
   execute "wincmd J"
   execute "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow()"
-  execute "nnoremap <silent> <buffer> q :ccl<cr>"
-  execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
   execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow<cr>zz:copen<cr>"
-  execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><cr>"
   execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
+  execute "nnoremap <silent> <buffer> j j"
+  execute "nnoremap <silent> <buffer> k k"
+  execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
+  execute "nnoremap <silent> <buffer> q :ccl<cr>"
+  execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><cr>"
 endfunction
 
 " activate cursorline and cursorcolumn only if buffer is modifiable
@@ -263,10 +265,9 @@ function! s:OpenInPreviousWindow ()
 endfunction
 
 
-
 " COMMANDS AND AUTOCOMMANDS:
 
-command! -bang -nargs=* -complete=file Ack call s:Ack(<bang>0, <q-args>)
+command! -bang -nargs=* -complete=file Ack call s:Ack(<bang>0, <q-args> . ' -H')
 
 augroup general
   autocmd!
@@ -360,8 +361,6 @@ nnoremap <leader>co :copen<cr>
 nnoremap <leader>cc :cclose<cr>
 " toggle marks
 nnoremap <leader>m :marks<cr>
-" paste toggle
-nnoremap <leader>pa :set paste!<cr>:set paste?<cr>
 " toggle spell checking
 nnoremap <leader>sp :set spell!<cr>
 " toggle registers
