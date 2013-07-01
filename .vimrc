@@ -5,6 +5,8 @@ filetype off
 " GLOBAL PLUGIN VARIABLES:
 
 " Ctrlp
+let g:ctrlp_by_filename = 1                                   " search by filename by default
+let g:ctrlp_cmd = 'CtrlPMRU'                                  " search mru files by default
 let g:ctrlp_user_command = 'ack %s -f'                        " use ack as search index
 
 " EasyMotion
@@ -12,10 +14,13 @@ let g:EasyMotion_leader_key = "'"                             " ' key is unbound
 
 " LatexBox
 let g:LatexBox_autosave = 1                                   " save before compiling
+let g:LatexBox_split_width = 60                               " width of table of contents
 
 " NerdTree
 let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']              " don't show these files
 let g:NERDTreeQuitOnOpen = 1                                  " quit vim in nerdtree is the only buffer open
+let g:NERDTreeShowHidden = 1                                  " show hidden files by default
+let g:NERDTreeWinSize = 60                                    " width of nerdtree window
 
 " Python
 let g:pymode_folding = 0                                      " python folding
