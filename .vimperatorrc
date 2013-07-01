@@ -1,0 +1,10 @@
+" vimperator configuration
+
+" slightly faster scrolling
+nnoremap j 4j
+nnoremap k 4k
+
+" miscellaneous options
+set complete=lS
+set visualbell
+set wildmode=list:full

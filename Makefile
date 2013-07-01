@@ -37,7 +37,7 @@
 # 	will restore previous dotfiles (keeping any non overlapping
 # 	ones in place)
 
-FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .ctags .ackrc
+FILES = .vim .bash_profile .bashrc .editrc .inputrc .tmux.conf .vimrc .ctags .ackrc .vimperatorrc
 CONFIG_FOLDERS = git
 
 install: create save clean link update
