@@ -214,6 +214,9 @@ function! s:CursorCross ()
   if &modifiable
     set cursorline
     set cursorcolumn
+  else
+    set nocursorline
+    set nocursorcolumn
   endif
 endfunction
 
@@ -376,15 +379,17 @@ nnoremap <leader>f :NERDTreeToggle<cr>
 nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
 nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
 " fugitive
+nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
+nnoremap <leader>gP :Git pull<cr>
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gl :silent Glog<cr>:copen<cr>:redraw!<cr>
+nnoremap <leader>go :Gbrowse<cr>
+nnoremap <leader>gp :Git push<cr>
+nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
-nnoremap <leader>gr :Gread<cr>
-nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>go :Gbrowse<cr>
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gp :Git push<cr>
-nnoremap <leader>gP :Git pull<cr>
 
 " file execution
 
