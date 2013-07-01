@@ -3,11 +3,13 @@
 # custom types
 --type-set=csv=.csv
 --type-set=json=.json
+--type-set=log=.log
 --type-set=tags=.tags,.venvtags
 
 # ignore some types by default
 --nocsv
 --nojson
+--nolog
 --nosql
 --notags
 
