@@ -1,6 +1,7 @@
 # ack configuration options
 
 # custom types
+--type-set=coffee=.coffee
 --type-set=csv=.csv
 --type-set=json=.json
 --type-set=log=.log
