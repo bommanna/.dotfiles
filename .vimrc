@@ -210,7 +210,7 @@ function! s:OnOpenQuickfix ()
   execute "nnoremap <silent> <buffer> k k"
   execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
   execute "nnoremap <silent> <buffer> q :ccl<cr>"
-  execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><cr>"
+  execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p"
 endfunction
 
 " activate cursorline and cursorcolumn only if buffer is modifiable
