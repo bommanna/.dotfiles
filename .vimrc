@@ -17,6 +17,7 @@ let g:EasyMotion_leader_key = "'"                             " ' key is unbound
 let g:LatexBox_autosave = 1                                   " save before compiling
 let g:LatexBox_Folding = 0                                    " special folding for latex
 let g:LatexBox_split_width = 60                               " width of table of contents
+let g:LatexBox_async = 0                                      " compile latex in background
 
 " NerdTree
 let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']              " don't show these files
