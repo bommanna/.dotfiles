@@ -39,6 +39,9 @@ let g:rooter_manual_only = 1                                  " doing it below f
 let g:rooter_patterns = ['.git/']                             " patterns indicating root directory
 let g:rooter_use_lcd = 1                                      " use buffer local directory
 
+" Solarized
+let g:solarized_termtrans = 1                                 " transparent background sometimes
+
 " Taglist
 let g:Tlist_Auto_Highlight_Tag = 1                            " highlight active tag (after a small inactivity period)
 let g:Tlist_Auto_Update = 1                                   " process new files as they are opened
@@ -52,7 +55,6 @@ let g:Tlist_Show_One_File = 1                                 " only show tags f
 let g:Tlist_Sort_Type = "name"                                " tag sort order
 let g:Tlist_Use_Right_Window = 1                              " put taglist window on the right
 let g:Tlist_WinWidth = 60                                     " width of taglist window
-
 
 " PATHOGEN:
 
