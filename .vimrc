@@ -2,6 +2,7 @@
 
 filetype off
 
+set whichwrap
 
 " GLOBAL PLUGIN VARIABLES:
 
@@ -77,6 +78,8 @@ set expandtab                                                 " insert spaces in
 set hidden                                                    " allow hidden buffers
 set lazyredraw                                                " don't redraw during macros, etc
 set linebreak                                                 " ? for latex
+set magic                                                     " use vim magic regular expressions by default
+set nojoinspaces                                              " don't insert two spaces after punctuation on a join
 set nostartofline                                             " keeps cursor on current column for movements like H, M, ...
 set noswapfile                                                " don't use swap files for saves
 set number                                                    " activate line numbers
@@ -89,6 +92,8 @@ set showcmd                                                   " show partial com
 set tabstop=2                                                 " number of spaces a tab takes (displayed)
 set tag=./.tags;,.venvtags                                    " tags file
 set textwidth=0                                               " don't insert line breaks for long lines
+set ttimeoutlen=100                                           " don't wait a second for wrong key codes to error out
+set virtualedit=block                                         " let cursor move past the last char in <C-V> mode
 set wrap                                                      " wrap long lines
 
 " autocomplete
@@ -390,6 +395,8 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
+" ^ is hard to hit
+nnoremap _ ^
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
