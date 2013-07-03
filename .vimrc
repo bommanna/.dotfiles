@@ -2,7 +2,6 @@
 
 filetype off
 
-set whichwrap
 
 " GLOBAL PLUGIN VARIABLES:
 
