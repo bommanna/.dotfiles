@@ -142,7 +142,7 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to ad
 " FUNCTIONS:
 
 " retab file using 2 spaces instead of 4 per tab
-function! Retab ()
+function! s:Retab ()
   set tabstop=4
   set noexpandtab
   %retab!
@@ -154,7 +154,7 @@ endfunction
 " refresh tags
 " this function only does something if the taglist window is open
 " this will also run ctags recursively if the file is in a git repository
-function! RefreshTags ()
+function! s:RefreshTags ()
   if bufloaded('__Tag_List__')
     TlistUpdate
     if ! empty(finddir('.git'))
@@ -326,9 +326,12 @@ endfunction
 
 " COMMANDS AND AUTOCOMMANDS:
 
-command! -bang -nargs=* -complete=file Ack call s:Ack(<bang>0, <q-args> . ' -H')
+" some commands
+command! -bang -nargs=* -complete=file  Ack     call s:Ack(<bang>0, <q-args> . ' -H')
+command!                                Retab   call s:Retab()
 
-augroup general
+" miscellaneous stuff
+augroup generalgroup
   autocmd!
   autocmd   BufEnter      *             Rooter
   autocmd   CmdwinEnter   *             nnoremap <buffer> <cr> <cr>
@@ -339,23 +342,33 @@ augroup general
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
 
+" use the correct help program for vim and tex files
+augroup helpgroup
+  autocmd!
+  autocmd   FileType      help          setlocal keywordprg=:help
+  autocmd   FileType      vim           setlocal keywordprg=:help
+  autocmd   FileType      tex           setlocal keywordprg=texdoc
+augroup END
+
+" change quickfix window keybindings and make it full width
 augroup quickfixgroup
   autocmd   FileType      qf            call s:OnOpenQuickfix()
 augroup END
 
+" some commands when using the taglist window
 augroup taglistgroup
   autocmd!
-  autocmd   BufWritePost  *             call RefreshTags()
+  autocmd   BufWritePost  *             call s:RefreshTags()
   autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
   autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
 augroup END
 
+" language specific thangs
 augroup pythongroup
   autocmd!
   autocmd   FileType      python        setlocal colorcolumn=80
   autocmd   FileType      python        setlocal omnifunc=pythoncomplete#Complete
 augroup END
-
 augroup coffeegroup
   autocmd!
   autocmd   BufWritePost  coffee        call s:AutoCompile()
