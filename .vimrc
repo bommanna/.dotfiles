@@ -293,7 +293,7 @@ function! s:MapNextFamily(map,cmd)
 endfunction
 
 " paste toggling
-" also copied from unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
+" also inspired by unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
 function! s:toggle_paste(force) abort
   if a:force
     let s:paste = &paste
@@ -373,7 +373,7 @@ augroup generalgroup
   autocmd   FileType      *             set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertEnter   *             set nocursorline
   autocmd   InsertLeave   *             set cursorline | call <SID>toggle_paste(0)
-  autocmd   WinEnter      *             call s:CursorCross()
+  autocmd   WinEnter      *             call <SID>CursorCross()
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
 
@@ -393,7 +393,7 @@ augroup END
 " some commands when using the taglist window
 augroup taglistgroup
   autocmd!
-  autocmd   BufWritePost  *             call s:RefreshTags()
+  autocmd   BufWritePost  *             call <SID>RefreshTags()
   autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
   autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
 augroup END
@@ -410,7 +410,7 @@ augroup pythongroup
 augroup END
 augroup coffeegroup
   autocmd!
-  autocmd   BufWritePost  coffee        call s:AutoCompile()
+  autocmd   BufWritePost  coffee        call <SID>AutoCompile()
   autocmd   FileType      coffee        setlocal colorcolumn=80
 augroup END
 
@@ -483,7 +483,7 @@ nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
 " toggle search highlight off
 nnoremap <silent> <space> :nohlsearch<cr>
-" pasting (copied from unimpaired.vim)
+" pasting (inspired by unimpaired.vim, cf. above)
 nnoremap <silent> yp  :call <SID>toggle_paste(1)<CR>a
 nnoremap <silent> yP  :call <SID>toggle_paste(1)<CR>i
 nnoremap <silent> yo  :call <SID>toggle_paste(1)<CR>o
@@ -496,6 +496,9 @@ call s:MapNextFamily('b','b')
 call s:MapNextFamily('c','c')
 call s:MapNextFamily('l','l')
 call s:MapNextFamily('t','t')
+" fixing diff mappings
+nnoremap ]d ]c
+nnoremap [d [c
 
 " plugins
 
