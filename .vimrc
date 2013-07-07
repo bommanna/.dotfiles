@@ -292,34 +292,19 @@ function! s:MapNextFamily(map,cmd)
   endif
 endfunction
 
-call s:MapNextFamily('a','')
-call s:MapNextFamily('b','b')
-call s:MapNextFamily('c','c')
-call s:MapNextFamily('l','l')
-call s:MapNextFamily('t','t')
-
 " paste toggling
 " also copied from unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
-function! s:setup_paste() abort
-  let s:paste = &paste
-  set paste
+function! s:toggle_paste(force) abort
+  if a:force
+    let s:paste = &paste
+    set paste
+  else
+    if exists('s:paste')
+      let &paste = s:paste
+      unlet s:paste
+    endif
+  endif
 endfunction
-
-nnoremap <silent> yp  :call <SID>setup_paste()<CR>a
-nnoremap <silent> yP  :call <SID>setup_paste()<CR>i
-nnoremap <silent> yo  :call <SID>setup_paste()<CR>o
-nnoremap <silent> yO  :call <SID>setup_paste()<CR>O
-nnoremap <silent> yA  :call <SID>setup_paste()<CR>A
-nnoremap <silent> yI  :call <SID>setup_paste()<CR>I
-
-augroup unimpaired_paste
-  autocmd!
-  autocmd InsertLeave *
-        \ if exists('s:paste') |
-        \   let &paste = s:paste |
-        \   unlet s:paste |
-        \ endif
-augroup END
 
 " force command to load in previous window
 " useful in particular for quickfix (which otherwise always uses the rightmost one)
@@ -371,12 +356,14 @@ function! s:create_snippet () range
 endfunction
 
 
-" COMMANDS AND AUTOCOMMANDS:
+" COMMANDS:
 
-" some commands
 command! -bang -nargs=* -complete=file  Ack     call s:Ack(<bang>0, <q-args> . ' -H')
 command!                                Retab   call s:Retab()
 command! -range                         Snip    <line1>,<line2>call s:create_snippet()
+
+
+" AUTOCOMMANDS:
 
 " miscellaneous stuff
 augroup generalgroup
@@ -385,7 +372,7 @@ augroup generalgroup
   autocmd   CmdwinEnter   *             nnoremap <buffer> <cr> <cr>
   autocmd   FileType      *             set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertEnter   *             set nocursorline
-  autocmd   InsertLeave   *             set cursorline
+  autocmd   InsertLeave   *             set cursorline | call <SID>toggle_paste(0)
   autocmd   WinEnter      *             call s:CursorCross()
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
@@ -496,6 +483,19 @@ nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
 " toggle search highlight off
 nnoremap <silent> <space> :nohlsearch<cr>
+" pasting (copied from unimpaired.vim)
+nnoremap <silent> yp  :call <SID>toggle_paste(1)<CR>a
+nnoremap <silent> yP  :call <SID>toggle_paste(1)<CR>i
+nnoremap <silent> yo  :call <SID>toggle_paste(1)<CR>o
+nnoremap <silent> yO  :call <SID>toggle_paste(1)<CR>O
+nnoremap <silent> yA  :call <SID>toggle_paste(1)<CR>A
+nnoremap <silent> yI  :call <SID>toggle_paste(1)<CR>I
+" more unimpaired mappings
+call s:MapNextFamily('a','')
+call s:MapNextFamily('b','b')
+call s:MapNextFamily('c','c')
+call s:MapNextFamily('l','l')
+call s:MapNextFamily('t','t')
 
 " plugins
 
