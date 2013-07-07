@@ -58,6 +58,7 @@ let g:Tlist_Sort_Type = "name"                                " tag sort order
 let g:Tlist_Use_Right_Window = 1                              " put taglist window on the right
 let g:Tlist_WinWidth = 60                                     " width of taglist window
 
+
 " PATHOGEN:
 
 call pathogen#infect()
@@ -232,6 +233,17 @@ function! s:CursorCross ()
   endif
 endfunction
 
+" get visual selection
+" from http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+function! s:get_visual_selection ()
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  return join(lines, "\n")
+endfunction
+
 " Ack command
 " opens a quickfix window with the results
 " simpler than ack.vim (https://github.com/mileszs/ack.vim) and isn't a ghetto grep hack
@@ -330,12 +342,41 @@ function! s:OpenInPreviousWindow (cmd)
   endif
 endfunction
 
+" snippets
+" scp selection to remote directory
+" requires igloo (https://github.com/mtth/igloo)
+function! s:create_snippet () range
+  if exists('g:snippets_profile')
+    let profile = g:snippets_profile
+  else
+    let profile = 'snippets'
+  endif
+  echo profile
+  " generate a pseudo-random hash
+  let hash = system("cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 32")
+  let cmd = a:firstline . ',' . a:lastline . 'w !igloo --stream'
+  let cmd .= ' --profile=' . profile . ' ' . hash
+  silent execute cmd
+  redraw!
+  if v:shell_error == 0
+    echomsg 'Snippet' hash 'created!'
+  else
+    call system('igloo --version')
+    if v:shell_error > 0
+      echoerr 'igloo command line utility missing'
+    else
+      echoerr profile . ' profile missing'
+    endif
+  endif
+endfunction
+
 
 " COMMANDS AND AUTOCOMMANDS:
 
 " some commands
 command! -bang -nargs=* -complete=file  Ack     call s:Ack(<bang>0, <q-args> . ' -H')
 command!                                Retab   call s:Retab()
+command! -range                         Snip    <line1>,<line2>call s:create_snippet()
 
 " miscellaneous stuff
 augroup generalgroup
