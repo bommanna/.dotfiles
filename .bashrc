@@ -62,15 +62,14 @@ export PYLINTHOME="$HOME/.config/pylint"
 export PYLINTRC="$HOME/.config/pylint/.pylintrc"
 
 # Igloo
-export IGLOO_PROFILES_PATH="$HOME/.config/igloo/config"
-export IGLOO_DEFAULT_PROFILE='default'
+export MYIGLOORC="$HOME/.config/igloo/.igloorc"
 
 
 # Aliases
 # -------
 
-alias eb='vim ~/.bashrc'
-alias sb='source ~/.bashrc'
+alias be='vim ~/.bashrc'
+alias bs='source ~/.bashrc'
 alias la='ls -AFG'
 alias ll='ls -AFGl'
 

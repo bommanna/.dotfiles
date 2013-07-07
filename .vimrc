@@ -18,6 +18,7 @@ let g:LatexBox_autosave = 1                                   " save before comp
 let g:LatexBox_Folding = 0                                    " special folding for latex
 let g:LatexBox_split_width = 60                               " width of table of contents
 let g:LatexBox_async = 0                                      " compile latex in background
+let g:LatexBox_latexmk_preview_continuously = 0               " compile latex manually
 
 " NerdTree
 let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']              " don't show these files
@@ -314,10 +315,12 @@ augroup END
 " same position in the text but its position relative to the window might be
 " different
 function! s:OpenInPreviousWindow (cmd)
+  let l:bwnr = winnr()
   let l:pwnr = winnr('#')
   execute a:cmd
   let l:cwnr = winnr()
-  if l:cwnr !=# l:pwnr
+  " we check if the cursor has moved window and if it isn't already in the correct one
+  if l:cwnr !=# l:bwnr && l:cwnr !=# l:pwnr
     let l:cbnr = bufnr('%')
     let l:view = winsaveview()
     execute "normal! \<c-o>"
@@ -368,6 +371,10 @@ augroup taglistgroup
 augroup END
 
 " language specific thangs
+augroup texgroup
+  autocmd!
+  autocmd   FileType      tex           noremap <buffer> <leader>ll :w<cr>:Latexmk<cr>
+augroup END
 augroup pythongroup
   autocmd!
   autocmd   FileType      python        setlocal colorcolumn=80
