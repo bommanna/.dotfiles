@@ -223,6 +223,7 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 
 " Snip:
 "   :[RANGE]Snip[!]
+"   :SnipBuffer[!] BUFFER
 "
 "   Create a snippet using the `igloo` executable (requires igloo to be
 "   installed: https://github.com/mtth/igloo). Configuration is done via two
@@ -237,6 +238,7 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 "   RANGE                               Optional line range to include in
 "                                       snippet (defaults to the current
 "                                       line).
+"   BUFFER                              Buffer to send.
 "
 " Examples:
 "   :Snip                               Creates a snippet with the contents of
@@ -246,6 +248,7 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 "                                       the browser.
 "
 command! -bang -range Snip <line1>,<line2>call <SID>create_snippet(<bang>0)
+command! -bang -nargs=1 SnipBuffer call <SID>create_snippet(<bang>0, <f-args>)
 
 
 " FUNCTIONS:
@@ -414,7 +417,7 @@ function! s:toggle_paste(force) abort
 endfunction
 
 " snippets
-function! s:create_snippet(open) range
+function! s:create_snippet(open, ...) range
   if exists('g:snippets_ssh_url')
     let ssh_url = g:snippets_ssh_url
   elseif exists('$SNIPPETS_SSH_URL')
@@ -431,9 +434,17 @@ function! s:create_snippet(open) range
   endif
   " generate a pseudo-random hash
   let hash = system("cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 32")
-  let cmd = a:firstline . ',' . a:lastline . 'w !igloo --stream'
-  let cmd .= ' --url=' . ssh_url . ' ' . hash
-  silent execute cmd
+  if a:0 < 1
+    " we are sending lines
+    let cmd = a:firstline . ',' . a:lastline . 'w !igloo --stream'
+    let cmd .= ' --url=' . ssh_url . ' ' . hash
+    silent execute cmd
+  else
+    " we are sending a buffer
+    let cmd = 'igloo --stream --url=' . ssh_url . ' ' . hash
+    call system(cmd, substitute(getreg(a:1), '\n', '\n', 'g'))
+    " (without the substitute, only the first line gets sent somehow)
+  endif
   redraw!
   if v:shell_error == 0
     if !empty(http_url)
@@ -450,9 +461,9 @@ function! s:create_snippet(open) range
   else
     call system('igloo --version')
     if v:shell_error > 0
-      echoerr 'igloo command line utility missing'
+      echoerr 'Igloo command line utility missing'
     else
-      echoerr profile . ' profile missing'
+      echoerr 'Something went wrong!'
     endif
   endif
 endfunction
