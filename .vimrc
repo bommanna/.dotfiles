@@ -1,3 +1,5 @@
+" VIM configuration file, inspired by many great .vimrc files found over the months
+
 " SAFETY:
 
 filetype off
@@ -142,33 +144,139 @@ set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add      "   completion for
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to add new dict words
 
 " disabled
-" syntax sync fromstart                                         " otherwise folding messes up highlighting
+" syntax sync fromstart                                       " otherwise folding messes up highlighting
+
+
+" COMMANDS:
+
+" Ack:
+"   :Ack[!] [OPTIONS] EXPR [FILE ...]
+"
+"   Search for matches of the regexp EXPR. If one or more FILE is specified, only these files are searched,
+"   otherwise the entire project directory will be explored. Any matches are loaded in the quickfix
+"   window. This implementation is simpler than that of ack.vim (https://github.com/mileszs/ack.vim) and
+"   doesn't rely on monkey patching the grep command.
+"
+" Arguments:
+"   !                                   Load the first match.
+"   OPTIONS, EXPR, FILE                 Theses arguments are forwarded to
+"                                       the ack executable (along with the `-H`
+"                                       flag to guarantee that the "   filename
+"                                       is always present even when searching
+"                                       inside a single file, otherwise the
+"                                       quickfix window "   will fail). Cf.
+"                                       `man ack` for details. Note that characters
+"                                       must be escaped or quoted.
+"
+" Examples:
+"   :Ack! hello                         Search for hello in project directory and open first match.
+"   :Ack '\bthe\b' %                    Search for occurences of the word `the` in the current file.
+"
+command! -bang -nargs=* -complete=file  Ack     call <SID>ack_search(<bang>0, <q-args> . ' -H')
+
+" OpenInPreviousWindow:
+"   :OpenInPreviousWindow[!] COMMAND
+"
+"   This is useful in particular for quickfix (which otherwise always uses the rightmost one)
+"   Note that the cursor in the window the command would have loaded in will always be in the
+"   same position in the text but its position relative to the window might be different.
+"
+" Arguments:
+"   !                                   Force command to load in previous window even if the cursor stays
+"                                       in the current window.
+"   COMMAND                             The command to execute.
+"
+command! -bang -nargs=*                 OpenInPreviousWindow  call <SID>open_in_previous_window(<bang>0, <q-args>)
+
+" RefreshTags:
+"   :RefreshTags[!]
+"
+"   By default this command only does something if the taglist window is open. If this is the case, it
+"   will update the taglist and run ctags recursively if the file is in a git repository (and
+"   error out otherwise).
+"
+" Arguments:
+"   !                                   Force tag refresh, even if the taglist window isn't open.
+"
+command! -bang                          RefreshTags   call <SID>refresh_tags(<bang>0)
+
+" Retab:
+"   :Retab BEFORE AFTER
+"
+"   This command will retab a file from BEFORE spaces per tab to AFTER spaces per tab.
+"
+" Arguments:
+"   BEFORE                              Initial number of spaces per tab
+"   AFTER                               Desired number of spaces per tab
+"
+command! -nargs=*                       Retab   call <SID>retab_file(<f-args>)
+
+" Snip:
+"   :[RANGE]Snip                               
+"
+"   Create a snippet using the `igloo` executable (requires igloo to be installed: https://github.com/mtth/igloo).
+"
+" Arguments:
+"   RANGE                               Optional line range to include in snippet (defaults to the current line).
+"
+" Examples:
+"   :Snip                               Creates a snippet with the contents of the current line.
+"   :'<,'>Snip                          Creates a snippet from the lines currently selected
+"
+command! -range                         Snip    <line1>,<line2>call <SID>create_snippet()
 
 
 " FUNCTIONS:
 
-" retab file using 2 spaces instead of 4 per tab
-function! s:Retab ()
-  set tabstop=4
-  set noexpandtab
-  %retab!
-  set tabstop=2
-  set expandtab
-  %retab
+" get visual selection (http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript)
+function! s:get_visual_selection()
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  return join(lines, "\n")
 endfunction
 
-" refresh tags
-" this function only does something if the taglist window is open
-" this will also run ctags recursively if the file is in a git repository
-function! s:RefreshTags ()
-  if bufloaded('__Tag_List__')
+" force command to load in previous window (cf. OpenInPreviousWindow command above for details)
+function! s:open_in_previous_window(force, cmd)
+  let l:bwnr = winnr()
+  let l:pwnr = winnr('#')
+  execute a:cmd
+  let l:cwnr = winnr()
+  " we check if the cursor has moved window and if it isn't already in the correct one
+  if (l:cwnr !=# l:bwnr || a:force) && l:cwnr !=# l:pwnr
+    let l:cbnr = bufnr('%')
+    let l:view = winsaveview()
+    execute "normal! \<c-o>"
+    execute l:pwnr . 'wincmd w'
+    execute 'hide buf' l:cbnr
+    call winrestview(l:view)
+  endif
+endfunction
+
+" refresh tags (cf. RefreshTags command above for details)
+function! s:refresh_tags(force)
+  if bufloaded('__Tag_List__') || a:force
     TlistUpdate
-    if ! empty(finddir('.git'))
+    echomsg 'Taglist updated!'
+    if !empty(finddir('.git'))
       call system('ctags -R --exclude=venv')
+      echomsg 'Project tags updated!'
     else
-      echo "Can't compile project tags, git repository not found in root"
+      echomsg "Can't compile project tags, git repository not found in root."
     endif
   endif
+endfunction
+
+" retab (cf. Retab command for details)
+function! s:retab_file(before, after)
+  let &tabstop = str2nr(a:before)
+  set noexpandtab
+  %retab!
+  let &tabstop = str2nr(a:after)
+  set expandtab
+  %retab
 endfunction
 
 " autocompile coffeescript, haml, stylus on save using a comment on the first line
@@ -182,7 +290,7 @@ endfunction
 " * replace the hash sign by the language's comment symbol
 " * form haml, all the files in the origin_folder will be compiled into a
 "   single destination file
-function! s:AutoCompile ()
+function! s:autocompile()
   let firstLine = split(getline(1))
   if len(firstLine) > 2
     if firstLine[1] ==# 'AUTOCOMPILE'
@@ -204,26 +312,20 @@ function! s:AutoCompile ()
 endfunction
 
 " Add mappings when opening quickfix window
-" o opens file (<cr> is remapped to :)
-" O previews file
-" v opens file in vertical split
-" V previews file in vertical split
-" q closes quickfix window
-function! s:OnOpenQuickfix ()
+function! s:on_open_quickfix()
   setlocal nocursorline
   execute "wincmd J"
-  execute "command! -buffer OpenInPreviousWindow call s:OpenInPreviousWindow('.cc')"
-  execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow<cr>zz:copen<cr>"
+  execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>"
   execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
   execute "nnoremap <silent> <buffer> j j"
   execute "nnoremap <silent> <buffer> k k"
-  execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow<cr>"
+  execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>"
   execute "nnoremap <silent> <buffer> q :ccl<cr>"
   execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p"
 endfunction
 
 " activate cursorline and cursorcolumn only if buffer is modifiable
-function! s:CursorCross ()
+function! s:toggle_cursor_cross()
   if &modifiable
     set cursorline
     set cursorcolumn
@@ -233,22 +335,8 @@ function! s:CursorCross ()
   endif
 endfunction
 
-" get visual selection
-" from http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
-function! s:get_visual_selection ()
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  return join(lines, "\n")
-endfunction
-
-" Ack command
-" opens a quickfix window with the results
-" simpler than ack.vim (https://github.com/mileszs/ack.vim) and isn't a ghetto grep hack
-" any arguments to the command get passed through to command line ack
-function! s:Ack (force, args)
+" Ack command (cf. Ack command above for explanations)
+function! s:ack_search(force, args)
   echo 'Acking...'
   if empty(a:args)
     let l:ack_args = expand("<cword>")
@@ -270,10 +358,8 @@ function! s:Ack (force, args)
   endif
 endfunction
 
-" previous and next mappings
-" copied from unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
-" didn't like that quickfix was remapped to q
-function! s:MapNextFamily(map,cmd)
+" previous and next mappings factory (copied from unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/)
+function! s:map_next_family(map,cmd)
   let map = '<Plug>unimpaired'.toupper(a:map)
   let end = ' ".(v:count ? v:count : "")<CR>'
   execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.a:cmd.'previous'.end
@@ -292,8 +378,7 @@ function! s:MapNextFamily(map,cmd)
   endif
 endfunction
 
-" paste toggling
-" also inspired by unimpaired.vim by tim pope (https://github.com/tpope/vim-unimpaired/)
+" paste toggling (also inspired by unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/)
 function! s:toggle_paste(force) abort
   if a:force
     let s:paste = &paste
@@ -306,30 +391,7 @@ function! s:toggle_paste(force) abort
   endif
 endfunction
 
-" force command to load in previous window
-" useful in particular for quickfix (which otherwise always uses the rightmost one)
-" nb: the cursor in the window the command would have loaded in will be in the
-" same position in the text but its position relative to the window might be
-" different
-function! s:OpenInPreviousWindow (cmd)
-  let l:bwnr = winnr()
-  let l:pwnr = winnr('#')
-  execute a:cmd
-  let l:cwnr = winnr()
-  " we check if the cursor has moved window and if it isn't already in the correct one
-  if l:cwnr !=# l:bwnr && l:cwnr !=# l:pwnr
-    let l:cbnr = bufnr('%')
-    let l:view = winsaveview()
-    execute "normal! \<c-o>"
-    execute l:pwnr . 'wincmd w'
-    execute 'hide buf' l:cbnr
-    call winrestview(l:view)
-  endif
-endfunction
-
 " snippets
-" scp selection to remote directory
-" requires igloo (https://github.com/mtth/igloo)
 function! s:create_snippet () range
   if exists('g:snippets_profile')
     let profile = g:snippets_profile
@@ -356,13 +418,6 @@ function! s:create_snippet () range
 endfunction
 
 
-" COMMANDS:
-
-command! -bang -nargs=* -complete=file  Ack     call s:Ack(<bang>0, <q-args> . ' -H')
-command!                                Retab   call s:Retab()
-command! -range                         Snip    <line1>,<line2>call s:create_snippet()
-
-
 " AUTOCOMMANDS:
 
 " miscellaneous stuff
@@ -373,7 +428,7 @@ augroup generalgroup
   autocmd   FileType      *             set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertEnter   *             set nocursorline
   autocmd   InsertLeave   *             set cursorline | call <SID>toggle_paste(0)
-  autocmd   WinEnter      *             call <SID>CursorCross()
+  autocmd   WinEnter      *             call <SID>toggle_cursor_cross()
   autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
 augroup END
 
@@ -387,13 +442,13 @@ augroup END
 
 " change quickfix window keybindings and make it full width
 augroup quickfixgroup
-  autocmd   FileType      qf            call s:OnOpenQuickfix()
+  autocmd   FileType      qf            call <SID>on_open_quickfix()
 augroup END
 
 " some commands when using the taglist window
 augroup taglistgroup
   autocmd!
-  autocmd   BufWritePost  *             call <SID>RefreshTags()
+  autocmd   BufWritePost  *             silent RefreshTags
   autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
   autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
 augroup END
@@ -410,7 +465,7 @@ augroup pythongroup
 augroup END
 augroup coffeegroup
   autocmd!
-  autocmd   BufWritePost  coffee        call <SID>AutoCompile()
+  autocmd   BufWritePost  coffee        call <SID>autocompile()
   autocmd   FileType      coffee        setlocal colorcolumn=80
 augroup END
 
@@ -491,11 +546,11 @@ nnoremap <silent> yO  :call <SID>toggle_paste(1)<CR>O
 nnoremap <silent> yA  :call <SID>toggle_paste(1)<CR>A
 nnoremap <silent> yI  :call <SID>toggle_paste(1)<CR>I
 " more unimpaired mappings
-call s:MapNextFamily('a','')
-call s:MapNextFamily('b','b')
-call s:MapNextFamily('c','c')
-call s:MapNextFamily('l','l')
-call s:MapNextFamily('t','t')
+call s:map_next_family('a','')
+call s:map_next_family('b','b')
+call s:map_next_family('c','c')
+call s:map_next_family('l','l')
+call s:map_next_family('t','t')
 " fixing diff mappings
 nnoremap ]d ]c
 nnoremap [d [c
