@@ -32,6 +32,15 @@ The following packages are optional but potentially useful:
 * reattach-to-user-namespace (optional: to enable pbcopy and pbpaste in tmux)
 
 
+Extra personal settings
+-----------------------
+
+The following files can be used to add untracked personal settings:
+
+* ``$HOME/.config/extra/.bashrc``: if this file exists, it will also be sourced by bash on startup.
+* ``$HOME/.config/extra/.vimperatorrc``: if this file exists, it will also be sourced by vimperator on startup.
+
+
 Miscellaneous
 -------------
 

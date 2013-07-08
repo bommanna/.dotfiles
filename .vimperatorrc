@@ -7,11 +7,11 @@ set defsearch=google
 set ignorecase
 set incsearch
 set nohlsearch
-set runtimepath=~/.config/vimperator
 set smartcase
 set toolbars=noaddons,nobookmarks,nomenu,nonavigation,notabs
 set visualbell
 set wildmode=list:full
+" set runtimepath=~/.config/vimperator (doesn't work)
 
 " about:config
 
@@ -20,6 +20,12 @@ set wildmode=list:full
 " set! browser.fullscreen.autohide=false
 " set! browser.tabs.closeButtons=2
 " set! browser.tabs.forceHide=true
+
+" commands
+
+" history
+command! -complete=history -nargs=+ -description="Open history in the current tab" hopen open <args>
+command! -complete=history -nargs=+ -description="Open history in a new tab" htabopen tabopen <args>
 
 " mappings
 
@@ -33,6 +39,9 @@ nnoremap K <C-u>
 nnoremap <BS> gu
 nnoremap <C-BS> gU
 
+" qmarks
+nnoremap <leader>q :qmarks<cr>
+
 " tab
 nnoremap l <C-n>
 nnoremap h <C-p>
@@ -42,3 +51,13 @@ nnoremap <silent> <C-h> :tabmove! -1<CR>
 " sidebars
 nnoremap <leader>b :sidebar Bookmarks<cr>
 nnoremap <leader>h :sidebar History<cr>
+
+" history
+nnoremap O :hopen 
+nnoremap T :htabopen 
+nnoremap <c-o> O
+nnoremap <c-t> T
+
+" extra configuration
+
+silent source ~/.config/extra/.vimperatorrc

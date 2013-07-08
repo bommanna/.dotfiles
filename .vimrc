@@ -222,12 +222,18 @@ command! -bang RefreshTags call <SID>refresh_tags(<bang>0)
 command! -nargs=* Retab call <SID>retab_file(<f-args>)
 
 " Snip:
-"   :[RANGE]Snip                               
+"   :[RANGE]Snip[!]
 "
 "   Create a snippet using the `igloo` executable (requires igloo to be
-"   installed: https://github.com/mtth/igloo).
+"   installed: https://github.com/mtth/igloo). Configuration is done via two
+"   global variables `g:snippets_ssh_url` and `g:snippets_http_url` or
+"   environment variables `$SNIPPETS_SSH_URL` and `$SNIPPETS_HTTP_URL` (the
+"   former take precedence). The http url is optional, to be able to open
+"   snippets in the browser.
 "
 " Arguments:
+"   !                                   Open snippet in browser (requires
+"                                       the snippet HTTP URL to be set).
 "   RANGE                               Optional line range to include in
 "                                       snippet (defaults to the current
 "                                       line).
@@ -236,9 +242,10 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 "   :Snip                               Creates a snippet with the contents of
 "                                       the current line.
 "   :'<,'>Snip                          Creates a snippet from the lines
-"                                       currently selected
+"                                       currently selected and view it from
+"                                       the browser.
 "
-command! -range Snip <line1>,<line2>call <SID>create_snippet()
+command! -bang -range Snip <line1>,<line2>call <SID>create_snippet(<bang>0)
 
 
 " FUNCTIONS:
@@ -407,21 +414,39 @@ function! s:toggle_paste(force) abort
 endfunction
 
 " snippets
-function! s:create_snippet () range
-  if exists('g:snippets_profile')
-    let profile = g:snippets_profile
+function! s:create_snippet(open) range
+  if exists('g:snippets_ssh_url')
+    let ssh_url = g:snippets_ssh_url
+  elseif exists('$SNIPPETS_SSH_URL')
+    let ssh_url = $SNIPPETS_SSH_URL
   else
-    let profile = 'snippets'
+    echoerr 'No snippets SSH URL found!'
   endif
-  echo profile
+  if exists('g:snippets_http_url')
+    let http_url = g:snippets_http_url
+  elseif exists('$SNIPPETS_HTTP_URL')
+    let http_url = $SNIPPETS_HTTP_URL
+  else
+    let http_url = ''
+  endif
   " generate a pseudo-random hash
   let hash = system("cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 32")
   let cmd = a:firstline . ',' . a:lastline . 'w !igloo --stream'
-  let cmd .= ' --profile=' . profile . ' ' . hash
+  let cmd .= ' --url=' . ssh_url . ' ' . hash
   silent execute cmd
   redraw!
   if v:shell_error == 0
-    echomsg 'Snippet' hash 'created!'
+    if !empty(http_url)
+      echomsg 'Snippet created! ' . http_url . hash
+      if a:open
+        call system('open http://' . http_url . hash)
+      endif
+    else
+      echomsg 'Snippet' hash 'created!'
+      if a:open
+        echoerr 'No snippets HTTP URL found!'
+      endif
+    endif
   else
     call system('igloo --version')
     if v:shell_error > 0

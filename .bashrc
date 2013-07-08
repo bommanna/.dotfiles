@@ -99,9 +99,7 @@ reattach-tmux(){
 # Source extra configuration files
 # --------------------------------
 
-EXTRA="$HOME/.config/bash"
-if [ -d $EXTRA ]; then
-  for file in "$EXTRA/*"; do
-    source $file;
-  done;
+EXTRA="$HOME/.config/extra/.bashrc"
+if [ -e $EXTRA ]; then
+  source $EXTRA;
 fi;
