@@ -1,4 +1,5 @@
-" VIM configuration file, inspired by many great .vimrc files found over the months
+" VIM configuration file, standing on the shoulders of giants
+
 
 " SAFETY:
 
@@ -8,57 +9,57 @@ filetype off
 " GLOBAL PLUGIN VARIABLES:
 
 " Ctrlp
-let g:ctrlp_by_filename = 1                                   " search by filename by default
-let g:ctrlp_cmd = 'CtrlPMRU'                                  " search mru files by default
-let g:ctrlp_user_command = 'ack %s -f'                        " use ack as search index
+let g:ctrlp_by_filename = 1                                                     " search by filename by default
+let g:ctrlp_cmd = 'CtrlPMRU'                                                    " search mru files by default
+let g:ctrlp_user_command = 'ack %s -f'                                          " use ack as search index
 
 " EasyMotion
-let g:EasyMotion_leader_key = "'"                             " ' key is unbound in normal and visual mode below
+let g:EasyMotion_leader_key = "'"                                               " ' key is unbound in normal and visual mode below
 
 " LatexBox
-let g:LatexBox_autosave = 1                                   " save before compiling
-let g:LatexBox_Folding = 0                                    " special folding for latex
-let g:LatexBox_split_width = 60                               " width of table of contents
-let g:LatexBox_async = 0                                      " compile latex in background
-let g:LatexBox_latexmk_preview_continuously = 0               " compile latex manually
+let g:LatexBox_autosave = 1                                                     " save before compiling
+let g:LatexBox_Folding = 0                                                      " special folding for latex
+let g:LatexBox_split_width = 60                                                 " width of table of contents
+let g:LatexBox_async = 0                                                        " compile latex in background
+let g:LatexBox_latexmk_preview_continuously = 0                                 " compile latex manually
 
 " NerdTree
-let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']              " don't show these files
-let g:NERDTreeQuitOnOpen = 1                                  " quit vim in nerdtree is the only buffer open
-let g:NERDTreeShowHidden = 1                                  " show hidden files by default
-let g:NERDTreeWinSize = 60                                    " width of nerdtree window
+let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']                                " don't show these files
+let g:NERDTreeQuitOnOpen = 1                                                    " quit vim in nerdtree is the only buffer open
+let g:NERDTreeShowHidden = 1                                                    " show hidden files by default
+let g:NERDTreeWinSize = 60                                                      " width of nerdtree window
 
 " Python
-let g:pymode_folding = 0                                      " python folding
-let g:pymode_lint = 0                                         " load lint plugin for code checking
-let g:pymode_lint_checker = ''                                " pyflakes,pep8,mccable,pylint
-let g:pymode_motion = 0                                       " python objects and motion
-let g:pymode_rope = 0                                         " load rope plugin for code refactoring
-let g:pymode_run = 0                                          " load run code plugin
-let g:pymode_syntax = 0                                       " pymode's custom syntax highlighting
-let g:pymode_virtualenv = 1                                   " switch to virtualenv pythonpath if in a virtualenv
+let g:pymode_folding = 0                                                        " python folding
+let g:pymode_lint = 0                                                           " load lint plugin for code checking
+let g:pymode_lint_checker = ''                                                  " pyflakes,pep8,mccable,pylint
+let g:pymode_motion = 0                                                         " python objects and motion
+let g:pymode_rope = 0                                                           " load rope plugin for code refactoring
+let g:pymode_run = 0                                                            " load run code plugin
+let g:pymode_syntax = 0                                                         " pymode's custom syntax highlighting
+let g:pymode_virtualenv = 1                                                     " switch to virtualenv pythonpath if in a virtualenv
 
 " Rooter
-let g:rooter_manual_only = 1                                  " doing it below for all filetypes (otherwise only some activate rooting)
-let g:rooter_patterns = ['.git/']                             " patterns indicating root directory
-let g:rooter_use_lcd = 1                                      " use buffer local directory
+let g:rooter_manual_only = 1                                                    " doing it below for all filetypes (otherwise only some activate rooting)
+let g:rooter_patterns = ['.git/']                                               " patterns indicating root directory
+let g:rooter_use_lcd = 1                                                        " use buffer local directory
 
 " Solarized
-let g:solarized_termtrans = 1                                 " transparent background sometimes
+let g:solarized_termtrans = 1                                                   " transparent background sometimes
 
 " Taglist
-let g:Tlist_Auto_Highlight_Tag = 1                            " highlight active tag (after a small inactivity period)
-let g:Tlist_Auto_Update = 1                                   " process new files as they are opened
-let g:Tlist_Compact_Format = 1                                " don't put line breaks between categories
-let g:Tlist_Enable_Fold_Column = 0                            " show fold column in taglist window
-let g:Tlist_Exit_OnlyWindow = 1                               " quit vim when taglist is the only window open
-let g:Tlist_File_Fold_Auto_Close = 1                          " automatically close folds corresponding to non active windows
-let g:Tlist_GainFocus_On_ToggleOpen = 0                       " move cursor to taglist window when opening it
-let g:Tlist_Highlight_Tag_On_BufEnter = 1                     " highlight active tag when entering a buffer
-let g:Tlist_Show_One_File = 1                                 " only show tags from active window
-let g:Tlist_Sort_Type = "name"                                " tag sort order
-let g:Tlist_Use_Right_Window = 1                              " put taglist window on the right
-let g:Tlist_WinWidth = 60                                     " width of taglist window
+let g:Tlist_Auto_Highlight_Tag = 1                                              " highlight active tag (after a small inactivity period)
+let g:Tlist_Auto_Update = 1                                                     " process new files as they are opened
+let g:Tlist_Compact_Format = 1                                                  " don't put line breaks between categories
+let g:Tlist_Enable_Fold_Column = 0                                              " show fold column in taglist window
+let g:Tlist_Exit_OnlyWindow = 1                                                 " quit vim when taglist is the only window open
+let g:Tlist_File_Fold_Auto_Close = 1                                            " automatically close folds corresponding to non active windows
+let g:Tlist_GainFocus_On_ToggleOpen = 0                                         " move cursor to taglist window when opening it
+let g:Tlist_Highlight_Tag_On_BufEnter = 1                                       " highlight active tag when entering a buffer
+let g:Tlist_Show_One_File = 1                                                   " only show tags from active window
+let g:Tlist_Sort_Type = "name"                                                  " tag sort order
+let g:Tlist_Use_Right_Window = 1                                                " put taglist window on the right
+let g:Tlist_WinWidth = 60                                                       " width of taglist window
 
 
 " PATHOGEN:
@@ -70,81 +71,81 @@ call pathogen#helptags()
 " SETTINGS:
 
 " magic
-filetype plugin on                                            " enable loading of plugins per filetype
-syntax enable                                                 " activate syntax highlighting
+filetype plugin on                                                              " enable loading of plugins per filetype
+syntax enable                                                                   " activate syntax highlighting
 
 " general
-set autoindent                                                " smarter indentation
-set backspace=indent,eol,start                                " allow backspace to delete new lines, etc.
-set encoding=utf-8                                            " duh
-set expandtab                                                 " insert spaces instead of a tab when tabbing
-set hidden                                                    " allow hidden buffers
-set lazyredraw                                                " don't redraw during macros, etc
-set linebreak                                                 " ? for latex
-set magic                                                     " use vim magic regular expressions by default
-set nojoinspaces                                              " don't insert two spaces after punctuation on a join
-set nostartofline                                             " keeps cursor on current column for movements like H, M, ...
-set noswapfile                                                " don't use swap files for saves
-set number                                                    " activate line numbers
-set omnifunc=syntaxcomplete#Complete                          " omnicompletion using syntax keywords
-set scrolloff=5                                               " allow 5 lines below/above the cursor
-set shell=/bin/bash\ --rcfile\ ~/.bashrc                      " load .bashrc when starting shell from vim
-set shellslash                                                " use forward slashes for paths, always
-set shiftwidth=2                                              " spaces used for indent keys (>>, ...) and for autoindent
-set showcmd                                                   " show partial command and number of lines/columns selected
-set tabstop=2                                                 " number of spaces a tab takes (displayed)
-set tag=./.tags;,.venvtags                                    " tags file
-set textwidth=0                                               " don't insert line breaks for long lines
-set ttimeoutlen=100                                           " don't wait a second for wrong key codes to error out
-set virtualedit=block                                         " let cursor move past the last char in <C-V> mode
-set wrap                                                      " wrap long lines
+set autoindent                                                                  " smarter indentation
+set backspace=indent,eol,start                                                  " allow backspace to delete new lines, etc.
+set encoding=utf-8                                                              " duh
+set expandtab                                                                   " insert spaces instead of a tab when tabbing
+set hidden                                                                      " allow hidden buffers
+set lazyredraw                                                                  " don't redraw during macros, etc
+set linebreak                                                                   " ? for latex
+set magic                                                                       " use vim magic regular expressions by default
+set nojoinspaces                                                                " don't insert two spaces after punctuation on a join
+set nostartofline                                                               " keeps cursor on current column for movements like H, M, ...
+set noswapfile                                                                  " don't use swap files for saves
+set number                                                                      " activate line numbers
+set omnifunc=syntaxcomplete#Complete                                            " omnicompletion using syntax keywords
+set scrolloff=5                                                                 " allow 5 lines below/above the cursor
+set shell=/bin/bash\ --rcfile\ ~/.bashrc                                        " load .bashrc when starting shell from vim
+set shellslash                                                                  " use forward slashes for paths, always
+set shiftwidth=2                                                                " spaces used for indent keys (>>, ...) and for autoindent
+set showcmd                                                                     " show partial command and number of lines/columns selected
+set tabstop=2                                                                   " number of spaces a tab takes (displayed)
+set tag=./.tags;,.venvtags                                                      " tags file
+set textwidth=0                                                                 " don't insert line breaks for long lines
+set ttimeoutlen=100                                                             " don't wait a second for wrong key codes to error out
+set virtualedit=block                                                           " let cursor move past the last char in <C-V> mode
+set wrap                                                                        " wrap long lines
 
 " autocomplete
-set completeopt=longest,menuone                               " only insert longest common strings of suggestions
-set wildignore=*.swp,*.bak                                    " don't show these files in autocompletion
-set wildignore+=*.pyc,*.class                                 " 
-set wildmenu                                                  " allow autocompletion with c-n
+set completeopt=longest,menuone                                                 " only insert longest common strings of suggestions
+set wildignore=*.swp,*.bak                                                      " don't show these files in autocompletion
+set wildignore+=*.pyc,*.class                                                   " 
+set wildmenu                                                                    " allow autocompletion with c-n
 
 " undohistory
-set undodir=~/.vim/undo                                       " saves directory
-set undofile                                                  " allow persistence of undo history
-set undolevels=1000                                           " number of operations used
-set undoreload=1000                                           " number of operations stored
+set undodir=~/.vim/undo                                                         " saves directory
+set undofile                                                                    " allow persistence of undo history
+set undolevels=1000                                                             " number of operations used
+set undoreload=1000                                                             " number of operations stored
 
 " folds
-set fillchars="fold: "                                        " don't show hyphens after folds
-set foldcolumn=2                                              " width of the fold column
-set foldlevelstart=6                                          " open folds on open
-set foldmethod=indent                                         " fold by indent
-set foldminlines=0                                            " allow folding of single lines
-set foldnestmax=5                                             " maximum fold level
+set fillchars="fold: "                                                          " don't show hyphens after folds
+set foldcolumn=2                                                                " width of the fold column
+set foldlevelstart=6                                                            " open folds on open
+set foldmethod=indent                                                           " fold by indent
+set foldminlines=0                                                              " allow folding of single lines
+set foldnestmax=5                                                               " maximum fold level
 
 " theme
-colorscheme solarized                                         " colorscheme
-set background=dark                                           " theme, autodetected
-set colorcolumn=                                              " don't highlight any columns
-set cursorcolumn                                              " highlight the current column
-set cursorline                                                " highlight the current row
-set showbreak=>>\ \                                           " characters shown on display linebreak
-set t_Co=256                                                  " terminal colors
+colorscheme solarized                                                           " colorscheme
+set background=dark                                                             " theme, autodetected
+set colorcolumn=                                                                " don't highlight any columns
+set cursorcolumn                                                                " highlight the current column
+set cursorline                                                                  " highlight the current row
+set showbreak=>>\ \                                                             " characters shown on display linebreak
+set t_Co=256                                                                    " terminal colors
 
 " search
-set hlsearch                                                  " highlight all matches after executing search query
-set ignorecase                                                " if all lowercase in search query, ignore case
-set incsearch                                                 " highlight potential matches as search query is being typed
-set smartcase                                                 " if some uppercase in search query, respect case
+set hlsearch                                                                    " highlight all matches after executing search query
+set ignorecase                                                                  " if all lowercase in search query, ignore case
+set incsearch                                                                   " highlight potential matches as search query is being typed
+set smartcase                                                                   " if some uppercase in search query, respect case
 
 " status line
-set laststatus=2                                              " always show status line
-set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%l/%L    " status bar format
+set laststatus=2                                                                " always show status line
+set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%l/%L                      " status bar format
 
 " spelling
-set dictionary=/usr/share/dict/words                          " files where to load word for dictionary
-set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add      "   completion for use with <c-x><c-k>
-set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to add new dict words
+set dictionary=/usr/share/dict/words                                            " files where to load word for dictionary
+set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add                        "   completion for use with <c-x><c-k>
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          " file where to add new dict words
 
 " disabled
-" syntax sync fromstart                                       " otherwise folding messes up highlighting
+" syntax sync fromstart                                                         " otherwise folding messes up highlighting
 
 
 " COMMANDS:
@@ -152,78 +153,92 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add        " file where to ad
 " Ack:
 "   :Ack[!] [OPTIONS] EXPR [FILE ...]
 "
-"   Search for matches of the regexp EXPR. If one or more FILE is specified, only these files are searched,
-"   otherwise the entire project directory will be explored. Any matches are loaded in the quickfix
-"   window. This implementation is simpler than that of ack.vim (https://github.com/mileszs/ack.vim) and
-"   doesn't rely on monkey patching the grep command.
+"   Search for matches of the regexp EXPR. If one or more FILE is specified,
+"   only these files are searched, otherwise the entire project directory will
+"   be explored. Any matches are loaded in the quickfix window. This
+"   implementation is simpler than that of ack.vim
+"   (https://github.com/mileszs/ack.vim) and doesn't rely on monkey patching
+"   the grep command.
 "
 " Arguments:
 "   !                                   Load the first match.
-"   OPTIONS, EXPR, FILE                 Theses arguments are forwarded to
+"   OPTIONS, EXPR, FILE                 These arguments are forwarded to
 "                                       the ack executable (along with the `-H`
-"                                       flag to guarantee that the "   filename
+"                                       flag to guarantee that the filename
 "                                       is always present even when searching
 "                                       inside a single file, otherwise the
-"                                       quickfix window "   will fail). Cf.
-"                                       `man ack` for details. Note that characters
-"                                       must be escaped or quoted.
+"                                       quickfix window will fail). Cf.
+"                                       `man ack` for details. Note that
+"                                       special characters must be escaped or
+"                                       quoted.
 "
 " Examples:
-"   :Ack! hello                         Search for hello in project directory and open first match.
-"   :Ack '\bthe\b' %                    Search for occurences of the word `the` in the current file.
+"   :Ack! hello                         Search for hello in project directory
+"                                       and open first match.
+"   :Ack '\bthe\b' %                    Search for occurences of the word
+"                                       `the` in the current file.
 "
-command! -bang -nargs=* -complete=file  Ack     call <SID>ack_search(<bang>0, <q-args> . ' -H')
+command! -bang -nargs=* -complete=file Ack call <SID>ack_search(<bang>0, <q-args> . ' -H')
 
 " OpenInPreviousWindow:
 "   :OpenInPreviousWindow[!] COMMAND
 "
-"   This is useful in particular for quickfix (which otherwise always uses the rightmost one)
-"   Note that the cursor in the window the command would have loaded in will always be in the
-"   same position in the text but its position relative to the window might be different.
+"   This is useful in particular for quickfix (which otherwise always uses the
+"   rightmost one) Note that the cursor in the window the command would have
+"   loaded in will always be in the same position in the text but its position
+"   relative to the window might be different.
 "
 " Arguments:
-"   !                                   Force command to load in previous window even if the cursor stays
-"                                       in the current window.
+"   !                                   Force command to load in previous
+"                                       window even if the cursor stays in the
+"                                       current window.
 "   COMMAND                             The command to execute.
 "
-command! -bang -nargs=*                 OpenInPreviousWindow  call <SID>open_in_previous_window(<bang>0, <q-args>)
+command! -bang -nargs=* OpenInPreviousWindow call <SID>open_in_previous_window(<bang>0, <q-args>)
 
 " RefreshTags:
 "   :RefreshTags[!]
 "
-"   By default this command only does something if the taglist window is open. If this is the case, it
-"   will update the taglist and run ctags recursively if the file is in a git repository (and
-"   error out otherwise).
+"   By default this command only does something if the taglist window is open.
+"   If this is the case, it will update the taglist and run ctags recursively
+"   if the file is in a git repository (and error out otherwise).
 "
 " Arguments:
-"   !                                   Force tag refresh, even if the taglist window isn't open.
+"   !                                   Force tag refresh, even if the taglist
+"                                       window isn't open.
 "
-command! -bang                          RefreshTags   call <SID>refresh_tags(<bang>0)
+command! -bang RefreshTags call <SID>refresh_tags(<bang>0)
 
 " Retab:
 "   :Retab BEFORE AFTER
 "
-"   This command will retab a file from BEFORE spaces per tab to AFTER spaces per tab.
+"   This command will retab a file from BEFORE spaces per tab to AFTER spaces
+"   per tab.
 "
 " Arguments:
 "   BEFORE                              Initial number of spaces per tab
 "   AFTER                               Desired number of spaces per tab
 "
-command! -nargs=*                       Retab   call <SID>retab_file(<f-args>)
+command! -nargs=* Retab call <SID>retab_file(<f-args>)
 
 " Snip:
 "   :[RANGE]Snip                               
 "
-"   Create a snippet using the `igloo` executable (requires igloo to be installed: https://github.com/mtth/igloo).
+"   Create a snippet using the `igloo` executable (requires igloo to be
+"   installed: https://github.com/mtth/igloo).
 "
 " Arguments:
-"   RANGE                               Optional line range to include in snippet (defaults to the current line).
+"   RANGE                               Optional line range to include in
+"                                       snippet (defaults to the current
+"                                       line).
 "
 " Examples:
-"   :Snip                               Creates a snippet with the contents of the current line.
-"   :'<,'>Snip                          Creates a snippet from the lines currently selected
+"   :Snip                               Creates a snippet with the contents of
+"                                       the current line.
+"   :'<,'>Snip                          Creates a snippet from the lines
+"                                       currently selected
 "
-command! -range                         Snip    <line1>,<line2>call <SID>create_snippet()
+command! -range Snip <line1>,<line2>call <SID>create_snippet()
 
 
 " FUNCTIONS:
@@ -423,50 +438,50 @@ endfunction
 " miscellaneous stuff
 augroup generalgroup
   autocmd!
-  autocmd   BufEnter      *             Rooter
-  autocmd   CmdwinEnter   *             nnoremap <buffer> <cr> <cr>
-  autocmd   FileType      *             set formatoptions-=c formatoptions-=r formatoptions-=o
-  autocmd   InsertEnter   *             set nocursorline
-  autocmd   InsertLeave   *             set cursorline | call <SID>toggle_paste(0)
-  autocmd   WinEnter      *             call <SID>toggle_cursor_cross()
-  autocmd   WinLeave      *             set nocursorline | set nocursorcolumn
+  autocmd   BufEnter                    *                   Rooter
+  autocmd   CmdwinEnter                 *                   nnoremap <buffer> <cr> <cr>
+  autocmd   FileType                    *                   set formatoptions-=c formatoptions-=r formatoptions-=o
+  autocmd   InsertEnter                 *                   set nocursorline
+  autocmd   InsertLeave                 *                   set cursorline | call <SID>toggle_paste(0)
+  autocmd   WinEnter                    *                   call <SID>toggle_cursor_cross()
+  autocmd   WinLeave                    *                   set nocursorline | set nocursorcolumn
 augroup END
 
 " use the correct help program for vim and tex files
 augroup helpgroup
   autocmd!
-  autocmd   FileType      help          setlocal keywordprg=:help
-  autocmd   FileType      vim           setlocal keywordprg=:help
-  autocmd   FileType      tex           setlocal keywordprg=texdoc
+  autocmd   FileType                    help                setlocal keywordprg=:help
+  autocmd   FileType                    vim                 setlocal keywordprg=:help
+  autocmd   FileType                    tex                 setlocal keywordprg=texdoc
 augroup END
 
 " change quickfix window keybindings and make it full width
 augroup quickfixgroup
-  autocmd   FileType      qf            call <SID>on_open_quickfix()
+  autocmd   FileType                    qf                  call <SID>on_open_quickfix()
 augroup END
 
 " some commands when using the taglist window
 augroup taglistgroup
   autocmd!
-  autocmd   BufWritePost  *             silent RefreshTags
-  autocmd   FileType      taglist       noremap <buffer> <silent> <leader>t <c-w>p
-  autocmd   FileType      taglist       set nocursorline | set nocursorcolumn
+  autocmd   BufWritePost                *                   silent RefreshTags
+  autocmd   FileType                    taglist             noremap <buffer> <silent> <leader>t <c-w>p
+  autocmd   FileType                    taglist             set nocursorline | set nocursorcolumn
 augroup END
 
 " language specific thangs
 augroup texgroup
   autocmd!
-  autocmd   FileType      tex           noremap <buffer> <leader>ll :w<cr>:Latexmk<cr>
+  autocmd   FileType                    tex                 noremap <buffer> <leader>ll :w<cr>:Latexmk<cr>
 augroup END
 augroup pythongroup
   autocmd!
-  autocmd   FileType      python        setlocal colorcolumn=80
-  autocmd   FileType      python        setlocal omnifunc=pythoncomplete#Complete
+  autocmd   FileType                    python              setlocal colorcolumn=80
+  autocmd   FileType                    python              setlocal omnifunc=pythoncomplete#Complete
 augroup END
 augroup coffeegroup
   autocmd!
-  autocmd   BufWritePost  coffee        call <SID>autocompile()
-  autocmd   FileType      coffee        setlocal colorcolumn=80
+  autocmd   BufWritePost                coffee              call <SID>autocompile()
+  autocmd   FileType                    coffee              setlocal colorcolumn=80
 augroup END
 
 
