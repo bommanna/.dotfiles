@@ -18,6 +18,16 @@ export IPYTHONDIR="$HOME/.config/ipython"
 # Editor
 export VISUAL='vim'
 
+# Pylint
+export PYLINTHOME="$HOME/.config/pylint"
+export PYLINTRC="$HOME/.config/pylint/.pylintrc"
+
+# Igloo
+export MYIGLOORC="$HOME/.config/igloo/.igloorc"
+
+# Grep
+export GREP_OPTIONS='--color=auto'
+
 # Terminal prompt display
 # Prompt indicates wall time (in seconds) of last command run along with
 # color indicator of success or failure (blue for success and orange for
@@ -50,19 +60,9 @@ PROMPT_COMMAND='timer_stop'
 
 export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n${VENV_PROMPT}\$ '
 
-# Grep
-export GREP_OPTIONS='--color=auto'
-
 # MySQL
 # PATH=$PATH:/usr/local/mysql/bin   # MySQL (not needed when using brew)
 # export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
-
-# Pylint
-export PYLINTHOME="$HOME/.config/pylint"
-export PYLINTRC="$HOME/.config/pylint/.pylintrc"
-
-# Igloo
-export MYIGLOORC="$HOME/.config/igloo/.igloorc"
 
 
 # Aliases
@@ -95,3 +95,13 @@ reattach-tmux(){
     reattach-to-user-namespace -l bash
   fi
 }
+
+# Source extra configuration files
+# --------------------------------
+
+EXTRA="$HOME/.config/bash"
+if [ -d $EXTRA ]; then
+  for file in "$EXTRA/*"; do
+    source $file;
+  done;
+fi;

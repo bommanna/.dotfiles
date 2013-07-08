@@ -1,10 +1,44 @@
 " vimperator configuration
 
-" slightly faster scrolling
-nnoremap j 4j
-nnoremap k 4k
+" options
 
-" miscellaneous options
-set complete=lS
+set complete=sl
+set defsearch=google
+set ignorecase
+set incsearch
+set nohlsearch
+set runtimepath=~/.config/vimperator
+set smartcase
+set toolbars=noaddons,nobookmarks,nomenu,nonavigation,notabs
 set visualbell
 set wildmode=list:full
+
+" about:config
+
+" set! general.autoScroll=false
+" set! ui.key.generalAccessKey=0
+" set! browser.fullscreen.autohide=false
+" set! browser.tabs.closeButtons=2
+" set! browser.tabs.forceHide=true
+
+" mappings
+
+" scrolling
+nnoremap j 4j
+nnoremap k 4k
+nnoremap J <C-d>
+nnoremap K <C-u>
+
+" depth
+nnoremap <BS> gu
+nnoremap <C-BS> gU
+
+" tab
+nnoremap l <C-n>
+nnoremap h <C-p>
+nnoremap <silent> <C-l> :tabmove! +1<CR>
+nnoremap <silent> <C-h> :tabmove! -1<CR>
+
+" sidebars
+nnoremap <leader>b :sidebar Bookmarks<cr>
+nnoremap <leader>h :sidebar History<cr>

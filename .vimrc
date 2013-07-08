@@ -499,8 +499,9 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
-" ^ is hard to hit
+" ^ is hard to hit, also by symmetry with `g_` mapping
 nnoremap _ ^
+vnoremap _ ^
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
@@ -540,14 +541,16 @@ vnoremap <silent> # :<c-u>
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
 " quickfix window
-nnoremap <leader>co :copen<cr>
 nnoremap <leader>cc :cclose<cr>
+nnoremap <leader>co :copen<cr>
+" toggle messages
+nnoremap <leader>M :messages<cr>
 " toggle marks
 nnoremap <leader>m :marks<cr>
-" toggle spell checking
-nnoremap <leader>sp :set spell!<cr>
 " toggle registers
 nnoremap <leader>r :reg<cr>
+" toggle spell checking
+nnoremap <leader>s :set spell!<cr>
 " .vimrc sugar (open in new tab, source)
 nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
