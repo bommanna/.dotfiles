@@ -16,6 +16,11 @@ let g:ctrlp_user_command = 'ack %s -f'                                          
 " EasyMotion
 let g:EasyMotion_leader_key = "'"                                               " ' key is unbound in normal and visual mode below
 
+" Gundo
+let g:gundo_preview_height = 20                                                 " height of diff preview window
+let g:gundo_width = 60                                                          " width of gundo window
+let g:gundo_preview_bottom = 0                                                  " use full width for diff preview window
+
 " LatexBox
 let g:LatexBox_autosave = 1                                                     " save before compiling
 let g:LatexBox_Folding = 0                                                      " special folding for latex
@@ -549,9 +554,7 @@ nnoremap <c-l> <c-w>l
 vnoremap > >gv
 vnoremap < <gv
 " ^ is hard to hit, also by symmetry with `g_` mapping (3 below are same as noremap)
-nnoremap _ ^
-onoremap _ ^
-vnoremap _ ^
+noremap _ ^
 " copying
 nnoremap Y y$
 
@@ -603,8 +606,8 @@ nnoremap <leader>s :set spell!<cr>
 " .vimrc sugar (open in new tab, source)
 nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
-" toggle search highlight off
-nnoremap <silent> <space> :nohlsearch<cr>
+" toggle search highlight off and redraw
+nnoremap <silent> <space> :nohlsearch<cr><c-l>
 " pasting (inspired by unimpaired.vim, cf. above)
 nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
 nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
@@ -644,6 +647,8 @@ nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
+" toggle Gundo
+nnoremap <leader>u :GundoToggle<cr>
 
 " languages
 
