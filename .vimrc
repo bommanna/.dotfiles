@@ -223,7 +223,7 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 
 " Snip:
 "   :[RANGE]Snip[!]
-"   :SnipBuffer[!] BUFFER
+"   :SnipRegister[!] REGISTER
 "
 "   Create a snippet using the `igloo` executable (requires igloo to be
 "   installed: https://github.com/mtth/igloo). Configuration is done via two
@@ -238,7 +238,7 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 "   RANGE                               Optional line range to include in
 "                                       snippet (defaults to the current
 "                                       line).
-"   BUFFER                              Buffer to send.
+"   REGISTER                            Register to send.
 "
 " Examples:
 "   :Snip                               Creates a snippet with the contents of
@@ -248,7 +248,7 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 "                                       the browser.
 "
 command! -bang -range Snip <line1>,<line2>call <SID>create_snippet(<bang>0)
-command! -bang -nargs=1 SnipBuffer call <SID>create_snippet(<bang>0, <f-args>)
+command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
 
 " FUNCTIONS:
@@ -329,8 +329,11 @@ function! s:autocompile()
       elseif &ft ==# 'stylus'
         let result = system('stylus ' . src . ' --out ' . dest)
       endif
+      redraw
       if v:shell_error
         echo result
+      else
+        echo 'Compilation successful!'
       endif
     endif
   endif
@@ -468,6 +471,14 @@ function! s:create_snippet(open, ...) range
   endif
 endfunction
 
+" toggle number/relativenumber
+function! s:toggle_relativenumber(force)
+  if a:force ==# 0 || &number
+    set relativenumber
+  elseif a:force ==# 1 || &relativenumber
+    set number
+  endif
+endfunction
 
 " AUTOCOMMANDS:
 
@@ -493,6 +504,7 @@ augroup END
 
 " change quickfix window keybindings and make it full width
 augroup quickfixgroup
+  autocmd!
   autocmd   FileType                    qf                  call <SID>on_open_quickfix()
 augroup END
 
@@ -516,7 +528,7 @@ augroup pythongroup
 augroup END
 augroup coffeegroup
   autocmd!
-  autocmd   BufWritePost                coffee              call <SID>autocompile()
+  autocmd   BufWritePost                *                   call <SID>autocompile()
   autocmd   FileType                    coffee              setlocal colorcolumn=80
 augroup END
 
@@ -526,23 +538,24 @@ augroup END
 " movements
 
 " visual up, down, end of line, start of line (useful for long lines)
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+noremap j gj
+noremap k gk
 " easy movement around splits
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
-" ^ is hard to hit, also by symmetry with `g_` mapping
-nnoremap _ ^
-vnoremap _ ^
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
+" ^ is hard to hit, also by symmetry with `g_` mapping (3 below are same as noremap)
+nnoremap _ ^
+onoremap _ ^
+vnoremap _ ^
+" copying
+nnoremap Y y$
 
-" commands and searches
+" commands
 
 " remap enter to command line
 nnoremap <cr> :
@@ -551,14 +564,12 @@ vnoremap <cr> :
 nnoremap : q:i
 nnoremap / q/i
 nnoremap ? q?i
-nnoremap Q q:i
 vnoremap : q:i
 vnoremap / q/i
 vnoremap ? q?i
-vnoremap Q q:i
-" don't move on * and #
-nnoremap * *<c-o>
-nnoremap # #<c-o>
+
+" searches
+
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<c-u>
   \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
@@ -573,6 +584,8 @@ vnoremap <silent> # :<c-u>
 
 " misc
 
+" toggle line numbers
+nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
 " changing background color
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
@@ -593,8 +606,8 @@ nnoremap <leader>vs :source $MYVIMRC<cr>
 " toggle search highlight off
 nnoremap <silent> <space> :nohlsearch<cr>
 " pasting (inspired by unimpaired.vim, cf. above)
-nnoremap <silent> yp  :call <SID>toggle_paste(1)<CR>a
-nnoremap <silent> yP  :call <SID>toggle_paste(1)<CR>i
+nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
+nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
 nnoremap <silent> yo  :call <SID>toggle_paste(1)<CR>o
 nnoremap <silent> yO  :call <SID>toggle_paste(1)<CR>O
 nnoremap <silent> yA  :call <SID>toggle_paste(1)<CR>A
@@ -604,7 +617,7 @@ call s:map_next_family('a','')
 call s:map_next_family('b','b')
 call s:map_next_family('c','c')
 call s:map_next_family('l','l')
-call s:map_next_family('t','t')
+call s:map_next_family('t','tab')
 " fixing diff mappings
 nnoremap ]d ]c
 nnoremap [d [c
@@ -632,10 +645,17 @@ nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
 
-" file execution
+" languages
 
-" execute file using bash
+" bash
+" execute file
 nnoremap <leader>bb :%w !bash<cr>
+" execute selection using bash (no replacement)
+vnoremap <leader>bb :w !bash<cr>
+
+" python
+" set filetype
+nnoremap <leader>pf :set filetype=python<cr>
 " execute file using shell python
 nnoremap <leader>pp :%w !python<cr>
 " execute file using shell ipython or python and go in interactive mode, note that this saves the file first
@@ -643,8 +663,6 @@ nnoremap <leader>pi :w<cr>:!ipython -i %<cr>
 nnoremap <leader>py :w<cr>:!python -i %<cr>
 " run pylint on file (this saves the file first)
 nnoremap <leader>pl :w<cr>:!pylint %<cr>
-" execute selection using bash (no replacement)
-vnoremap <leader>bb :w !bash<cr>
 " execute selection with shell python (without replacing selection)
 vnoremap <leader>pp :w !python<cr>
 
@@ -653,3 +671,20 @@ vnoremap <leader>pp :w !python<cr>
 
 iabbr MM Matthieu Monsch
 iabbr #! #!/usr/bin/env
+
+
+" FUTURE:
+
+" execute command without moving cursor in window
+" doesn't work currently (doesn't do anything)
+" function! s:run_in_place(cmd)
+"   let l:view = winsaveview()
+"   " silent execute 'normal! ' . a:cmd
+"   silent execute a:cmd
+"   " call winrestview(l:view)
+"   " redraw!
+" endfunction
+" command! -nargs=* RunInPlace call <SID>run_in_place(<q-args>)
+
+" snip to pbcopy (using reattach-to-namespace if $TMUX)
+" unclear how to do over ssh
