@@ -691,6 +691,14 @@ iabbr #! #!/usr/bin/env
 
 " FUTURE:
 
+" fixes
+
+" taglist open (currently first open forces cursor to taglist window, later ones go down one line)
+" gundo avoid resize craziness
+" fugitive bug fixes
+
+" function ideas
+
 " execute command without moving cursor in window
 " doesn't work currently (doesn't do anything)
 " function! s:run_in_place(cmd)
