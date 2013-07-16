@@ -437,7 +437,7 @@ function! s:on_open_quickfix()
   nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>
   nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>
   nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>
-  nnoremap <silent> <buffer> q :ccl<cr>
+  nnoremap <silent> <buffer> q <c-w>p:ccl<cr>
   nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p
 endfunction
 
