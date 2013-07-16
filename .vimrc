@@ -93,6 +93,7 @@ set hidden                                                                      
 set lazyredraw                                                                  " don't redraw during macros, etc
 set linebreak                                                                   " ? for latex
 set magic                                                                       " use vim magic regular expressions by default
+set modelines=0                                                                 " read meta stuff from top or bottom of files
 set nojoinspaces                                                                " don't insert two spaces after punctuation on a join
 set nostartofline                                                               " keeps cursor on current column for movements like H, M, ...
 set noswapfile                                                                  " don't use swap files for saves
@@ -642,6 +643,8 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
+" not forgetting the previous window mapping
+nnoremap <c-n> <c-w>p
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
