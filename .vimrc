@@ -366,6 +366,21 @@ function! s:autocompile()
   endif
 endfunction
 
+" closes buffer if last one open
+" activated by setting buffer local variable b:autoclose
+function! s:autoclose_buffer()
+  if exists('b:autoclose') && b:autoclose
+    if winbufnr(2) ==# -1
+      if tabpagenr('$') ==# 1
+        bdelete
+        quit
+      else
+        close
+      endif
+    endif
+  endif
+endfunction
+
 " scratch buffer
 " edited version of http://www.vim.org/scripts/script.php?script_id=664
 " buffer is now always on top full width and autocloses
@@ -391,21 +406,11 @@ function! s:open_scratch_buffer(reset)
   endif
 endfunction
 
-function! s:autoclose_scratch_buffer()
-  if winbufnr(2) ==# -1
-    if tabpagenr('$') ==# 1
-      bdelete
-      quit
-    else
-      close
-    endif
-  endif
-endfunction
-
 function! s:on_open_scratch(height, fresh)
   execute 'wincmd K'
   execute 'resize ' . a:height
   if a:fresh
+    let b:autoclose = 1
     setlocal bufhidden=hide
     setlocal buflisted
     setlocal buftype=nofile
@@ -414,7 +419,6 @@ function! s:on_open_scratch(height, fresh)
     setlocal winfixheight
     augroup scratch
       autocmd!
-      autocmd BufEnter __Scratch__ call <SID>autoclose_scratch_buffer()
       if g:scratch_window_autohide
         autocmd BufLeave __Scratch__ close
       endif
@@ -428,12 +432,13 @@ function! s:on_open_quickfix()
   setlocal nowrap
   execute "wincmd J"
   call s:resize_window(1, 20)
-  execute "nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>"
-  execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>"
-  execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
-  execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>"
-  execute "nnoremap <silent> <buffer> q :ccl<cr>"
-  execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p"
+  let b:autoclose = 1
+  nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>
+  nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>
+  nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>
+  nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>
+  nnoremap <silent> <buffer> q :ccl<cr>
+  nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p
 endfunction
 
 " resize window dynamically
@@ -582,7 +587,7 @@ endfunction
 " miscellaneous stuff
 augroup generalgroup
   autocmd!
-  autocmd   BufEnter                    *                   Rooter
+  autocmd   BufEnter                    *                   call <SID>autoclose_buffer() | Rooter
   autocmd   CmdwinEnter                 *                   nnoremap <buffer> <cr> <cr>
   autocmd   FileType                    *                   set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertEnter                 *                   set nocursorline
@@ -779,6 +784,8 @@ iabbr #! #!/usr/bin/env
 
 " gundo avoid resize craziness
 " fugitive bug fixes
+" rewriter rooter
+" write virtualenv setter
 
 " function ideas
 
