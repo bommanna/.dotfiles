@@ -17,9 +17,10 @@ let g:ctrlp_user_command = 'ack %s -f'                                          
 let g:EasyMotion_leader_key = "'"                                               " ' key is unbound in normal and visual mode below
 
 " Gundo
-let g:gundo_preview_height = 20                                                 " height of diff preview window
+let g:gundo_preview_height = 12                                                 " height of diff preview window
 let g:gundo_width = 60                                                          " width of gundo window
-let g:gundo_preview_bottom = 0                                                  " use full width for diff preview window
+let g:gundo_help = 0                                                            " show help
+let g:gundo_preview_bottom = 1                                                  " use full width for diff preview window
 
 " LatexBox
 let g:LatexBox_autosave = 1                                                     " save before compiling
@@ -344,17 +345,24 @@ function! s:autocompile()
   endif
 endfunction
 
-" Add mappings when opening quickfix window
+" Customizing quickfix window
 function! s:on_open_quickfix()
   setlocal nocursorline
+  setlocal nowrap
   execute "wincmd J"
+  call s:resize_window(1, 20)
   execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>"
   execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
-  execute "nnoremap <silent> <buffer> j j"
-  execute "nnoremap <silent> <buffer> k k"
   execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>"
   execute "nnoremap <silent> <buffer> q :ccl<cr>"
   execute "nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p"
+endfunction
+
+" resize window dynamically
+function! s:resize_window(min_lines, max_lines)
+  let total_lines = line('$')
+  let height = min([a:max_lines, max([a:min_lines, total_lines])])
+  execute "resize " . height
 endfunction
 
 " activate cursorline and cursorcolumn only if buffer is modifiable
@@ -379,7 +387,10 @@ function! s:ack_search(force, args)
   let l:ack_results = system('ack ' . l:ack_args)
   if strlen(l:ack_results)
     cgete l:ack_results
-    botright copen
+    copen
+    " set the title (possible only after it has been opened)
+    " redraw! will take care of showing the right one
+    let w:quickfix_title = ' Ack ' . a:args
     if a:force
       .cc
     endif
