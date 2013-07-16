@@ -645,7 +645,7 @@ vnoremap ' <nop>
 nnoremap <leader>f :NERDTreeToggle<cr>
 " toggle taglist
 nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-nnoremap <leader>T :TlistToggle<cr><c-w>=<cr>
+nnoremap <leader>T :TlistToggle<cr><c-w>=
 " fugitive
 nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
 nnoremap <leader>gP :Git pull<cr>
@@ -693,7 +693,6 @@ iabbr #! #!/usr/bin/env
 
 " fixes
 
-" taglist open (currently first open forces cursor to taglist window, later ones go down one line)
 " gundo avoid resize craziness
 " fugitive bug fixes
 
