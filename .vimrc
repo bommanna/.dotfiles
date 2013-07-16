@@ -162,7 +162,7 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 " COMMANDS:
 
 " Ack:
-"   :Ack[!] [OPTIONS] EXPR [FILE ...]
+"   :Ack[!] [[OPTIONS] EXPR [FILE ...]]
 "
 "   Search for matches of the regexp EXPR. If one or more FILE is specified,
 "   only these files are searched, otherwise the entire project directory will
@@ -181,7 +181,8 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 "                                       quickfix window will fail). Cf.
 "                                       `man ack` for details. Note that
 "                                       special characters must be escaped or
-"                                       quoted.
+"                                       quoted. If omitted, the previous ack
+"                                       search will be repeated.
 "
 " Examples:
 "   :Ack! hello                         Search for hello in project directory
@@ -189,7 +190,7 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 "   :Ack '\bthe\b' %                    Search for occurences of the word
 "                                       `the` in the current file.
 "
-command! -bang -nargs=* -complete=file Ack call <SID>ack_search(<bang>0, <q-args> . ' -H')
+command! -bang -nargs=* -complete=file Ack call <SID>ack_search(<bang>0, <q-args>)
 
 " OpenInPreviousWindow:
 "   :OpenInPreviousWindow[!] COMMAND
@@ -231,7 +232,7 @@ command! -bang RefreshTags call <SID>refresh_tags(<bang>0)
 "   BEFORE                              Initial number of spaces per tab
 "   AFTER                               Desired number of spaces per tab
 "
-command! -range -nargs=* Retab <line1>,<line2>call <SID>retab(<f-args>)
+command! -range=% -nargs=* Retab <line1>,<line2>call <SID>retab(<f-args>)
 
 " Snip:
 "   :[RANGE]Snip[!]
@@ -322,11 +323,7 @@ endfunction
 " retab (cf. Retab command for details)
 function! s:retab(before, after) range
   let &tabstop = str2nr(a:before)
-  if a:firstline < a:lastline
-    let range = a:firstline . ',' . a:lastline
-  else
-    let range = '%'
-  endif
+  let range = a:firstline . ',' . a:lastline
   set noexpandtab
   execute range . 'retab!'
   let &tabstop = str2nr(a:after)
@@ -405,7 +402,6 @@ function! s:autoclose_scratch_buffer()
   endif
 endfunction
 
-" Mark a buffer as scratch
 function! s:on_open_scratch(height, fresh)
   execute 'wincmd K'
   execute 'resize ' . a:height
@@ -431,7 +427,7 @@ function! s:on_open_quickfix()
   setlocal nocursorline
   setlocal nowrap
   execute "wincmd J"
-  call s:resize_window(5, 20)
+  call s:resize_window(1, 20)
   execute "nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>"
   execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>"
   execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
@@ -461,26 +457,29 @@ endfunction
 " Ack command (cf. Ack command above for explanations)
 function! s:ack_search(force, args)
   echo 'Acking...'
-  if empty(a:args)
-    let l:ack_args = expand("<cword>")
+  if strlen(a:args)
+    let s:ack_search_args = a:args
+  endif
+  if !exists('s:ack_search_args')
+    redraw!
+    echo 'No search term found'
   else
-    let l:ack_args = a:args
-  end
-  let l:ack_results = system('ack ' . l:ack_args)
-  if strlen(l:ack_results)
-    cgete l:ack_results
-    copen
-    " set the title (possible only after it has been opened)
-    " redraw! will take care of showing the right one
-    let w:quickfix_title = ' Ack ' . a:args
-    if a:force
-      .cc
+    let l:ack_results = system('ack ' . s:ack_search_args . ' -H')
+    if strlen(l:ack_results)
+      cgete l:ack_results
+      copen
+      " set the title (possible only after it has been opened)
+      " redraw! will take care of showing the right one
+      let w:quickfix_title = ' Ack ' . s:ack_search_args
+      if a:force
+        .cc
+      endif
+      redraw!
+      echo line('$') . ' result(s) found'
+    else
+      redraw!
+      echo 'No results found'
     endif
-    redraw!
-    echo line('$') . ' result(s) found'
-  else
-    redraw!
-    echo 'No results found'
   endif
 endfunction
 
