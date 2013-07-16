@@ -67,6 +67,10 @@ let g:Tlist_Sort_Type = "name"                                                  
 let g:Tlist_Use_Right_Window = 1                                                " put taglist window on the right
 let g:Tlist_WinWidth = 60                                                       " width of taglist window
 
+" Miscellaneous
+let g:scratch_window_autohide = 1                                               " close scratch window when switching out
+let g:scratch_window_height = 10                                                " height of scratch window
+
 
 " PATHOGEN:
 
@@ -216,16 +220,17 @@ command! -bang -nargs=* OpenInPreviousWindow call <SID>open_in_previous_window(<
 command! -bang RefreshTags call <SID>refresh_tags(<bang>0)
 
 " Retab:
-"   :Retab BEFORE AFTER
+"   :[RANGE]Retab BEFORE AFTER
 "
 "   This command will retab a file from BEFORE spaces per tab to AFTER spaces
 "   per tab.
 "
 " Arguments:
+"   RANGE                               Optional range to retab
 "   BEFORE                              Initial number of spaces per tab
 "   AFTER                               Desired number of spaces per tab
 "
-command! -nargs=* Retab call <SID>retab_file(<f-args>)
+command! -range -nargs=* Retab <line1>,<line2>call <SID>retab(<f-args>)
 
 " Snip:
 "   :[RANGE]Snip[!]
@@ -255,6 +260,19 @@ command! -nargs=* Retab call <SID>retab_file(<f-args>)
 "
 command! -bang -range Snip <line1>,<line2>call <SID>create_snippet(<bang>0)
 command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
+
+" Scratch:
+"   :Scratch[!]
+"
+"   Open a scratch buffer in a full width window at the top of the screen.
+"   This window is closed automatically when it is the last one left and
+"   the buffer is deleted when VIM exits.
+"
+" Arguments:
+"   !                                   Reset the scratch window (i.e.
+"                                       empty any previous contents).
+"
+command! -bang -nargs=0 Scratch call <SID>open_scratch_buffer(<bang>0)
 
 
 " FUNCTIONS:
@@ -301,13 +319,18 @@ function! s:refresh_tags(force)
 endfunction
 
 " retab (cf. Retab command for details)
-function! s:retab_file(before, after)
+function! s:retab(before, after) range
   let &tabstop = str2nr(a:before)
+  if a:firstline < a:lastline
+    let range = a:firstline . ',' . a:lastline
+  else
+    let range = '%'
+  endif
   set noexpandtab
-  %retab!
+  execute range . 'retab!'
   let &tabstop = str2nr(a:after)
   set expandtab
-  %retab
+  execute range . 'retab!'
 endfunction
 
 " autocompile coffeescript, haml, stylus on save using a comment on the first line
@@ -345,12 +368,70 @@ function! s:autocompile()
   endif
 endfunction
 
+" scratch buffer
+" edited version of http://www.vim.org/scripts/script.php?script_id=664
+" buffer is now always on top full width and autocloses
+function! s:open_scratch_buffer(reset)
+  let buffer_name = '__Scratch__'
+  let scr_bufnum = bufnr(buffer_name)
+  if scr_bufnum == -1
+    execute 'new ' . buffer_name
+    call s:on_open_scratch(g:scratch_window_height, 1)
+  else
+    let scr_winnum = bufwinnr(scr_bufnum)
+    if scr_winnum != -1
+      if winnr() != scr_winnum
+        execute scr_winnum . "wincmd w"
+      endif
+    else
+      execute "split +buffer" . scr_bufnum
+      call s:on_open_scratch(g:scratch_window_height, 0)
+    endif
+    if a:reset
+      silent execute '%d'
+    endif
+  endif
+endfunction
+
+function! s:autoclose_scratch_buffer()
+  if winbufnr(2) ==# -1
+    if tabpagenr('$') ==# 1
+      bdelete
+      quit
+    else
+      close
+    endif
+  endif
+endfunction
+
+" Mark a buffer as scratch
+function! s:on_open_scratch(height, fresh)
+  execute 'wincmd K'
+  execute 'resize ' . a:height
+  if a:fresh
+    setlocal bufhidden=hide
+    setlocal buflisted
+    setlocal buftype=nofile
+    setlocal nonumber
+    setlocal noswapfile
+    setlocal winfixheight
+    augroup scratch
+      autocmd!
+      autocmd BufEnter __Scratch__ call <SID>autoclose_scratch_buffer()
+      if g:scratch_window_autohide
+        autocmd BufLeave __Scratch__ close
+      endif
+    augroup end
+  endif
+endfunction
+
 " Customizing quickfix window
 function! s:on_open_quickfix()
   setlocal nocursorline
   setlocal nowrap
   execute "wincmd J"
-  call s:resize_window(1, 20)
+  call s:resize_window(5, 20)
+  execute "nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>"
   execute "nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>"
   execute "nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>"
   execute "nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>"
@@ -612,8 +693,9 @@ nnoremap <leader>M :messages<cr>
 nnoremap <leader>m :marks<cr>
 " toggle registers
 nnoremap <leader>r :reg<cr>
-" toggle spell checking
-nnoremap <leader>s :set spell!<cr>
+" toggle scratch window
+nnoremap <leader>s :Scratch<cr>
+nnoremap <leader>S :Scratch!<cr>
 " .vimrc sugar (open in new tab, source)
 nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
