@@ -21,6 +21,11 @@ let g:ctrlp_by_filename = 1                                                     
 let g:ctrlp_cmd = 'CtrlPMRU'                                                    " search mru files by default
 let g:ctrlp_user_command = 'ack %s -f'                                          " use ack as search index
 
+" Cursorcross
+let g:cursorcross_debug = 0                                                     " show messages to debug order of autocommands
+let g:cursorcross_dynamic = 1                                                   " cursorline in normal mode, cursorcolumn in insert mode
+let g:cursorcross_mappings = 1                                                  " create mappings
+
 " EasyMotion
 let g:EasyMotion_leader_key = "'"                                               " ' key is unbound in normal and visual mode below
 
@@ -76,8 +81,6 @@ let g:Tlist_Use_Right_Window = 1                                                
 let g:Tlist_WinWidth = 60                                                       " width of taglist window
 
 " Miscellaneous
-let g:dynamic_cursorcross = 1                                                   " cursorline in normal mode, cursorcolumn in insert mode
-let g:dynamic_cursorcross_debug = 0                                             " show messages to debug order of autocommands
 let g:scratch_window_autohide = 1                                               " close scratch window when switching out
 let g:scratch_window_height = 10                                                " height of scratch window
 let g:search_executable = 'ack'                                                 " default could be 'egrep -n'
@@ -632,63 +635,6 @@ function! s:toggle_relativenumber(force)
   endif
 endfunction
 
-" dynamic cursorcross
-if !exists('g:dynamic_cursorcross')
-  let g:dynamic_cursorcross = 0
-endif
-if !exists('g:dynamic_cursorcross_debug')
-  let g:dynamic_cursorcross_debug = 0
-endif
-
-if g:dynamic_cursorcross
-  set cursorline
-  let s:cursorcross = 1
-else
-  let s:cursorcross = 0
-endif
-
-function! s:toggle_cursorcross(...)
-  if a:0
-    let cursorcross_save = s:cursorcross
-    let s:cursorcross = a:1
-  else
-    if exists('cursorcross_save')
-      let s:cursorcross = cursorcross_save
-      unlet cursorcross_save
-    else
-      let s:cursorcross = !s:cursorcross
-    endif
-  endif
-  if s:cursorcross
-    set cursorline
-    set nocursorcolumn
-  else
-    set nocursorline
-    set nocursorcolumn
-  endif
-endfunction
-
-function! s:set_cursorcross(column, line, message)
-  if g:dynamic_cursorcross_debug
-    echomsg a:message
-  endif
-  if s:cursorcross
-    if a:line
-      set cursorline
-    else
-      set nocursorline
-    endif
-    if a:column
-      set cursorcolumn
-    else
-      set nocursorcolumn
-    endif
-  else
-    set nocursorcolumn
-    set nocursorline
-  endif
-endfunction
-
 
 " AUTOCOMMANDS:
 
@@ -699,17 +645,6 @@ augroup generalgroup
   autocmd   BufEnter                    *                   call <SID>on_buf_enter()
   autocmd   FileType                    *                   set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
-augroup END
-
-" dynamic cursor
-augroup cursorgroup
-  " BufWinEnter seems to be executed last (i.e. for the quickfix window, after nomodifiable has been set)
-  autocmd!
-  autocmd   BufWinEnter                 *                   call <SID>set_cursorcross(0, 1, 'bufwinenter')
-  autocmd   InsertEnter                 *                   call <SID>set_cursorcross(1, 0, 'insertenter')
-  autocmd   InsertLeave                 *                   call <SID>set_cursorcross(0, 1, 'insertleave')
-  autocmd   WinEnter                    *                   call <SID>set_cursorcross(0, 1, 'winenter')
-  autocmd   WinLeave                    *                   call <SID>set_cursorcross(0, 0, 'winleave')
 augroup END
 
 " use the correct help program for vim and tex files
@@ -802,16 +737,6 @@ vnoremap <silent> # :<c-u>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
   \gv:call setreg('"', old_reg, old_regtype)<cr>n
 
-" cursor
-
-" toggle cursorcross
-nnoremap <silent> + :call <SID>toggle_cursorcross()<cr>
-" toggle cursorline
-noremap - :set cursorline!<cr>
-" toggle cursorcolumn
-nnoremap \| :set cursorcolumn!<cr>
-vnoremap \| <esc>:set cursorcolumn!<cr>gv
-
 " misc
 
 " undo
@@ -863,7 +788,7 @@ vnoremap ' <nop>
 nnoremap <leader>f :NERDTreeToggle<cr>
 " toggle taglist
 nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-nnoremap <leader>T :call <SID>toggle_cursorcross(0)<cr>:TlistToggle<cr><c-w>=:call <SID>toggle_cursorcross()<cr>
+nnoremap <leader>T :CursorcrossOff<cr>:TlistToggle<cr><c-w>=:CursorcrossToggle<cr>
 " fugitive
 nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
 nnoremap <leader>gP :Git pull<cr>
