@@ -1,4 +1,12 @@
-" VIM configuration file, standing on the shoulders of giants
+" VIM configuration file
+"
+" Standing on the shoulders of giants:
+"   Learn Vimscript the Hard Way [http://learnvimscriptthehardway.stevelosh.com/]
+"   The cleanest vimrc you will ever see [https://github.com/skwp/dotfiles/blob/master/vimrc]
+"   The ultimate Vim configuration [http://amix.dk/vim/vimrc.html]
+"   unimpaired.vim [https://github.com/tpope/vim-unimpaired]
+"   scratch.vim [https://github.com/vim-scripts/scratch.vim]
+"   ack.vim [https://github.com/mileszs/ack.vim]
 
 
 " SAFETY:
@@ -68,10 +76,11 @@ let g:Tlist_Use_Right_Window = 1                                                
 let g:Tlist_WinWidth = 60                                                       " width of taglist window
 
 " Miscellaneous
-let g:search_highlight_matches = 1                                              " highlight search terms
-let g:search_executable = 'ack'                                                 " default could be 'egrep -n'
+let g:dynamic_cursorcross = 1                                                   " cursorline in normal mode, cursorcolumn in insert mode
 let g:scratch_window_autohide = 1                                               " close scratch window when switching out
 let g:scratch_window_height = 10                                                " height of scratch window
+let g:search_executable = 'ack'                                                 " default could be 'egrep -n'
+let g:search_highlight_matches = 1                                              " highlight search terms
 
 
 " PATHOGEN:
@@ -336,17 +345,17 @@ function! s:retab(before, after) range
 endfunction
 
 " autocompile coffeescript, haml, stylus on save using a comment on the first line
-" usage (coffee, stylus):
-" # AUTOCOMPILE destination
-" usage (haml):
-" # AUTOCOMPILE destination origin_directory
-" notes:
-" * destination path is relative to the current file's directory
-" * origin_folder is relative to vim's current work directory
-" * replace the hash sign by the language's comment symbol
-" * form haml, all the files in the origin_folder will be compiled into a
-"   single destination file
 function! s:autocompile()
+  " usage (coffee, stylus):
+  " # AUTOCOMPILE destination
+  " usage (haml):
+  " # AUTOCOMPILE destination origin_directory
+  " notes:
+  " * destination path is relative to the current file's directory
+  " * origin_folder is relative to vim's current work directory
+  " * replace the hash sign by the language's comment symbol
+  " * form haml, all the files in the origin_folder will be compiled into a
+  "   single destination file
   let firstLine = split(getline(1))
   if len(firstLine) > 2
     if firstLine[1] ==# 'AUTOCOMPILE'
@@ -389,9 +398,9 @@ if !exists('s:buf_delete_handler')
   let s:buf_delete_handler = {}
 endif
 
-" usage
-" f(command[, buffer_number])
 function! s:on_buf_delete(...)
+  " usage
+  " f(command[, buffer_number])
   if a:0 > 0
     " we are adding a handler
     if a:0 ==# 1
@@ -412,9 +421,9 @@ function! s:on_buf_delete(...)
 endfunction
 
 " scratch buffer
-" edited version of http://www.vim.org/scripts/script.php?script_id=664
-" buffer is now always on top full width and autocloses
 function! s:open_scratch_buffer(reset)
+  " edited version of http://www.vim.org/scripts/script.php?script_id=664
+  " buffer is now always on top full width and autocloses
   let buffer_name = '__Scratch__'
   let scr_bufnum = bufnr(buffer_name)
   if scr_bufnum == -1
@@ -475,17 +484,6 @@ function! s:resize_window(min_lines, max_lines)
   let total_lines = line('$')
   let height = min([a:max_lines, max([a:min_lines, total_lines])])
   execute "resize " . height
-endfunction
-
-" activate cursorline and cursorcolumn only if buffer is modifiable
-function! s:toggle_cursor_cross()
-  if &modifiable
-    set cursorline
-    set cursorcolumn
-  else
-    set nocursorline
-    set nocursorcolumn
-  endif
 endfunction
 
 " Search command (cf. Search command above for explanations)
@@ -630,17 +628,75 @@ function! s:toggle_relativenumber(force)
   endif
 endfunction
 
+" dynamic cursorcross
+if exists('g:dynamic_cursorcross') && g:dynamic_cursorcross
+  set cursorline
+  let s:cursorcross = 1
+else
+  let s:cursorcross = 0
+endif
+
+function! s:toggle_cursorcross(...)
+  if a:0
+    let cursorcross_save = s:cursorcross
+    let s:cursorcross = a:1
+  else
+    if exists('cursorcross_save')
+      let s:cursorcross = cursorcross_save
+      unlet cursorcross_save
+    else
+      let s:cursorcross = !s:cursorcross
+    endif
+  endif
+  if s:cursorcross
+    set cursorline
+    set nocursorcolumn
+  else
+    set nocursorline
+    set nocursorcolumn
+  endif
+endfunction
+
+function! s:set_cursorcross(column, line, message)
+  " echomsg a:message
+  if s:cursorcross
+    if a:line
+      set cursorline
+    else
+      set nocursorline
+    endif
+    if a:column
+      set cursorcolumn
+    else
+      set nocursorcolumn
+    endif
+  else
+    set nocursorcolumn
+    set nocursorline
+  endif
+endfunction
+
 
 " AUTOCOMMANDS:
 
 " miscellaneous stuff
 augroup generalgroup
   autocmd!
-  autocmd   BufEnter                    *                   call <SID>on_buf_enter()
   autocmd   BufDelete                   *                   call <SID>on_buf_delete()
+  autocmd   BufEnter                    *                   call <SID>on_buf_enter()
   autocmd   FileType                    *                   set formatoptions-=c formatoptions-=r formatoptions-=o
-  autocmd   InsertEnter                 *                   set cursorcolumn
-  autocmd   InsertLeave                 *                   set nocursorcolumn | call <SID>toggle_paste(0)
+  autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
+augroup END
+
+" dynamic cursor
+augroup cursorgroup
+  " BufWinEnter seems to be executed last (i.e. for the quickfix window, after nomodifiable has been set)
+  autocmd!
+  autocmd   BufWinEnter                 *                   call <SID>set_cursorcross(0, 1, 'bufwinenter')
+  autocmd   InsertEnter                 *                   call <SID>set_cursorcross(1, 0, 'insertenter')
+  autocmd   InsertLeave                 *                   call <SID>set_cursorcross(0, 1, 'insertleave')
+  autocmd   WinEnter                    *                   call <SID>set_cursorcross(0, 1, 'winenter')
+  autocmd   WinLeave                    *                   call <SID>set_cursorcross(0, 0, 'winleave')
 augroup END
 
 " use the correct help program for vim and tex files
@@ -699,11 +755,11 @@ vnoremap > >gv
 vnoremap < <gv
 " ^ is hard to hit, also by symmetry with `g_` mapping
 noremap _ ^
-" copying
-nnoremap Y y$
-" repeating
-nnoremap <tab> ;
-nnoremap <s-tab> ,
+" fixing <c-i> jump (same as <tab> for vim)
+nnoremap <c-e> <c-i>
+" fixing diff jumps
+nnoremap ]d ]c
+nnoremap [d [c
 
 " commands
 
@@ -716,6 +772,9 @@ vnoremap : q:i
 
 " searches
 
+" repeating search
+nnoremap <tab> ;
+nnoremap <s-tab> ,
 " toggle search highlight
 nnoremap <space> :set nohlsearch!<cr>:set hlsearch?<cr>
 " enable search for selected text, forwards (*) or backwards (#)
@@ -730,15 +789,26 @@ vnoremap <silent> # :<c-u>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
   \gv:call setreg('"', old_reg, old_regtype)<cr>n
 
+" cursor
+
+" toggle cursorcross
+nnoremap <silent> + :call <SID>toggle_cursorcross()<cr>
+" toggle cursorline
+noremap - :set cursorline!<cr>
+" toggle cursorcolumn
+nnoremap \| :set cursorcolumn!<cr>
+vnoremap \| <esc>:set cursorcolumn!<cr>gv
+
 " misc
 
+" undo
+nnoremap U <c-r>
+" copying
+nnoremap Y y$
 " redraw
 nnoremap , <c-l>
 " toggle line numbers
 nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
-" search
-nnoremap <c-e> :SearchBuffer 
-nnoremap <c-y> :Search
 " changing background color
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
@@ -770,9 +840,6 @@ call s:map_next_family('b','b')
 call s:map_next_family('c','c')
 call s:map_next_family('l','l')
 call s:map_next_family('t','tab')
-" fixing diff mappings
-nnoremap ]d ]c
-nnoremap [d [c
 
 " plugins
 
@@ -783,7 +850,7 @@ vnoremap ' <nop>
 nnoremap <leader>f :NERDTreeToggle<cr>
 " toggle taglist
 nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-nnoremap <leader>T :TlistToggle<cr><c-w>=
+nnoremap <leader>T :call <SID>toggle_cursorcross(0)<cr>:TlistToggle<cr><c-w>=:call <SID>toggle_cursorcross()<cr>
 " fugitive
 nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
 nnoremap <leader>gP :Git pull<cr>
@@ -833,8 +900,10 @@ iabbr #! #!/usr/bin/env
 
 " gundo avoid resize craziness
 " fugitive bug fixes
-" rewriter rooter
+" rewrite rooter
 " write virtualenv setter
+" write search using lvim
+" fix ack to be used normally (not for searching buffer)
 
 " function ideas
 
