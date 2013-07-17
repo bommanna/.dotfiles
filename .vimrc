@@ -77,6 +77,7 @@ let g:Tlist_WinWidth = 60                                                       
 
 " Miscellaneous
 let g:dynamic_cursorcross = 1                                                   " cursorline in normal mode, cursorcolumn in insert mode
+let g:dynamic_cursorcross_debug = 0                                             " show messages to debug order of autocommands
 let g:scratch_window_autohide = 1                                               " close scratch window when switching out
 let g:scratch_window_height = 10                                                " height of scratch window
 let g:search_executable = 'ack'                                                 " default could be 'egrep -n'
@@ -292,8 +293,9 @@ command! -bang -nargs=0 Scratch call <SID>open_scratch_buffer(<bang>0)
 
 " FUNCTIONS:
 
-" get visual selection (http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript)
+" get visual selection
 function! s:get_visual_selection()
+  " copied from http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
   let [lnum1, col1] = getpos("'<")[1:2]
   let [lnum2, col2] = getpos("'>")[1:2]
   let lines = getline(lnum1, lnum2)
@@ -534,8 +536,9 @@ function! s:search(force, buffer, args)
   endif
 endfunction
 
-" previous and next mappings factory (copied from unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/)
+" previous and next mappings factory
 function! s:map_next_family(map,cmd)
+  " copied from unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
   let map = '<Plug>unimpaired'.toupper(a:map)
   let end = ' ".(v:count ? v:count : "")<CR>'
   execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.a:cmd.'previous'.end
@@ -554,8 +557,9 @@ function! s:map_next_family(map,cmd)
   endif
 endfunction
 
-" paste toggling (also inspired by unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/)
+" paste toggling
 function! s:toggle_paste(force) abort
+  " also inspired by unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
   if a:force
     let s:paste = &paste
     set paste
@@ -629,7 +633,14 @@ function! s:toggle_relativenumber(force)
 endfunction
 
 " dynamic cursorcross
-if exists('g:dynamic_cursorcross') && g:dynamic_cursorcross
+if !exists('g:dynamic_cursorcross')
+  let g:dynamic_cursorcross = 0
+endif
+if !exists('g:dynamic_cursorcross_debug')
+  let g:dynamic_cursorcross_debug = 0
+endif
+
+if g:dynamic_cursorcross
   set cursorline
   let s:cursorcross = 1
 else
@@ -658,7 +669,9 @@ function! s:toggle_cursorcross(...)
 endfunction
 
 function! s:set_cursorcross(column, line, message)
-  " echomsg a:message
+  if g:dynamic_cursorcross_debug
+    echomsg a:message
+  endif
   if s:cursorcross
     if a:line
       set cursorline
