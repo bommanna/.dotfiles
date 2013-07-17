@@ -68,6 +68,8 @@ let g:Tlist_Use_Right_Window = 1                                                
 let g:Tlist_WinWidth = 60                                                       " width of taglist window
 
 " Miscellaneous
+let g:search_highlight_matches = 1                                              " highlight search terms
+let g:search_executable = 'ack'                                                 " default could be 'egrep -n'
 let g:scratch_window_autohide = 1                                               " close scratch window when switching out
 let g:scratch_window_height = 10                                                " height of scratch window
 
@@ -131,20 +133,20 @@ set foldmethod=indent                                                           
 set foldminlines=0                                                              " allow folding of single lines
 set foldnestmax=5                                                               " maximum fold level
 
+" search
+set ignorecase                                                                  " if all lowercase in search query, ignore case
+set incsearch                                                                   " highlight potential matches as search query is being typed
+set nohlsearch                                                                  " don't highlight matches after executing search query
+set smartcase                                                                   " if some uppercase in search query, respect case
+
 " theme
 colorscheme solarized                                                           " colorscheme
 set background=dark                                                             " theme, autodetected
 set colorcolumn=                                                                " don't highlight any columns
-set cursorcolumn                                                                " highlight the current column
-set cursorline                                                                  " highlight the current row
+set nocursorcolumn                                                              " highlight the current column
+set nocursorline                                                                " highlight the current row
 set showbreak=>>\ \                                                             " characters shown on display linebreak
 set t_Co=256                                                                    " terminal colors
-
-" search
-set hlsearch                                                                    " highlight all matches after executing search query
-set ignorecase                                                                  " if all lowercase in search query, ignore case
-set incsearch                                                                   " highlight potential matches as search query is being typed
-set smartcase                                                                   " if some uppercase in search query, respect case
 
 " status line
 set laststatus=2                                                                " always show status line
@@ -161,8 +163,9 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 
 " COMMANDS:
 
-" Ack:
-"   :Ack[!] [[OPTIONS] EXPR [FILE ...]]
+" Search:
+"   :Search[!] [[OPTIONS] EXPR [FILE ...]]
+"   :SearchBuffer[!] [[OPTIONS] EXPR]
 "
 "   Search for matches of the regexp EXPR. If one or more FILE is specified,
 "   only these files are searched, otherwise the entire project directory will
@@ -185,12 +188,13 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 "                                       search will be repeated.
 "
 " Examples:
-"   :Ack! hello                         Search for hello in project directory
+"   :Search! hello                      Search for hello in project directory
 "                                       and open first match.
-"   :Ack '\bthe\b' %                    Search for occurences of the word
+"   :SearchBuffer '\bthe\b'             Search for occurences of the word
 "                                       `the` in the current file.
 "
-command! -bang -nargs=* -complete=file Ack call <SID>ack_search(<bang>0, <q-args>)
+command! -bang -nargs=* -complete=file Search call <SID>search(<bang>0, 0, <q-args>)
+command! -bang -nargs=* SearchBuffer call <SID>search(<bang>0, 1, <q-args>)
 
 " OpenInPreviousWindow:
 "   :OpenInPreviousWindow[!] COMMAND
@@ -366,9 +370,9 @@ function! s:autocompile()
   endif
 endfunction
 
-" closes buffer if last one open
-" activated by setting buffer local variable b:autoclose
-function! s:autoclose_buffer()
+" buffer event handlers
+function! s:on_buf_enter()
+  execute "Rooter"
   if exists('b:autoclose') && b:autoclose
     if winbufnr(2) ==# -1
       if tabpagenr('$') ==# 1
@@ -377,6 +381,32 @@ function! s:autoclose_buffer()
       else
         close
       endif
+    endif
+  endif
+endfunction
+
+if !exists('s:buf_delete_handler')
+  let s:buf_delete_handler = {}
+endif
+
+" usage
+" f(command[, buffer_number])
+function! s:on_buf_delete(...)
+  if a:0 > 0
+    " we are adding a handler
+    if a:0 ==# 1
+      let buf_nr = bufnr('%')
+    else
+      let buf_nr = a:2
+    endif
+    " note: key is coerced to string
+    let s:buf_delete_handler[buf_nr] = a:1
+  else
+    " we are looking for a handler
+    let buf_nr = expand('<abuf>')
+    if has_key(s:buf_delete_handler, buf_nr)
+      execute s:buf_delete_handler[buf_nr]
+      unlet s:buf_delete_handler[buf_nr]
     endif
   endif
 endfunction
@@ -428,7 +458,6 @@ endfunction
 
 " Customizing quickfix window
 function! s:on_open_quickfix()
-  setlocal nocursorline
   setlocal nowrap
   execute "wincmd J"
   call s:resize_window(1, 20)
@@ -459,25 +488,44 @@ function! s:toggle_cursor_cross()
   endif
 endfunction
 
-" Ack command (cf. Ack command above for explanations)
-function! s:ack_search(force, args)
-  echo 'Acking...'
+" Search command (cf. Search command above for explanations)
+function! s:search(force, buffer, args)
+  cclose
   if strlen(a:args)
-    let s:ack_search_args = a:args
+    let s:search_args = a:args
   endif
-  if !exists('s:ack_search_args')
+  if !exists('s:search_args')
     redraw!
     echo 'No search term found'
   else
-    let l:ack_results = system('ack ' . s:ack_search_args . ' -H')
-    if strlen(l:ack_results)
-      cgete l:ack_results
+    echo 'Searching...'
+    if a:buffer
+      if exists('g:search_highlight_matches') && g:search_highlight_matches
+        let match_id = matchadd('Search', '\v' . s:search_args)
+      endif
+      let filepath = expand('%:p')
+      let cmd = g:search_executable . " -H '" . s:search_args . "' " . filepath
+    else
+      let cmd = g:search_executable . ' ' . s:search_args
+    endif
+    let l:results = system(cmd)
+    if strlen(l:results)
+      if a:force
+        cexpr l:results
+      else
+        cgete l:results
+      endif
       copen
+      call matchadd('Search', '\v' . s:search_args)
       " set the title (possible only after it has been opened)
       " redraw! will take care of showing the right one
-      let w:quickfix_title = ' Ack ' . s:ack_search_args
-      if a:force
-        .cc
+      if a:buffer
+        let w:quickfix_title = 'Search [' . filepath . '] ' . s:search_args
+      else
+        let w:quickfix_title = 'Search ' . s:search_args
+      endif
+      if exists('g:search_highlight_matches') && g:search_highlight_matches
+        call s:on_buf_delete('execute "call matchdelete(' . match_id . ')"')
       endif
       redraw!
       echo line('$') . ' result(s) found'
@@ -582,18 +630,17 @@ function! s:toggle_relativenumber(force)
   endif
 endfunction
 
+
 " AUTOCOMMANDS:
 
 " miscellaneous stuff
 augroup generalgroup
   autocmd!
-  autocmd   BufEnter                    *                   call <SID>autoclose_buffer() | Rooter
-  autocmd   CmdwinEnter                 *                   nnoremap <buffer> <cr> <cr>
+  autocmd   BufEnter                    *                   call <SID>on_buf_enter()
+  autocmd   BufDelete                   *                   call <SID>on_buf_delete()
   autocmd   FileType                    *                   set formatoptions-=c formatoptions-=r formatoptions-=o
-  autocmd   InsertEnter                 *                   set nocursorline
-  autocmd   InsertLeave                 *                   set cursorline | call <SID>toggle_paste(0)
-  autocmd   WinEnter                    *                   call <SID>toggle_cursor_cross()
-  autocmd   WinLeave                    *                   set nocursorline | set nocursorcolumn
+  autocmd   InsertEnter                 *                   set cursorcolumn
+  autocmd   InsertLeave                 *                   set nocursorcolumn | call <SID>toggle_paste(0)
 augroup END
 
 " use the correct help program for vim and tex files
@@ -614,8 +661,6 @@ augroup END
 augroup taglistgroup
   autocmd!
   autocmd   BufWritePost                *                   silent RefreshTags
-  autocmd   FileType                    taglist             noremap <buffer> <silent> <leader>t <c-w>p
-  autocmd   FileType                    taglist             set nocursorline | set nocursorcolumn
 augroup END
 
 " language specific thangs
@@ -636,7 +681,7 @@ augroup END
 
 
 " MAPPINGS:
-
+" 
 " movements
 
 " visual up, down, end of line, start of line (useful for long lines)
@@ -652,42 +697,48 @@ nnoremap <c-n> <c-w>p
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
-" ^ is hard to hit, also by symmetry with `g_` mapping (3 below are same as noremap)
+" ^ is hard to hit, also by symmetry with `g_` mapping
 noremap _ ^
 " copying
 nnoremap Y y$
+" repeating
+nnoremap <tab> ;
+nnoremap <s-tab> ,
 
 " commands
 
-" remap enter to command line
-nnoremap <cr> :
-vnoremap <cr> :
+" remap command line
+nnoremap ; :
+vnoremap ; :
 " always use command line window otherwise
 nnoremap : q:i
-nnoremap / q/i
-nnoremap ? q?i
 vnoremap : q:i
-vnoremap / q/i
-vnoremap ? q?i
 
 " searches
 
+" toggle search highlight
+nnoremap <space> :set nohlsearch!<cr>:set hlsearch?<cr>
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<c-u>
   \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
   \gvy/<c-r><c-r>=substitute(
   \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
-  \gv:call setreg('"', old_reg, old_regtype)<cr><c-o>
+  \gv:call setreg('"', old_reg, old_regtype)<cr>n
 vnoremap <silent> # :<c-u>
   \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
   \gvy?<c-r><c-r>=substitute(
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
-  \gv:call setreg('"', old_reg, old_regtype)<cr><c-o>
+  \gv:call setreg('"', old_reg, old_regtype)<cr>n
 
 " misc
 
+" redraw
+nnoremap , <c-l>
 " toggle line numbers
 nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
+" search
+nnoremap <c-e> :SearchBuffer 
+nnoremap <c-y> :Search
 " changing background color
 nnoremap <leader>bgd :set background=dark<cr>
 nnoremap <leader>bgl :set background=light<cr>
@@ -701,13 +752,11 @@ nnoremap <leader>m :marks<cr>
 " toggle registers
 nnoremap <leader>r :reg<cr>
 " toggle scratch window
-nnoremap <leader>s :Scratch<cr>
 nnoremap <leader>S :Scratch!<cr>
+nnoremap <leader>s :Scratch<cr>
 " .vimrc sugar (open in new tab, source)
 nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
-" toggle search highlight off and redraw
-nnoremap <silent> <space> :nohlsearch<cr><c-l>
 " pasting (inspired by unimpaired.vim, cf. above)
 nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
 nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
