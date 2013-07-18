@@ -4,6 +4,7 @@
 "   Learn Vimscript the Hard Way [http://learnvimscriptthehardway.stevelosh.com/]
 "   The cleanest vimrc you will ever see [https://github.com/skwp/dotfiles/blob/master/vimrc]
 "   The ultimate Vim configuration [http://amix.dk/vim/vimrc.html]
+"   Scrooloose's vimrc [https://github.com/scrooloose/vimfiles/blob/master/vimrc]
 "   unimpaired.vim [https://github.com/tpope/vim-unimpaired]
 "   scratch.vim [https://github.com/vim-scripts/scratch.vim]
 "   ack.vim [https://github.com/mileszs/ack.vim]
@@ -11,7 +12,8 @@
 
 " SAFETY:
 
-filetype off
+filetype off                                                                    " safely load plugins
+set nocompatible                                                                " why not?
 
 
 " GLOBAL PLUGIN VARIABLES:
@@ -163,7 +165,18 @@ set t_Co=256                                                                    
 
 " status line
 set laststatus=2                                                                " always show status line
-set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%l/%L                      " status bar format
+set statusline=%<                                                               " truncate on left if too long
+set statusline+=%F\                                                             " full filepath
+set statusline+=%{fugitive#statusline()}                                        " current git branch (if any)
+set statusline+=%r                                                              " readonly flag [RO]
+set statusline+=%#identifier#                                                   " highlighting start
+set statusline+=%y                                                              " filetype
+set statusline+=%#error#                                                        " switch highlighting
+set statusline+=%m                                                              " modified flag [+] (or [-] if nomodifiable is set)
+set statusline+=%*                                                              " end highlighting
+set statusline+=%=                                                              " switch to right side
+set statusline+=%{v:searchforward?'/':'?'}%{getreg('/')}\                       " latest search along with direction
+set statusline+=%c,%l/%L                                                        " current column, current line / total lines
 
 " spelling
 set dictionary=/usr/share/dict/words                                            " files where to load word for dictionary
@@ -728,20 +741,18 @@ nnoremap <space> :set nohlsearch!<cr>:set hlsearch?<cr>
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<c-u>
   \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
-  \gvy/<c-r><c-r>=substitute(
+  \gvy/<c-r>=substitute(
   \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
-  \gv:call setreg('"', old_reg, old_regtype)<cr>n
+  \:call setreg('"', old_reg, old_regtype)<cr>
 vnoremap <silent> # :<c-u>
   \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>
-  \gvy?<c-r><c-r>=substitute(
+  \gvy?<c-r>=substitute(
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
-  \gv:call setreg('"', old_reg, old_regtype)<cr>n
+  \:call setreg('"', old_reg, old_regtype)<cr>
 
 " misc
 
-" undo
-nnoremap U <c-r>
-" copying
+" copying (consistency with C and D)
 nnoremap Y y$
 " redraw
 nnoremap , <c-l>
@@ -758,13 +769,10 @@ nnoremap <leader>M :messages<cr>
 " toggle marks
 nnoremap <leader>m :marks<cr>
 " toggle registers
-nnoremap <leader>r :reg<cr>
+nnoremap <leader>r :registers<cr>
 " toggle scratch window
 nnoremap <leader>S :Scratch!<cr>
 nnoremap <leader>s :Scratch<cr>
-" .vimrc sugar (open in new tab, source)
-nnoremap <leader>ve :tabnew $MYVIMRC<cr>
-nnoremap <leader>vs :source $MYVIMRC<cr>
 " pasting (inspired by unimpaired.vim, cf. above)
 nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
 nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
@@ -806,6 +814,12 @@ nnoremap <leader>u :GundoToggle<cr>
 
 " languages
 
+" vim
+" open .vimrc
+nnoremap <leader>ve :tabnew $MYVIMRC<cr>
+"source .vimrc
+nnoremap <leader>vs :source $MYVIMRC<cr>
+
 " bash
 " execute file
 nnoremap <leader>bb :%w !bash<cr>
@@ -840,8 +854,25 @@ iabbr #! #!/usr/bin/env
 " fugitive bug fixes
 " rewrite rooter
 " write virtualenv setter
-" write search using lvim
 " fix ack to be used normally (not for searching buffer)
+" write search using lvim (Locate)
+
+" Locate ideas
+" the search tool you never knew vim had
+" vimgrep on steroids
+" use dictionary-functions for when closing location window (or use python bindings)
+" Mapping
+" gl: locate selection (or same as previous if no selection)
+" gL: locate prompt (if nothing inputed, use last general search pattern)
+" Commands
+" Lo[cate][!] [PATTERN]
+" Options
+" height = [5, 20] (min, max height of location window)
+" highlight = 1 (highlight matches in window)
+" jump = 0 (automatically jump to first match when using mapping)
+" verymagic = 0 (automatically add verymagic flag to prompted pattern)
+" refresh = 0 (automatically refresh location list when buffer changes)
+
 
 " function ideas
 
