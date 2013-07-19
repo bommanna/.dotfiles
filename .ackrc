@@ -14,5 +14,8 @@
 --nosql
 --notags
 
+# follow symlinks by default
+--follow
+
 # page results
 --pager=less -r

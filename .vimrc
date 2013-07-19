@@ -20,9 +20,10 @@ set nocompatible                                                                
 " GLOBAL PLUGIN VARIABLES:
 
 " Ctrlp
-let g:ctrlp_cache_dir = $HOME . '/.vim/cache/ctrlp'                              " directory to store cached filepaths
 let g:ctrlp_by_filename = 1                                                     " search by filename by default
+let g:ctrlp_cache_dir = $HOME . '/.vim/cache/ctrlp'                             " directory to store cached filepaths
 let g:ctrlp_cmd = 'CtrlPMRU'                                                    " search mru files by default
+let g:ctrlp_extensions = ['tag']                                                " add tag explorer
 let g:ctrlp_user_command = 'ack %s -f'                                          " use ack as search index
 
 " Cursorcross
@@ -106,7 +107,7 @@ filetype plugin on                                                              
 syntax enable                                                                   " activate syntax highlighting
 
 " general
-set autoindent                                                                  " smarter indentation
+set autoindent                                                                  " keep indentation when going to new line
 set backspace=indent,eol,start                                                  " allow backspace to delete new lines, etc.
 set encoding=utf-8                                                              " duh
 set expandtab                                                                   " insert spaces instead of a tab when tabbing
@@ -116,6 +117,7 @@ set linebreak                                                                   
 set magic                                                                       " use vim magic regular expressions by default
 set modelines=0                                                                 " read meta stuff from top or bottom of files
 set nojoinspaces                                                                " don't insert two spaces after punctuation on a join
+set nosmartindent                                                               " don't add extra indents, ever
 set nostartofline                                                               " keeps cursor on current column for movements like H, M, ...
 set noswapfile                                                                  " don't use swap files for saves
 set number                                                                      " activate line numbers
@@ -802,7 +804,7 @@ call s:map_next_family('a','')
 call s:map_next_family('b','b')
 call s:map_next_family('c','c')
 call s:map_next_family('l','l')
-call s:map_next_family('t','tab')
+call s:map_next_family('t','t')
 
 " plugins
 
@@ -865,7 +867,7 @@ iabbr #! #!/usr/bin/env
 
 " FUTURE:
 
-" fixes
+" changes/fixes
 
 " gundo avoid resize craziness
 " fugitive bug fixes
@@ -875,8 +877,11 @@ iabbr #! #!/usr/bin/env
 " write search using lvim (Locate, see below)
 " create mappings gs/gS for scratch (for your convenience remap sleep to gZzZz) and which in visual mode appends (or replaces if gS) the lines to the scratch buffer
 " write plugin similar to [https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim] to display last search in command line
+" look into formatoptions
 
-" Locate ideas
+" ideas
+
+" Locate
 " the search tool you never knew vim had
 " vimgrep on steroids
 " use dictionary-functions for when closing location window (or use python bindings)
@@ -891,9 +896,6 @@ iabbr #! #!/usr/bin/env
 " jump = 0 (automatically jump to first match when using mapping)
 " verymagic = 0 (automatically add verymagic flag to prompted pattern)
 " refresh = 0 (automatically refresh location list when buffer changes)
-
-
-" function ideas
 
 " execute command without moving cursor in window
 " doesn't work currently (doesn't do anything)
