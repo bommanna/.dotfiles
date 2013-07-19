@@ -20,6 +20,7 @@ set nocompatible                                                                
 " GLOBAL PLUGIN VARIABLES:
 
 " Ctrlp
+let g:ctrlp_cache_dir = $HOME . '/.vim/cache/ctrlp'                              " directory to store cached filepaths
 let g:ctrlp_by_filename = 1                                                     " search by filename by default
 let g:ctrlp_cmd = 'CtrlPMRU'                                                    " search mru files by default
 let g:ctrlp_user_command = 'ack %s -f'                                          " use ack as search index
@@ -46,8 +47,10 @@ let g:LatexBox_async = 0                                                        
 let g:LatexBox_latexmk_preview_continuously = 0                                 " compile latex manually
 
 " NerdTree
+let g:NERDTreeBookmarksFile = $HOME . '/.vim/cache/.nerdtree_bookmarks'         " where to store the NERDTree bookmarks
 let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']                                " don't show these files
 let g:NERDTreeQuitOnOpen = 1                                                    " quit vim in nerdtree is the only buffer open
+let g:NERDTreeShowBookmarks = 0                                                 " show bookmarks by default
 let g:NERDTreeShowHidden = 1                                                    " show hidden files by default
 let g:NERDTreeWinSize = 60                                                      " width of nerdtree window
 
@@ -869,8 +872,9 @@ iabbr #! #!/usr/bin/env
 " rewrite rooter
 " write virtualenv setter
 " fix ack to be used normally (not for searching buffer)
-" write search using lvim (Locate)
+" write search using lvim (Locate, see below)
 " create mappings gs/gS for scratch (for your convenience remap sleep to gZzZz) and which in visual mode appends (or replaces if gS) the lines to the scratch buffer
+" write plugin similar to [https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim] to display last search in command line
 
 " Locate ideas
 " the search tool you never knew vim had
