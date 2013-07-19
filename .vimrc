@@ -90,8 +90,6 @@ let g:Tlist_WinWidth = 60                                                       
 " Miscellaneous
 let g:scratch_window_autohide = 1                                               " close scratch window when switching out
 let g:scratch_window_height = 10                                                " height of scratch window
-let g:search_executable = 'ack'                                                 " default could be 'egrep -n'
-let g:search_highlight_matches = 1                                              " highlight search terms
 
 
 " PATHOGEN:
@@ -203,16 +201,15 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 
 " COMMANDS:
 
-" Search:
-"   :Search[!] [[OPTIONS] EXPR [FILE ...]]
-"   :SearchBuffer[!] [[OPTIONS] EXPR]
+" Ack:
+"   :Ack[!] [[OPTIONS] EXPR [FILE ...]]
 "
-"   Search for matches of the regexp EXPR. If one or more FILE is specified,
+"   Ack for matches of the regexp EXPR. If one or more FILE is specified,
 "   only these files are searched, otherwise the entire project directory will
 "   be explored. Any matches are loaded in the quickfix window. This
 "   implementation is simpler than that of ack.vim
-"   (https://github.com/mileszs/ack.vim) and doesn't rely on monkey patching
-"   the grep command.
+"   (https://github.com/mileszs/ack.vim), doesn't rely on monkey patching
+"   the grep command, and highlights results in the quickfix window.
 "
 " Arguments:
 "   !                                   Load the first match.
@@ -228,13 +225,12 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 "                                       search will be repeated.
 "
 " Examples:
-"   :Search! hello                      Search for hello in project directory
+"   :Ack! hello                         Ack for hello in project directory
 "                                       and open first match.
-"   :SearchBuffer '\bthe\b'             Search for occurences of the word
+"   :Ack '\bthe\b' %                    Ack for occurences of the word
 "                                       `the` in the current file.
 "
-command! -bang -nargs=* -complete=file Search call <SID>search(<bang>0, 0, <q-args>)
-command! -bang -nargs=* SearchBuffer call <SID>search(<bang>0, 1, <q-args>)
+command! -bang -nargs=* -complete=file Ack call <SID>ack(<bang>0, <q-args>)
 
 " OpenInPreviousWindow:
 "   :OpenInPreviousWindow[!] COMMAND
@@ -500,6 +496,7 @@ endfunction
 " Customizing quickfix window
 function! s:on_open_quickfix()
   setlocal nowrap
+  setlocal statusline=%f%=%l/%L
   execute "wincmd J"
   call s:resize_window(1, 20)
   let b:autoclose = 1
@@ -518,8 +515,8 @@ function! s:resize_window(min_lines, max_lines)
   execute "resize " . height
 endfunction
 
-" Search command (cf. Search command above for explanations)
-function! s:search(force, buffer, args)
+" Ack command (cf. Ack command above for explanations)
+function! s:ack(force, args)
   cclose
   if strlen(a:args)
     let s:search_args = a:args
@@ -529,15 +526,12 @@ function! s:search(force, buffer, args)
     echo 'No search term found'
   else
     echo 'Searching...'
-    if a:buffer
-      if exists('g:search_highlight_matches') && g:search_highlight_matches
-        let match_id = matchadd('Search', '\v' . s:search_args)
-      endif
-      let filepath = expand('%:p')
-      let cmd = g:search_executable . " -H '" . s:search_args . "' " . filepath
-    else
-      let cmd = g:search_executable . ' ' . s:search_args
-    endif
+    "   if exists('g:search_highlight_matches') && g:search_highlight_matches
+    "     let match_id = matchadd('Search', '\v' . s:search_args)
+    "   endif
+    "   let filepath = expand('%:p')
+    "   let cmd = g:search_executable . " -H '" . s:search_args . "' " . filepath
+    let cmd = 'ack -H ' . s:search_args
     let l:results = system(cmd)
     if strlen(l:results)
       if a:force
@@ -547,16 +541,17 @@ function! s:search(force, buffer, args)
       endif
       copen
       call matchadd('Search', '\v' . s:search_args)
+      " call matchadd('Search', '\v' . s:search_args)
       " set the title (possible only after it has been opened)
       " redraw! will take care of showing the right one
-      if a:buffer
-        let w:quickfix_title = 'Search [' . filepath . '] ' . s:search_args
-      else
-        let w:quickfix_title = 'Search ' . s:search_args
-      endif
-      if exists('g:search_highlight_matches') && g:search_highlight_matches
-        call s:on_buf_delete('execute "call matchdelete(' . match_id . ')"')
-      endif
+      " if a:buffer
+      "   let w:quickfix_title = 'Search [' . filepath . '] ' . s:search_args
+      " else
+      "   let w:quickfix_title = 'Search ' . s:search_args
+      " endif
+      " if exists('g:search_highlight_matches') && g:search_highlight_matches
+      "   call s:on_buf_delete('execute "call matchdelete(' . match_id . ')"')
+      " endif
       redraw!
       echo line('$') . ' result(s) found'
     else
@@ -724,14 +719,17 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 " not forgetting the previous window mapping
-nnoremap <c-n> <c-w>p
+nnoremap <c-o> <c-w>p
 " easier indentation
 vnoremap > >gv
 vnoremap < <gv
 " ^ is hard to hit, also by symmetry with `g_` mapping
 noremap _ ^
-" fixing <c-i> jump (same as <tab> for vim)
-nnoremap <c-e> <c-i>
+" jumps
+nnoremap <c-r> <c-i>
+nnoremap <c-e> <c-o>
+" fixing undo
+nnoremap U <c-r>
 " fixing diff jumps
 nnoremap ]d ]c
 nnoremap [d [c
