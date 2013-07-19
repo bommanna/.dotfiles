@@ -5,15 +5,16 @@
 "   The cleanest vimrc you will ever see [https://github.com/skwp/dotfiles/blob/master/vimrc]
 "   The ultimate Vim configuration [http://amix.dk/vim/vimrc.html]
 "   Scrooloose's vimrc [https://github.com/scrooloose/vimfiles/blob/master/vimrc]
+"   Bling's vimrc [https://github.com/bling/dotvim/blob/master/vimrc]
+"
+" Features inspirations from:
 "   unimpaired.vim [https://github.com/tpope/vim-unimpaired]
 "   scratch.vim [https://github.com/vim-scripts/scratch.vim]
 "   ack.vim [https://github.com/mileszs/ack.vim]
 
 
-" SAFETY:
-
-filetype off                                                                    " safely load plugins
-set nocompatible                                                                " why not?
+filetype off                                                                    " safety
+set nocompatible                                                                " one more time
 
 
 " GLOBAL PLUGIN VARIABLES:
@@ -91,11 +92,11 @@ let g:search_highlight_matches = 1                                              
 
 " PATHOGEN:
 
-call pathogen#infect()
-call pathogen#helptags()
+call pathogen#infect()                                                          " load plugins
+call pathogen#helptags()                                                        " generate help
 
 
-" SETTINGS:
+" OPTIONS:
 
 " magic
 filetype plugin on                                                              " enable loading of plugins per filetype
@@ -135,7 +136,7 @@ set wildignore+=*.pyc,*.class                                                   
 set wildmenu                                                                    " allow autocompletion with c-n
 
 " undohistory
-set undodir=~/.vim/undo                                                         " saves directory
+set undodir=~/.vim/cache/undo                                                   " saves directory
 set undofile                                                                    " allow persistence of undo history
 set undolevels=1000                                                             " number of operations used
 set undoreload=1000                                                             " number of operations stored
@@ -154,6 +155,12 @@ set incsearch                                                                   
 set nohlsearch                                                                  " don't highlight matches after executing search query
 set smartcase                                                                   " if some uppercase in search query, respect case
 
+" backups and swapfiles
+set backup                                                                      " store existing files when overwriting
+set backupdir=~/.vim/cache/backup                                               " store them here
+set directory=~/.vim/cache/swap                                                 " we won't create swapfiles, but just in case
+set noswapfile                                                                  " as we said, no swapfiles
+
 " theme
 colorscheme solarized                                                           " colorscheme
 set background=dark                                                             " theme, autodetected
@@ -167,15 +174,17 @@ set t_Co=256                                                                    
 set laststatus=2                                                                " always show status line
 set statusline=%<                                                               " truncate on left if too long
 set statusline+=%F\                                                             " full filepath
-set statusline+=%{fugitive#statusline()}                                        " current git branch (if any)
+set statusline+=%{&modifiable?fugitive#statusline():''}                         " current git branch (if any and if buffer modifiable)
 set statusline+=%r                                                              " readonly flag [RO]
-set statusline+=%#identifier#                                                   " highlighting start
+set statusline+=%#StatusLineNC#                                                 " highlighting start
 set statusline+=%y                                                              " filetype
-set statusline+=%#error#                                                        " switch highlighting
+set statusline+=%#ErrorMsg#                                                     " switch highlighting
 set statusline+=%m                                                              " modified flag [+] (or [-] if nomodifiable is set)
 set statusline+=%*                                                              " end highlighting
 set statusline+=%=                                                              " switch to right side
-set statusline+=%{v:searchforward?'/':'?'}%{getreg('/')}\                       " latest search along with direction
+set statusline+=%#StatusLineNC#                                                 " highlighting start
+set statusline+=%{v:searchforward?'/':'?'}%{getreg('/')}                        " latest search along with direction
+set statusline+=%*\                                                             " end highlighting
 set statusline+=%c,%l/%L                                                        " current column, current line / total lines
 
 " spelling
@@ -721,6 +730,11 @@ nnoremap <c-e> <c-i>
 " fixing diff jumps
 nnoremap ]d ]c
 nnoremap [d [c
+" move cursor in insert mode
+inoremap <C-h> <left>
+inoremap <C-l> <right>
+" list and quick go to buffer
+nnoremap gb :ls<cr>:e #
 
 " commands
 
@@ -771,8 +785,8 @@ nnoremap <leader>m :marks<cr>
 " toggle registers
 nnoremap <leader>r :registers<cr>
 " toggle scratch window
-nnoremap <leader>S :Scratch!<cr>
-nnoremap <leader>s :Scratch<cr>
+nnoremap gS :Scratch!<cr>
+nnoremap gs :Scratch<cr>
 " pasting (inspired by unimpaired.vim, cf. above)
 nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
 nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
@@ -856,6 +870,7 @@ iabbr #! #!/usr/bin/env
 " write virtualenv setter
 " fix ack to be used normally (not for searching buffer)
 " write search using lvim (Locate)
+" create mappings gs/gS for scratch (for your convenience remap sleep to gZzZz) and which in visual mode appends (or replaces if gS) the lines to the scratch buffer
 
 " Locate ideas
 " the search tool you never knew vim had
