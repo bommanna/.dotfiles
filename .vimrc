@@ -87,10 +87,6 @@ let g:Tlist_Sort_Type = "name"                                                  
 let g:Tlist_Use_Right_Window = 1                                                " put taglist window on the right
 let g:Tlist_WinWidth = 60                                                       " width of taglist window
 
-" Miscellaneous
-let g:scratch_window_autohide = 1                                               " close scratch window when switching out
-let g:scratch_window_height = 10                                                " height of scratch window
-
 
 " PATHOGEN:
 
@@ -303,19 +299,6 @@ command! -range=% -nargs=* Retab <line1>,<line2>call <SID>retab(<f-args>)
 command! -bang -range Snip <line1>,<line2>call <SID>create_snippet(<bang>0)
 command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
-" Scratch:
-"   :Scratch[!]
-"
-"   Open a scratch buffer in a full width window at the top of the screen.
-"   This window is closed automatically when it is the last one left and
-"   the buffer is deleted when VIM exits.
-"
-" Arguments:
-"   !                                   Reset the scratch window (i.e.
-"                                       empty any previous contents).
-"
-command! -bang -nargs=0 Scratch call <SID>open_scratch_buffer(<bang>0)
-
 
 " FUNCTIONS:
 
@@ -445,51 +428,6 @@ function! s:on_buf_delete(...)
       execute s:buf_delete_handler[buf_nr]
       unlet s:buf_delete_handler[buf_nr]
     endif
-  endif
-endfunction
-
-" scratch buffer
-function! s:open_scratch_buffer(reset)
-  " edited version of http://www.vim.org/scripts/script.php?script_id=664
-  " buffer is now always on top full width and autocloses
-  let buffer_name = '__Scratch__'
-  let scr_bufnum = bufnr(buffer_name)
-  if scr_bufnum == -1
-    execute 'new ' . buffer_name
-    call s:on_open_scratch(g:scratch_window_height, 1)
-  else
-    let scr_winnum = bufwinnr(scr_bufnum)
-    if scr_winnum != -1
-      if winnr() != scr_winnum
-        execute scr_winnum . "wincmd w"
-      endif
-    else
-      execute "split +buffer" . scr_bufnum
-      call s:on_open_scratch(g:scratch_window_height, 0)
-    endif
-    if a:reset
-      silent execute '%d'
-    endif
-  endif
-endfunction
-
-function! s:on_open_scratch(height, fresh)
-  execute 'wincmd K'
-  execute 'resize ' . a:height
-  if a:fresh
-    let b:autoclose = 1
-    setlocal bufhidden=hide
-    setlocal buflisted
-    setlocal buftype=nofile
-    setlocal nonumber
-    setlocal noswapfile
-    setlocal winfixheight
-    augroup scratch
-      autocmd!
-      if g:scratch_window_autohide
-        autocmd BufLeave __Scratch__ close
-      endif
-    augroup end
   endif
 endfunction
 

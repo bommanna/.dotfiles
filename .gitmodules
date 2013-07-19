@@ -40,3 +40,6 @@
 [submodule ".vim/bundle/cursorcross.vim"]
 	path = .vim/bundle/cursorcross.vim
 	url = https://github.com/mtth/cursorcross.vim.git
+[submodule ".vim/bundle/scratch.vim"]
+	path = .vim/bundle/scratch.vim
+	url = https://github.com/mtth/scratch.vim.git
