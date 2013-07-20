@@ -3,12 +3,13 @@
 " Standing on the shoulders of giants:
 "   Learn Vimscript the Hard Way [http://learnvimscriptthehardway.stevelosh.com/]
 "   The cleanest vimrc you will ever see [https://github.com/skwp/dotfiles/blob/master/vimrc]
-"   The ultimate Vim configuration [http://amix.dk/vim/vimrc.html]
+"   The ultimate VIM configuration [http://amix.dk/VIM/vimrc.html]
 "   Scrooloose's vimrc [https://github.com/scrooloose/vimfiles/blob/master/vimrc]
 "   Bling's vimrc [https://github.com/bling/dotvim/blob/master/vimrc]
 "
 " Features inspirations from:
-"   unimpaired.vim [https://github.com/tpope/vim-unimpaired]
+"   vim-rooter [https://github.com/airblade/vim-rooter]
+"   unimpaired.vim [https://github.com/tpope/VIM-unimpaired]
 "   ack.vim [https://github.com/mileszs/ack.vim]
 
 
@@ -52,7 +53,7 @@ let g:LatexBox_latexmk_preview_continuously = 0                                 
 " NerdTree
 let g:NERDTreeBookmarksFile = $HOME . '/.vim/cache/.nerdtree_bookmarks'         " where to store the NERDTree bookmarks
 let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']                                " don't show these files
-let g:NERDTreeQuitOnOpen = 1                                                    " quit vim in nerdtree is the only buffer open
+let g:NERDTreeQuitOnOpen = 1                                                    " quit VIM in nerdtree is the only buffer open
 let g:NERDTreeShowBookmarks = 0                                                 " show bookmarks by default
 let g:NERDTreeShowHidden = 1                                                    " show hidden files by default
 let g:NERDTreeWinSize = 60                                                      " width of nerdtree window
@@ -67,11 +68,6 @@ let g:pymode_run = 0                                                            
 let g:pymode_syntax = 0                                                         " pymode's custom syntax highlighting
 let g:pymode_virtualenv = 1                                                     " switch to virtualenv pythonpath if in a virtualenv
 
-" Rooter
-let g:rooter_manual_only = 1                                                    " doing it below for all filetypes (otherwise only some activate rooting)
-let g:rooter_patterns = ['.git/']                                               " patterns indicating root directory
-let g:rooter_use_lcd = 1                                                        " use buffer local directory
-
 " Solarized
 let g:solarized_termtrans = 1                                                   " transparent background sometimes
 
@@ -80,7 +76,7 @@ let g:Tlist_Auto_Highlight_Tag = 1                                              
 let g:Tlist_Auto_Update = 1                                                     " process new files as they are opened
 let g:Tlist_Compact_Format = 1                                                  " don't put line breaks between categories
 let g:Tlist_Enable_Fold_Column = 0                                              " show fold column in taglist window
-let g:Tlist_Exit_OnlyWindow = 1                                                 " quit vim when taglist is the only window open
+let g:Tlist_Exit_OnlyWindow = 1                                                 " quit VIM when taglist is the only window open
 let g:Tlist_File_Fold_Auto_Close = 1                                            " automatically close folds corresponding to non active windows
 let g:Tlist_GainFocus_On_ToggleOpen = 0                                         " move cursor to taglist window when opening it
 let g:Tlist_Highlight_Tag_On_BufEnter = 1                                       " highlight active tag when entering a buffer
@@ -88,6 +84,9 @@ let g:Tlist_Show_One_File = 1                                                   
 let g:Tlist_Sort_Type = "name"                                                  " tag sort order
 let g:Tlist_Use_Right_Window = 1                                                " put taglist window on the right
 let g:Tlist_WinWidth = 60                                                       " width of taglist window
+
+" Miscellaneous
+let g:project_root_markers = ['.git/', 'venv/']                                 " markers to find project root directory
 
 
 " PATHOGEN:
@@ -104,13 +103,14 @@ syntax enable                                                                   
 " general
 set encoding=utf-8                                                              " en-coh-ding
 set hidden                                                                      " allow hidden buffers
-set lazyredraw                                                                  " don't redraw during macros, etc
-set magic                                                                       " use vim magic regular expressions by default
+set lazyredraw                                                                  " don't redraw during macros, etc.
+set magic                                                                       " use VIM magic regular expressions by default
 set modelines=0                                                                 " read meta stuff from top or bottom of files
+set noautochdir                                                                 " cwd is set differently (cf. s:smart_chdir function below)
 set nostartofline                                                               " keeps cursor on current column for movements like H, M, ...
 set number                                                                      " activate line numbers
 set scrolloff=5                                                                 " allow 5 lines below/above the cursor
-set shell=/bin/bash\ --rcfile\ ~/.bashrc                                        " load .bashrc when starting shell from vim
+set shell=/bin/bash\ --rcfile\ ~/.bashrc                                        " load .bashrc when starting shell from VIM
 set shellslash                                                                  " use forward slashes for paths, always
 set showcmd                                                                     " show partial command and number of lines/columns selected
 set tag=./.tags;,.venvtags                                                      " tags files
@@ -307,19 +307,9 @@ command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
 " FUNCTIONS:
 
-function! s:get_visual_selection()
-  " get visual selection
-  " copied from http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  return join(lines, "\n")
-endfunction
-
 function! s:smart_indent()
-  " matches characters preceded by two or more whitespace characters in the first non-empty line above
+  " matches indent of characters preceded by two or more whitespace characters
+  " in the first non-empty line above
   let line_number = line('.')
   let line_content = ''
   while !strlen(line_content) && line_number >=# 1
@@ -333,6 +323,54 @@ function! s:smart_indent()
   else
     return repeat(' ', &tabstop)
   endif
+endfunction
+
+function! s:get_project_root(markers)
+  " get root of current project. markers corresponding to directories must end
+  " with a /
+  let dir_current_file = fnameescape(expand('%:p:h'))
+  for marker in a:markers
+    if match(marker, '/') !=# -1
+      let marker_path = finddir(marker, dir_current_file . ';')
+      if !empty(marker_path)
+        return fnamemodify(marker_path, ':p:h:h')
+      endif
+    else
+      let marker_path = findfile(marker, dir_current_file . ';')
+      if !empty(marker_path)
+        return fnamemodify(marker_path, ':p:h')
+      endif
+    endif
+  endfor
+  return ''
+endfunction
+
+function! s:smart_chdir()
+  " set local working directory to project directory (marked by presence of
+  " certain files) or to current file's directory. For special buffers, do
+  " nothing.
+  " copied from airblade/vim-rooter [https://github.com/airblade/vim-rooter]
+  if match(expand('%:p'), '^\w\+://.*') !=# -1 || !empty(&buftype)
+    " virtual file or special buffer
+    return
+  endif
+  let project_root = s:get_project_root(g:project_root_markers)
+  if !empty(project_root)
+    execute ':lcd ' . fnameescape(project_root)
+  else
+    execute ':lcd ' . fnameescape(expand('%'))
+  endif
+endfunction
+
+function! s:get_visual_selection()
+  " get visual selection
+  " copied from http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  return join(lines, "\n")
 endfunction
 
 function! s:open_in_previous_window(force, cmd)
@@ -387,7 +425,7 @@ function! s:autocompile()
   " # AUTOCOMPILE destination origin_directory
   " notes:
   " * destination path is relative to the current file's directory
-  " * origin_folder is relative to vim's current work directory
+  " * origin_folder is relative to VIM's current work directory
   " * replace the hash sign by the language's comment symbol
   " * form haml, all the files in the origin_folder will be compiled into a
   "   single destination file
@@ -468,7 +506,7 @@ endfunction
 
 function! s:map_next_family(map,cmd)
   " previous and next mappings factory
-  " copied from unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
+  " copied from unimpaired.vim by tim pope, https://github.com/tpope/VIM-unimpaired/
   let map = '<Plug>unimpaired'.toupper(a:map)
   let end = ' ".(v:count ? v:count : "")<CR>'
   execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.a:cmd.'previous'.end
@@ -488,7 +526,7 @@ function! s:map_next_family(map,cmd)
 endfunction
 
 function! s:toggle_paste(force) abort
-  " also inspired by unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
+  " also inspired by unimpaired.vim by tim pope, https://github.com/tpope/VIM-unimpaired/
   if a:force
     let s:paste = &paste
     set paste
@@ -565,7 +603,7 @@ endfunction
 " buffer management
 function! s:on_buf_enter()
   " buffer event handlers
-  execute "Rooter"
+  call s:smart_chdir()
   if exists('b:autoclose') && b:autoclose
     if winbufnr(2) ==# -1
       if tabpagenr('$') ==# 1
@@ -615,7 +653,7 @@ augroup generalgroup
   autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
 augroup END
 
-" use the correct help program for vim and tex files
+" use the correct help program for VIM and tex files
 augroup helpgroup
   autocmd!
   autocmd   FileType                    help                setlocal keywordprg=:help
@@ -716,8 +754,6 @@ inoremap <expr> <s-tab> <SID>smart_indent()
 " easier indentation in visual mode
 vnoremap > >gv
 vnoremap < <gv
-" list and quick go to buffer
-nnoremap gb :ls<cr>:e #
 " copying (consistency with C and D)
 nnoremap Y y$
 " toggle line numbers
@@ -753,8 +789,8 @@ call s:map_next_family('t','t')
 " toggle NERDtree
 nnoremap <leader>f :NERDTreeToggle<cr>
 " toggle taglist
-nnoremap <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-nnoremap <leader>T :CursorcrossOff<cr>:TlistToggle<cr><c-w>=:CursorcrossToggle<cr>
+nnoremap <silent> <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
+nnoremap <silent> <leader>T :CursorcrossOff<cr>:TlistToggle<cr><c-w>=:CursorcrossToggle<cr>
 " fugitive
 nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
 nnoremap <leader>gP :Git pull<cr>
@@ -772,7 +808,7 @@ nnoremap <leader>u :GundoToggle<cr>
 
 " languages
 
-" vim
+" VIM
 " open .vimrc
 nnoremap <leader>ve :tabnew $MYVIMRC<cr>
 "source .vimrc
@@ -810,7 +846,6 @@ iabbr #! #!/usr/bin/env
 
 " gundo avoid resize craziness
 " fugitive bug fixes
-" rewrite rooter
 " write virtualenv setter
 " write search using lvim (Locate, see below)
 " write plugin similar to [https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim] to display last search in command line
@@ -819,7 +854,7 @@ iabbr #! #!/usr/bin/env
 " ideas
 
 " Locate
-" the search tool you never knew vim had
+" the search tool you never knew VIM had
 " vimgrep on steroids
 " use dictionary-functions for when closing location window (or use python bindings)
 " Mapping
