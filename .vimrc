@@ -9,7 +9,6 @@
 "
 " Features inspirations from:
 "   unimpaired.vim [https://github.com/tpope/vim-unimpaired]
-"   scratch.vim [https://github.com/vim-scripts/scratch.vim]
 "   ack.vim [https://github.com/mileszs/ack.vim]
 
 
@@ -22,8 +21,11 @@ set nocompatible                                                                
 " Ctrlp
 let g:ctrlp_by_filename = 1                                                     " search by filename by default
 let g:ctrlp_cache_dir = $HOME . '/.vim/cache/ctrlp'                             " directory to store cached filepaths
+let g:ctrlp_clear_cache_on_exit = 0                                             " retain cache between sessions (<F5> to clear manually)
 let g:ctrlp_cmd = 'CtrlPMRU'                                                    " search mru files by default
 let g:ctrlp_extensions = ['tag']                                                " add tag explorer
+let g:ctrlp_lazy_update = 1                                                     " wait 250ms after typing before refreshing
+let g:ctrlp_regexp = 0                                                          " use regexp as default search mode
 let g:ctrlp_user_command = 'ack %s -f'                                          " use ack as search index
 
 " Cursorcross
@@ -96,7 +98,6 @@ call pathogen#helptags()                                                        
 
 " OPTIONS:
 
-" magic
 filetype plugin on                                                              " enable loading of plugins per filetype
 syntax enable                                                                   " activate syntax highlighting
 
@@ -119,7 +120,7 @@ set virtualedit=block                                                           
 " text formatting
 set autoindent                                                                  " keep indentation when going to new line
 set backspace=indent,eol,start                                                  " allow backspace to delete new lines, etc.
-set formatoptions+=n,j                                                          " recognize lists when formatting and remove comment marker when joining
+set formatoptions+=nj                                                           " recognize lists when formatting and remove comment marker when joining
 set linebreak                                                                   " wrap lines at break characters
 set nojoinspaces                                                                " don't insert two spaces after punctuation on a join
 set nosmartindent                                                               " don't add extra indents, ever
@@ -315,6 +316,23 @@ function! s:get_visual_selection()
   let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
   let lines[0] = lines[0][col1 - 1:]
   return join(lines, "\n")
+endfunction
+
+function! s:smart_indent()
+  " matches characters preceded by two or more whitespace characters in the first non-empty line above
+  let line_number = line('.')
+  let line_content = ''
+  while !strlen(line_content) && line_number >=# 1
+    let line_number -= 1
+    let line_content = getline(line_number)
+  endwhile
+  let line_content = line_content[col('.') - 1:]
+  let offset = match(line_content, '\s\s\S')
+  if offset >=# 0
+    return repeat(' ', offset + 2)
+  else
+    return repeat(' ', &tabstop)
+  endif
 endfunction
 
 function! s:open_in_previous_window(force, cmd)
@@ -693,7 +711,9 @@ nnoremap , <c-l>
 " ' is used for easymotion, replaced by ` mark travel
 nnoremap ' <nop>
 vnoremap ' <nop>
-" easier indentation
+" smart indentation
+inoremap <expr> <s-tab> <SID>smart_indent()
+" easier indentation in visual mode
 vnoremap > >gv
 vnoremap < <gv
 " list and quick go to buffer
