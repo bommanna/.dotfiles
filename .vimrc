@@ -368,6 +368,7 @@ endfunction
 
 function! s:retab(before, after) range
   " cf. Retab command for details
+  let tabstop_save = &tabstop
   let &tabstop = str2nr(a:before)
   let range = a:firstline . ',' . a:lastline
   set noexpandtab
@@ -375,6 +376,7 @@ function! s:retab(before, after) range
   let &tabstop = str2nr(a:after)
   set expandtab
   execute range . 'retab!'
+  let &tabstop = tabstop_save
 endfunction
 
 function! s:autocompile()
@@ -551,9 +553,7 @@ function! s:create_snippet(open, ...) range
 endfunction
 
 function! s:toggle_relativenumber(force)
-  " toggle number/relativenumber
-  " force = 0 to set number
-  " force = 1 to set relativenumber
+  " toggle number/relativenumber (force = 0 to set number, force = 1 to set relativenumber)
   " note that if neither option is on, and force is different from 0 and 1, nothing will happen
   if a:force ==# 0 || &number
     set relativenumber
