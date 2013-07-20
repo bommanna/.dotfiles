@@ -177,17 +177,14 @@ set t_Co=256                                                                    
 set laststatus=2                                                                " always show status line
 set statusline=%<                                                               " truncate on left if too long
 set statusline+=%F\                                                             " full filepath
-set statusline+=%{&modifiable?fugitive#statusline():''}                         " current git branch (if any and if buffer modifiable)
+set statusline+=%{&modifiable?fugitive#statusline():''}\                        " current git branch (if any and if buffer modifiable)
 set statusline+=%r                                                              " readonly flag [RO]
-set statusline+=%#StatusLineNC#                                                 " highlighting start
+set statusline+=%#pandocStrikeoutTable#                                         " highlighting start 
 set statusline+=%y                                                              " filetype
 set statusline+=%#ErrorMsg#                                                     " switch highlighting
 set statusline+=%m                                                              " modified flag [+] (or [-] if nomodifiable is set)
 set statusline+=%*                                                              " end highlighting
 set statusline+=%=                                                              " switch to right side
-set statusline+=%#StatusLineNC#                                                 " highlighting start
-set statusline+=%{v:searchforward?'/':'?'}%{getreg('/')}                        " latest search along with direction
-set statusline+=%*\                                                             " end highlighting
 set statusline+=%c,%l/%L                                                        " current column, current line / total lines
 
 " spelling
@@ -350,15 +347,12 @@ function! s:smart_chdir()
   " certain files) or to current file's directory. For special buffers, do
   " nothing.
   " copied from airblade/vim-rooter [https://github.com/airblade/vim-rooter]
-  if match(expand('%:p'), '^\w\+://.*') !=# -1 || !empty(&buftype)
-    " virtual file or special buffer
-    return
-  endif
-  let project_root = s:get_project_root(g:project_root_markers)
-  if !empty(project_root)
-    execute ':lcd ' . fnameescape(project_root)
-  else
-    execute ':lcd ' . fnameescape(expand('%'))
+  if match(expand('%:p'), '^\w\+://.*') ==# -1 && empty(&buftype)
+    let working_directory = s:get_project_root(g:project_root_markers)
+    if empty(working_directory)
+      let working_directory = expand('%')
+    endif
+    execute ':lcd ' . fnameescape(working_directory)
   endif
 endfunction
 
@@ -590,6 +584,17 @@ function! s:create_snippet(open, ...) range
   endif
 endfunction
 
+function! s:echo_line()
+  " print cwd and last search in status line
+  " inspired by https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim
+  let width = winwidth(0) - 12
+  let line = ''
+  let line .= '[search: ' . (v:searchforward?'/':'?') . getreg('/') . '] '
+  let line .= '[cwd: ' . getcwd() . '] '
+  let line = strpart(line, 0, width)
+  echo line
+endfunction
+
 function! s:toggle_relativenumber(force)
   " toggle number/relativenumber (force = 0 to set number, force = 1 to set relativenumber)
   " note that if neither option is on, and force is different from 0 and 1, nothing will happen
@@ -650,6 +655,7 @@ augroup generalgroup
   autocmd!
   autocmd   BufDelete                   *                   call <SID>on_buf_delete()
   autocmd   BufEnter                    *                   call <SID>on_buf_enter()
+  autocmd   CursorMoved                 *                   call <SID>echo_line()
   autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
 augroup END
 
@@ -848,8 +854,6 @@ iabbr #! #!/usr/bin/env
 " fugitive bug fixes
 " write virtualenv setter
 " write search using lvim (Locate, see below)
-" write plugin similar to [https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim] to display last search in command line
-" look into formatoptions
 
 " ideas
 
