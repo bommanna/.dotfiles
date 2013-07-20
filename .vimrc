@@ -101,37 +101,40 @@ filetype plugin on                                                              
 syntax enable                                                                   " activate syntax highlighting
 
 " general
-set autoindent                                                                  " keep indentation when going to new line
-set backspace=indent,eol,start                                                  " allow backspace to delete new lines, etc.
-set encoding=utf-8                                                              " duh
-set expandtab                                                                   " insert spaces instead of a tab when tabbing
+set encoding=utf-8                                                              " en-coh-ding
 set hidden                                                                      " allow hidden buffers
 set lazyredraw                                                                  " don't redraw during macros, etc
-set linebreak                                                                   " ? for latex
 set magic                                                                       " use vim magic regular expressions by default
 set modelines=0                                                                 " read meta stuff from top or bottom of files
-set nojoinspaces                                                                " don't insert two spaces after punctuation on a join
-set nosmartindent                                                               " don't add extra indents, ever
 set nostartofline                                                               " keeps cursor on current column for movements like H, M, ...
-set noswapfile                                                                  " don't use swap files for saves
 set number                                                                      " activate line numbers
-set omnifunc=syntaxcomplete#Complete                                            " omnicompletion using syntax keywords
 set scrolloff=5                                                                 " allow 5 lines below/above the cursor
 set shell=/bin/bash\ --rcfile\ ~/.bashrc                                        " load .bashrc when starting shell from vim
 set shellslash                                                                  " use forward slashes for paths, always
-set shiftwidth=2                                                                " spaces used for indent keys (>>, ...) and for autoindent
 set showcmd                                                                     " show partial command and number of lines/columns selected
-set tabstop=2                                                                   " number of spaces a tab takes (displayed)
-set tag=./.tags;,.venvtags                                                      " tags file
-set textwidth=0                                                                 " don't insert line breaks for long lines
+set tag=./.tags;,.venvtags                                                      " tags files
 set ttimeoutlen=100                                                             " don't wait a second for wrong key codes to error out
 set virtualedit=block                                                           " let cursor move past the last char in <C-V> mode
+
+" text formatting
+set autoindent                                                                  " keep indentation when going to new line
+set backspace=indent,eol,start                                                  " allow backspace to delete new lines, etc.
+set formatoptions+=n,j                                                          " recognize lists when formatting and remove comment marker when joining
+set linebreak                                                                   " wrap lines at break characters
+set nojoinspaces                                                                " don't insert two spaces after punctuation on a join
+set nosmartindent                                                               " don't add extra indents, ever
+set textwidth=0                                                                 " don't insert line breaks for long lines
 set wrap                                                                        " wrap long lines
+
+" tabbing
+set expandtab                                                                   " insert spaces instead of a tab when tabbing
+set shiftwidth=2                                                                " spaces used for indent keys (>>, ...) and for autoindent
+set tabstop=2                                                                   " number of spaces a tab takes (displayed)
 
 " autocomplete
 set completeopt=longest,menuone                                                 " only insert longest common strings of suggestions
-set wildignore=*.swp,*.bak                                                      " don't show these files in autocompletion
-set wildignore+=*.pyc,*.class                                                   " 
+set omnifunc=syntaxcomplete#Complete                                            " default omnicompletion using syntax keywords
+set wildignore=*.swp,*.bak,*.pyc,*.class                                        " don't show these files in file autocompletion
 set wildmenu                                                                    " allow autocompletion with c-n
 
 " undohistory
@@ -143,10 +146,10 @@ set undoreload=1000                                                             
 " folds
 set fillchars="fold: "                                                          " don't show hyphens after folds
 set foldcolumn=2                                                                " width of the fold column
-set foldlevelstart=6                                                            " open folds on open
+set foldlevelstart=11                                                           " open all folds when opening new file
 set foldmethod=indent                                                           " fold by indent
 set foldminlines=0                                                              " allow folding of single lines
-set foldnestmax=5                                                               " maximum fold level
+set foldnestmax=10                                                              " maximum fold level
 
 " search
 set ignorecase                                                                  " if all lowercase in search query, ignore case
@@ -162,11 +165,11 @@ set noswapfile                                                                  
 
 " theme
 colorscheme solarized                                                           " colorscheme
-set background=dark                                                             " theme, autodetected
-set colorcolumn=                                                                " don't highlight any columns
-set nocursorcolumn                                                              " highlight the current column
-set nocursorline                                                                " highlight the current row
-set showbreak=>>\ \                                                             " characters shown on display linebreak
+set background=dark                                                             " theme
+set colorcolumn=                                                                " don't highlight any columns by default
+set nocursorcolumn                                                              " don't highlight the current column
+set nocursorline                                                                " or the current row
+set showbreak=>>\ \                                                             " characters shown after wrap linebreak
 set t_Co=256                                                                    " terminal colors
 
 " status line
@@ -189,7 +192,8 @@ set statusline+=%c,%l/%L                                                        
 " spelling
 set dictionary=/usr/share/dict/words                                            " files where to load word for dictionary
 set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add                        "   completion for use with <c-x><c-k>
-set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          " file where to add new dict words
+set spell                                                                       " turn spellcheck on by default
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          " file where to add new dictionary words
 
 " disabled
 " syntax sync fromstart                                                         " otherwise folding messes up highlighting
@@ -302,8 +306,8 @@ command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
 " FUNCTIONS:
 
-" get visual selection
 function! s:get_visual_selection()
+  " get visual selection
   " copied from http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
   let [lnum1, col1] = getpos("'<")[1:2]
   let [lnum2, col2] = getpos("'>")[1:2]
@@ -313,8 +317,8 @@ function! s:get_visual_selection()
   return join(lines, "\n")
 endfunction
 
-" force command to load in previous window (cf. OpenInPreviousWindow command above for details)
 function! s:open_in_previous_window(force, cmd)
+  " a force command to load in previous window (cf. OpenInPreviousWindow command above for details)
   let l:bwnr = winnr()
   let l:pwnr = winnr('#')
   execute a:cmd
@@ -330,8 +334,8 @@ function! s:open_in_previous_window(force, cmd)
   endif
 endfunction
 
-" refresh tags (cf. RefreshTags command above for details)
 function! s:refresh_tags(force)
+  " (cf. RefreshTags command above for details)
   if bufloaded('__Tag_List__') || a:force
     TlistUpdate
     echomsg 'Taglist updated!'
@@ -344,8 +348,8 @@ function! s:refresh_tags(force)
   endif
 endfunction
 
-" retab (cf. Retab command for details)
 function! s:retab(before, after) range
+  " cf. Retab command for details
   let &tabstop = str2nr(a:before)
   let range = a:firstline . ',' . a:lastline
   set noexpandtab
@@ -355,8 +359,8 @@ function! s:retab(before, after) range
   execute range . 'retab!'
 endfunction
 
-" autocompile coffeescript, haml, stylus on save using a comment on the first line
 function! s:autocompile()
+  " autocompile coffeescript, haml, stylus on save using a comment on the first line
   " usage (coffee, stylus):
   " # AUTOCOMPILE destination
   " usage (haml):
@@ -390,49 +394,8 @@ function! s:autocompile()
   endif
 endfunction
 
-" buffer event handlers
-function! s:on_buf_enter()
-  execute "Rooter"
-  if exists('b:autoclose') && b:autoclose
-    if winbufnr(2) ==# -1
-      if tabpagenr('$') ==# 1
-        bdelete
-        quit
-      else
-        close
-      endif
-    endif
-  endif
-endfunction
-
-if !exists('s:buf_delete_handler')
-  let s:buf_delete_handler = {}
-endif
-
-function! s:on_buf_delete(...)
-  " usage
-  " f(command[, buffer_number])
-  if a:0 > 0
-    " we are adding a handler
-    if a:0 ==# 1
-      let buf_nr = bufnr('%')
-    else
-      let buf_nr = a:2
-    endif
-    " note: key is coerced to string
-    let s:buf_delete_handler[buf_nr] = a:1
-  else
-    " we are looking for a handler
-    let buf_nr = expand('<abuf>')
-    if has_key(s:buf_delete_handler, buf_nr)
-      execute s:buf_delete_handler[buf_nr]
-      unlet s:buf_delete_handler[buf_nr]
-    endif
-  endif
-endfunction
-
-" Customizing quickfix window
 function! s:on_open_quickfix()
+  " Customizing quickfix window
   setlocal nowrap
   setlocal statusline=%f%=%l/%L
   execute "wincmd J"
@@ -446,15 +409,15 @@ function! s:on_open_quickfix()
   nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p
 endfunction
 
-" resize window dynamically
 function! s:resize_window(min_lines, max_lines)
+  " resize window dynamically
   let total_lines = line('$')
   let height = min([a:max_lines, max([a:min_lines, total_lines])])
   execute "resize " . height
 endfunction
 
-" Ack command (cf. Ack command above for explanations)
 function! s:ack(force, args)
+  " cf. Ack command above for explanations
   cclose
   if strlen(a:args)
     let s:search_args = a:args
@@ -464,11 +427,6 @@ function! s:ack(force, args)
     echo 'No search term found'
   else
     echo 'Searching...'
-    "   if exists('g:search_highlight_matches') && g:search_highlight_matches
-    "     let match_id = matchadd('Search', '\v' . s:search_args)
-    "   endif
-    "   let filepath = expand('%:p')
-    "   let cmd = g:search_executable . " -H '" . s:search_args . "' " . filepath
     let cmd = 'ack -H ' . s:search_args
     let l:results = system(cmd)
     if strlen(l:results)
@@ -479,17 +437,6 @@ function! s:ack(force, args)
       endif
       copen
       call matchadd('Search', '\v' . s:search_args)
-      " call matchadd('Search', '\v' . s:search_args)
-      " set the title (possible only after it has been opened)
-      " redraw! will take care of showing the right one
-      " if a:buffer
-      "   let w:quickfix_title = 'Search [' . filepath . '] ' . s:search_args
-      " else
-      "   let w:quickfix_title = 'Search ' . s:search_args
-      " endif
-      " if exists('g:search_highlight_matches') && g:search_highlight_matches
-      "   call s:on_buf_delete('execute "call matchdelete(' . match_id . ')"')
-      " endif
       redraw!
       echo line('$') . ' result(s) found'
     else
@@ -499,8 +446,8 @@ function! s:ack(force, args)
   endif
 endfunction
 
-" previous and next mappings factory
 function! s:map_next_family(map,cmd)
+  " previous and next mappings factory
   " copied from unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
   let map = '<Plug>unimpaired'.toupper(a:map)
   let end = ' ".(v:count ? v:count : "")<CR>'
@@ -520,7 +467,6 @@ function! s:map_next_family(map,cmd)
   endif
 endfunction
 
-" paste toggling
 function! s:toggle_paste(force) abort
   " also inspired by unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
   if a:force
@@ -534,8 +480,8 @@ function! s:toggle_paste(force) abort
   endif
 endfunction
 
-" snippets
 function! s:create_snippet(open, ...) range
+  " snippets
   if exists('g:snippets_ssh_url')
     let ssh_url = g:snippets_ssh_url
   elseif exists('$SNIPPETS_SSH_URL')
@@ -586,12 +532,57 @@ function! s:create_snippet(open, ...) range
   endif
 endfunction
 
-" toggle number/relativenumber
 function! s:toggle_relativenumber(force)
+  " toggle number/relativenumber
+  " force = 0 to set number
+  " force = 1 to set relativenumber
+  " note that if neither option is on, and force is different from 0 and 1, nothing will happen
   if a:force ==# 0 || &number
     set relativenumber
   elseif a:force ==# 1 || &relativenumber
     set number
+  endif
+endfunction
+
+" buffer management
+function! s:on_buf_enter()
+  " buffer event handlers
+  execute "Rooter"
+  if exists('b:autoclose') && b:autoclose
+    if winbufnr(2) ==# -1
+      if tabpagenr('$') ==# 1
+        bdelete
+        quit
+      else
+        close
+      endif
+    endif
+  endif
+endfunction
+
+if !exists('s:buf_delete_handler')
+  let s:buf_delete_handler = {}
+endif
+
+function! s:on_buf_delete(...)
+  " usage
+  " f(command[, buffer_number])
+  if a:0 > 0
+    " we are adding a handler
+    if a:0 ==# 1
+      let buf_nr = bufnr('%')
+    else
+      let buf_nr = a:2
+    endif
+    " note: key is coerced to string
+    let s:buf_delete_handler[buf_nr] = a:1
+  else
+    " we are looking for a handler
+    let buf_nr = expand('<abuf>')
+    if has_key(s:buf_delete_handler, buf_nr)
+      execute s:buf_delete_handler[buf_nr]
+      unlet s:buf_delete_handler[buf_nr]
+    endif
   endif
 endfunction
 
@@ -603,7 +594,6 @@ augroup generalgroup
   autocmd!
   autocmd   BufDelete                   *                   call <SID>on_buf_delete()
   autocmd   BufEnter                    *                   call <SID>on_buf_enter()
-  autocmd   FileType                    *                   set formatoptions-=c formatoptions-=r formatoptions-=o
   autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
 augroup END
 
@@ -611,8 +601,8 @@ augroup END
 augroup helpgroup
   autocmd!
   autocmd   FileType                    help                setlocal keywordprg=:help
-  autocmd   FileType                    vim                 setlocal keywordprg=:help
   autocmd   FileType                    tex                 setlocal keywordprg=texdoc
+  autocmd   FileType                    vim                 setlocal keywordprg=:help
 augroup END
 
 " change quickfix window keybindings and make it full width
@@ -628,10 +618,6 @@ augroup taglistgroup
 augroup END
 
 " language specific thangs
-augroup texgroup
-  autocmd!
-  autocmd   FileType                    tex                 noremap <buffer> <leader>ll :w<cr>:Latexmk<cr>
-augroup END
 augroup pythongroup
   autocmd!
   autocmd   FileType                    python              setlocal colorcolumn=80
@@ -648,7 +634,7 @@ augroup END
 " 
 " movements
 
-" visual up, down, end of line, start of line (useful for long lines)
+" visual up, down
 noremap j gj
 noremap k gk
 " easy movement around splits
@@ -658,33 +644,19 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 " not forgetting the previous window mapping
 nnoremap <c-o> <c-w>p
-" easier indentation
-vnoremap > >gv
-vnoremap < <gv
-" ^ is hard to hit, also by symmetry with `g_` mapping
-noremap _ ^
-" jumps
+" remap jumps
 nnoremap <c-r> <c-i>
 nnoremap <c-e> <c-o>
-" fixing undo
+" and now undo
 nnoremap U <c-r>
-" fixing diff jumps
-nnoremap ]d ]c
-nnoremap [d [c
+" ^ is hard to hit, also by symmetry with `g_` mapping
+noremap _ ^
 " move cursor in insert mode
 inoremap <C-h> <left>
 inoremap <C-l> <right>
-" list and quick go to buffer
-nnoremap gb :ls<cr>:e #
-
-" commands
-
-" remap command line
-nnoremap ; :
-vnoremap ; :
-" always use command line window otherwise
-nnoremap : q:i
-vnoremap : q:i
+" mapping diff jumps, d makes more sense
+nnoremap ]d ]c
+nnoremap [d [c
 
 " searches
 
@@ -705,12 +677,29 @@ vnoremap <silent> # :<c-u>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<cr><cr>
   \:call setreg('"', old_reg, old_regtype)<cr>
 
-" misc
+" commands
 
-" copying (consistency with C and D)
-nnoremap Y y$
+" remap command line
+nnoremap ; :
+vnoremap ; :
+" always use command line window otherwise
+nnoremap : q:i
+vnoremap : q:i
+
+" miscellaneous
+
 " redraw
 nnoremap , <c-l>
+" ' is used for easymotion, replaced by ` mark travel
+nnoremap ' <nop>
+vnoremap ' <nop>
+" easier indentation
+vnoremap > >gv
+vnoremap < <gv
+" list and quick go to buffer
+nnoremap gb :ls<cr>:e #
+" copying (consistency with C and D)
+nnoremap Y y$
 " toggle line numbers
 nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
 " changing background color
@@ -725,9 +714,6 @@ nnoremap <leader>M :messages<cr>
 nnoremap <leader>m :marks<cr>
 " toggle registers
 nnoremap <leader>r :registers<cr>
-" toggle scratch window
-nnoremap gS :Scratch!<cr>
-nnoremap gs :Scratch<cr>
 " pasting (inspired by unimpaired.vim, cf. above)
 nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
 nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
@@ -744,9 +730,6 @@ call s:map_next_family('t','t')
 
 " plugins
 
-" ' is used for easymotion, replaced by ` mark travel
-nnoremap ' <nop>
-vnoremap ' <nop>
 " toggle NERDtree
 nnoremap <leader>f :NERDTreeToggle<cr>
 " toggle taglist
@@ -809,9 +792,7 @@ iabbr #! #!/usr/bin/env
 " fugitive bug fixes
 " rewrite rooter
 " write virtualenv setter
-" fix ack to be used normally (not for searching buffer)
 " write search using lvim (Locate, see below)
-" create mappings gs/gS for scratch (for your convenience remap sleep to gZzZz) and which in visual mode appends (or replaces if gS) the lines to the scratch buffer
 " write plugin similar to [https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim] to display last search in command line
 " look into formatoptions
 
