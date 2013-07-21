@@ -40,3 +40,6 @@
 [submodule ".vim/bundle/scratch.vim"]
 	path = .vim/bundle/scratch.vim
 	url = https://github.com/mtth/scratch.vim.git
+[submodule ".vim/bundle/tabular"]
+	path = .vim/bundle/tabular
+	url = https://github.com/godlygeek/tabular.git
