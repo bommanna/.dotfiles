@@ -81,16 +81,6 @@ if !g:vimrc_disable_plugins
   let g:NERDTreeShowHidden = 1                                                " show hidden files by default
   let g:NERDTreeWinSize = 60                                                  " width of nerdtree window
 
-  " Python
-  let g:pymode_folding = 0                                                    " python folding
-  let g:pymode_lint = 0                                                       " load lint plugin for code checking
-  let g:pymode_lint_checker = ''                                              " pyflakes,pep8,mccable,pylint
-  let g:pymode_motion = 0                                                     " python objects and motion
-  let g:pymode_rope = 0                                                       " load rope plugin for code refactoring
-  let g:pymode_run = 0                                                        " load run code plugin
-  let g:pymode_syntax = 0                                                     " pymode's custom syntax highlighting
-  let g:pymode_virtualenv = 1                                                 " switch to virtualenv pythonpath if in a virtualenv
-
   " Taglist
   let g:Tlist_Auto_Highlight_Tag = 1                                          " highlight active tag (after a small inactivity period)
   let g:Tlist_Auto_Update = 1                                                 " process new files as they are opened
@@ -152,6 +142,7 @@ if !g:vimrc_disable_options
   " text formatting
   set autoindent                                                              " keep indentation when going to new line
   set backspace=indent,eol,start                                              " allow backspace to delete new lines, etc.
+  set formatlistpat=^\\s*\\(\\d\\+\\\|[*+-]\\)[\\]:.)}\\t\ ]\\s*              " allow non numbered lists (starting by *+-)
   set formatoptions+=nj                                                       " recognize lists when formatting and remove comment marker when joining
   set linebreak                                                               " wrap lines at break characters
   set nojoinspaces                                                            " don't insert two spaces after punctuation on a join
