@@ -6,11 +6,13 @@
 "   The ultimate VIM configuration [http://amix.dk/VIM/vimrc.html]
 "   Scrooloose's vimrc [https://github.com/scrooloose/vimfiles/blob/master/vimrc]
 "   Bling's vimrc [https://github.com/bling/dotvim/blob/master/vimrc]
+"   VIM sensible [https://github.com/tpope/vim-sensible]
 "
 " Features inspirations from:
 "   vim-rooter [https://github.com/airblade/vim-rooter]
 "   unimpaired.vim [https://github.com/tpope/VIM-unimpaired]
 "   ack.vim [https://github.com/mileszs/ack.vim]
+"   vim-bufferline [https://github.com/bling/vim-bufferline]
 
 
 filetype off                                                                    " safety
@@ -109,6 +111,7 @@ set modelines=0                                                                 
 set noautochdir                                                                 " cwd is set differently (cf. s:smart_chdir function below)
 set nostartofline                                                               " keeps cursor on current column for movements like H, M, ...
 set number                                                                      " activate line numbers
+set sidescrolloff=5                                                             " allow 5 lines left/right of the cursor
 set scrolloff=5                                                                 " allow 5 lines below/above the cursor
 set shell=/bin/bash\ --rcfile\ ~/.bashrc                                        " load .bashrc when starting shell from VIM
 set shellslash                                                                  " use forward slashes for paths, always
@@ -133,6 +136,7 @@ set shiftwidth=2                                                                
 set tabstop=2                                                                   " number of spaces a tab takes (displayed)
 
 " autocomplete
+set complete-=i                                                                 " what to include when pressing <c-n> and <c-p> in insert mode
 set completeopt=longest,menuone                                                 " only insert longest common strings of suggestions
 set omnifunc=syntaxcomplete#Complete                                            " default omnicompletion using syntax keywords
 set wildignore=*.swp,*.bak,*.pyc,*.class                                        " don't show these files in file autocompletion
@@ -225,7 +229,7 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                          
 " Examples:
 "   :Ack! hello                         Ack for hello in project directory
 "                                       and open first match.
-"   :Ack '\bthe\b' %                    Ack for occurences of the word
+"   :Ack '\bthe\b' %                    Ack for occurrences of the word
 "                                       `the` in the current file.
 "
 command! -bang -nargs=* -complete=file Ack call <SID>ack(<bang>0, <q-args>)
@@ -280,7 +284,7 @@ command! -range=% -nargs=* Retab <line1>,<line2>call <SID>retab(<f-args>)
 "   installed: https://github.com/mtth/igloo). Configuration is done via two
 "   global variables `g:snippets_ssh_url` and `g:snippets_http_url` or
 "   environment variables `$SNIPPETS_SSH_URL` and `$SNIPPETS_HTTP_URL` (the
-"   former take precedence). The http url is optional, to be able to open
+"   former take precedence). The http URL is optional, to be able to open
 "   snippets in the browser.
 "
 " Arguments:
@@ -350,7 +354,7 @@ function! s:smart_chdir()
   if match(expand('%:p'), '^\w\+://.*') ==# -1 && empty(&buftype)
     let working_directory = s:get_project_root(g:project_root_markers)
     if empty(working_directory)
-      let working_directory = expand('%')
+      let working_directory = expand('%:p:h')
     endif
     execute ':lcd ' . fnameescape(working_directory)
   endif
@@ -444,21 +448,6 @@ function! s:autocompile()
       endif
     endif
   endif
-endfunction
-
-function! s:on_open_quickfix()
-  " Customizing quickfix window
-  setlocal nowrap
-  setlocal statusline=%f%=%l/%L
-  execute "wincmd J"
-  call s:resize_window(1, 20)
-  let b:autoclose = 1
-  nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>
-  nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>
-  nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>
-  nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>
-  nnoremap <silent> <buffer> q <c-w>p:ccl<cr>
-  nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p
 endfunction
 
 function! s:resize_window(min_lines, max_lines)
@@ -584,17 +573,6 @@ function! s:create_snippet(open, ...) range
   endif
 endfunction
 
-function! s:echo_line()
-  " print cwd and last search in status line
-  " inspired by https://github.com/bling/vim-bufferline/blob/master/plugin/bufferline.vim
-  let width = winwidth(0) - 12
-  let line = ''
-  let line .= '[search: ' . (v:searchforward?'/':'?') . getreg('/') . '] '
-  let line .= '[cwd: ' . getcwd() . '] '
-  let line = strpart(line, 0, width)
-  echo line
-endfunction
-
 function! s:toggle_relativenumber(force)
   " toggle number/relativenumber (force = 0 to set number, force = 1 to set relativenumber)
   " note that if neither option is on, and force is different from 0 and 1, nothing will happen
@@ -603,6 +581,17 @@ function! s:toggle_relativenumber(force)
   elseif a:force ==# 1 || &relativenumber
     set number
   endif
+endfunction
+
+function! s:toggle_hlsearch()
+  " toggle hlsearch and display some information
+  let &hlsearch = 1 - &hlsearch
+  let width = winwidth(0) - 12
+  let line = '[hl: ' . &hlsearch . '] '
+  let line .= '[search: ' . (v:searchforward?'/':'?') . getreg('/') . '] '
+  let line .= '[cwd: ' . getcwd() . '] '
+  let line = strpart(line, 0, width)
+  echo line
 endfunction
 
 " buffer management
@@ -647,15 +636,33 @@ function! s:on_buf_delete(...)
   endif
 endfunction
 
+function! s:on_filetype()
+  if &ft ==# 'taglist'
+    setlocal nospell
+  elseif &ft ==# 'qf'
+    setlocal nowrap
+    setlocal statusline=%f%=%l/%L
+    execute "wincmd J"
+    call s:resize_window(1, 20)
+    let b:autoclose = 1
+    nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>
+    nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>
+    nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>
+    nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>
+    nnoremap <silent> <buffer> q <c-w>p:ccl<cr>
+    nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p
+  endif
+endfunction
+
 
 " AUTOCOMMANDS:
 
-" miscellaneous stuff
-augroup generalgroup
+" general events
+augroup eventgroup
   autocmd!
   autocmd   BufDelete                   *                   call <SID>on_buf_delete()
   autocmd   BufEnter                    *                   call <SID>on_buf_enter()
-  autocmd   CursorMoved                 *                   call <SID>echo_line()
+  autocmd   FileType                    *                   call <SID>on_filetype()
   autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
 augroup END
 
@@ -665,12 +672,6 @@ augroup helpgroup
   autocmd   FileType                    help                setlocal keywordprg=:help
   autocmd   FileType                    tex                 setlocal keywordprg=texdoc
   autocmd   FileType                    vim                 setlocal keywordprg=:help
-augroup END
-
-" change quickfix window keybindings and make it full width
-augroup quickfixgroup
-  autocmd!
-  autocmd   FileType                    qf                  call <SID>on_open_quickfix()
 augroup END
 
 " some commands when using the taglist window
@@ -726,7 +727,7 @@ nnoremap [d [c
 nnoremap <tab> ;
 nnoremap <s-tab> ,
 " toggle search highlight
-nnoremap <space> :set nohlsearch!<cr>:set hlsearch?<cr>
+nnoremap <space> :call <SID>toggle_hlsearch()<cr>
 " enable search for selected text, forwards (*) or backwards (#)
 vnoremap <silent> * :<c-u>
   \let old_reg=getreg('"')<bar>let old_regtype=getregtype('"')<cr>

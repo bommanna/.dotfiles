@@ -33,7 +33,7 @@
 	url = https://github.com/Lokaltog/vim-easymotion.git
 [submodule ".vim/bundle/LaTeX-Box"]
 	path = .vim/bundle/LaTeX-Box
-	url = https://github.com/mtth/LaTeX-Box.git
+	url = https://github.com/LaTeX-Box-Team/LaTeX-Box.git
 [submodule ".vim/bundle/cursorcross.vim"]
 	path = .vim/bundle/cursorcross.vim
 	url = https://github.com/mtth/cursorcross.vim.git
