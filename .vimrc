@@ -56,6 +56,7 @@ if !g:vimrc_disable_plugins
   let g:cursorcross_debug = 0                                                 " show messages to debug order of autocommands
   let g:cursorcross_dynamic = 1                                               " cursorline in normal mode, cursorcolumn in insert mode
   let g:cursorcross_mappings = 1                                              " create mappings
+  let g:cursorcross_exceptions = ['tex', 'qf']                                " disable cursorcross for these filetypes
 
   " EasyMotion
   let g:EasyMotion_leader_key = "'"                                           " ' key is unbound in normal and visual mode below
