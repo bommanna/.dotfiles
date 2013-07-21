@@ -214,7 +214,7 @@ if !g:vimrc_disable_options
   " spelling
   set dictionary=/usr/share/dict/words                                        " files where to load word for dictionary
   set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add                    "   completion for use with <c-x><c-k>
-  set spell                                                                   " turn spellcheck on by default
+  set nospell                                                                 " no spellcheck on by default
   set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                      " file where to add new dictionary words
 
   " disabled
@@ -392,7 +392,6 @@ if !g:vimrc_disable_autocommands
     autocmd   VimEnter                    *                   call <SID>create_next_mappings()
     autocmd   BufDelete                   *                   call <SID>on_buf_delete()
     autocmd   BufEnter                    *                   call <SID>on_buf_enter()
-    autocmd   FileType                    *                   call <SID>on_filetype()
     autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
   augroup END
 
@@ -571,13 +570,6 @@ function! s:retab(before, after) range
   set expandtab
   execute range . 'retab!'
   let &tabstop = tabstop_save
-endfunction
-
-function! s:resize_window(min_lines, max_lines)
-  " resize window dynamically
-  let total_lines = line('$')
-  let height = min([a:max_lines, max([a:min_lines, total_lines])])
-  execute "resize " . height
 endfunction
 
 " Smart autochdir
@@ -863,24 +855,6 @@ function! s:on_buf_delete(...)
       execute s:buf_delete_handler[buf_nr]
       unlet s:buf_delete_handler[buf_nr]
     endif
-  endif
-endfunction
-
-function! s:on_filetype()
-  if &ft ==# 'taglist'
-    setlocal nospell
-  elseif &ft ==# 'qf'
-    setlocal nowrap
-    setlocal statusline=%f%=%l/%L
-    execute "wincmd J"
-    call s:resize_window(1, 20)
-    let b:autoclose = 1
-    nnoremap <silent> <buffer> <cr> :OpenInPreviousWindow .cc<cr>
-    nnoremap <silent> <buffer> O :OpenInPreviousWindow .cc<cr>zz:copen<cr>
-    nnoremap <silent> <buffer> V <c-w><cr>:ccl<cr><c-w>H:copen<cr>
-    nnoremap <silent> <buffer> o :OpenInPreviousWindow .cc<cr>
-    nnoremap <silent> <buffer> q <c-w>p:ccl<cr>
-    nnoremap <silent> <buffer> v <c-w><cr>:ccl<cr><c-w>H:copen<cr><c-w>p
   endif
 endfunction
 

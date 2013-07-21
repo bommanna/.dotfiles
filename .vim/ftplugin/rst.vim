@@ -1,4 +1,5 @@
 " rst specific options
 
-set formatoptions+=aw
-set textwidth=79
+setlocal formatoptions+=aw
+setlocal textwidth=79
+setlocal spell

@@ -1,3 +1,4 @@
 " VIM configuration for python
 
-set colorcolumn=80
+setlocal colorcolumn=80
+setlocal spell
