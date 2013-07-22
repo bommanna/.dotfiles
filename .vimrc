@@ -108,7 +108,7 @@ if !g:vimrc_disable_colorschemes
   call pathogen#infect($HOME . '/.vim/bundle/colorschemes')                   " load all colorschemes
 endif
 
-if !g:vimrc_disable_plugins || g:vimrc_disable_colorschemes
+if !g:vimrc_disable_plugins || !g:vimrc_disable_colorschemes
   call pathogen#helptags()
 endif
 
@@ -124,11 +124,9 @@ if !g:vimrc_disable_options
   set encoding=utf-8                                                          " en-coh-ding
   set hidden                                                                  " allow hidden buffers
   set lazyredraw                                                              " don't redraw during macros, etc.
-  set list                                                                    " show hidden characters this
-  set listchars=tab:>-,trail:\                                                " which hidden characters to show
   set magic                                                                   " use VIM magic regular expressions by default
   set modelines=0                                                             " read meta stuff from top or bottom of files
-  set noautochdir                                                             " cwd is set differently (cf. s:smart_chdir function below)
+  set noautochdir                                                             " cwd is set differently (cf. ``s:smart_chdir`` function below)
   set nostartofline                                                           " keeps cursor on current column for movements like H, M, ...
   set number                                                                  " activate line numbers
   set sidescrolloff=5                                                         " allow 5 lines left/right of the cursor
@@ -145,8 +143,10 @@ if !g:vimrc_disable_options
   set backspace=indent,eol,start                                              " allow backspace to delete new lines, etc.
   set formatlistpat=^\\s*\\(\\d\\+\\\|[*+-]\\)[\\]:.)}\\t\ ]\\s*              " allow non numbered lists (starting by *+-)
   set formatoptions+=nj                                                       " recognize lists when formatting and remove comment marker when joining
-  set linebreak                                                               " wrap lines at break characters
+  set list                                                                    " show hidden characters (cf. ``listchar`` option below)
+  set listchars=tab:>-,trail:\                                                " which hidden characters to show
   set nojoinspaces                                                            " don't insert two spaces after punctuation on a join
+  set nolinebreak                                                             " wrap lines anywhere (``linebreak`` is incompatible with list)
   set nosmartindent                                                           " don't add extra indents, ever
   set textwidth=0                                                             " don't insert line breaks for long lines
   set wrap                                                                    " wrap long lines
