@@ -60,6 +60,12 @@ create:
 		echo "Creating .config directory"; \
 		mkdir "$(HOME)/.config"; \
 	fi;
+	@if [ ! -d "$(HOME)/.config/extra" ]; then \
+		mkdir "$(HOME)/.config/extra"; \
+	fi;
+	@if [ ! -d "$(HOME)/.config/info" ]; then \
+		mkdir "$(HOME)/.config/info"; \
+	fi;
 	@if [ ! -d  save ]; then \
 		echo "Save directory created at $(CURDIR)/save"; \
 		mkdir save; \

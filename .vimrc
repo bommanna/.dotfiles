@@ -26,11 +26,7 @@
 
 " runtime path
 let g:runtimepath = $HOME . '/.config/vim'
-if strlen(g:runtimepath)
-  let &runtimepath .= ',' . g:runtimepath
-else
-  let g:runtimepath = split(&runtimepath, ',')[0]
-endif
+let &runtimepath .= ',' . g:runtimepath
 
 " environment variables
 let g:vimrc_disable_plugins = $VIM_DISABLE_PLUGINS == 1                       " disable all plugins except colorschemes
@@ -133,6 +129,7 @@ syntax enable                                                                 " 
 if !g:vimrc_disable_options
 
   " general
+  let &viminfo .= ',n' . $HOME . '/.config/info/.viminfo'                     " location of .viminfo file
   set encoding=utf-8                                                          " en-coh-ding
   set hidden                                                                  " allow hidden buffers
   set lazyredraw                                                              " don't redraw during macros, etc.
@@ -270,8 +267,9 @@ if !g:vimrc_disable_mappings
 
   " editing
 
-  " don't overwrite " register with single normal mode x
+  " don't overwrite registers with single normal mode xs
   nnoremap x "_x
+  nnoremap X "_X
 
   " searches
 
