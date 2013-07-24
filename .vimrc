@@ -1,11 +1,11 @@
-" VIM configuration file
+" Vim configuration file
 "
 "
 " Standing on the shoulders of giants:
 "
 " * http://learnvimscriptthehardway.stevelosh.com/
 " * https://github.com/skwp/dotfiles/blob/master/vimrc
-" * http://amix.dk/VIM/vimrc.html
+" * http://amix.dk/vim/vimrc.html
 " * https://github.com/scrooloose/vimfiles/blob/master/vimrc
 " * https://github.com/bling/dotvim/blob/master/vimrc
 " * https://github.com/tpope/vim-sensible
@@ -15,7 +15,7 @@
 " Features inspirations from:
 "
 " * https://github.com/airblade/vim-rooter
-" * https://github.com/tpope/VIM-unimpaired
+" * https://github.com/tpope/vim-unimpaired
 " * https://github.com/mileszs/ack.vim
 " * https://github.com/bling/vim-bufferline
 "
@@ -57,7 +57,7 @@ if !g:vimrc_disable_plugins
   let g:ctrlp_cmd = 'CtrlPMRU'                                                " search mru files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
-  let g:ctrlp_mruf_exclude='.*\.txt$'                                         " don't remember these files (for VIM help files)
+  let g:ctrlp_mruf_exclude='.*\.txt$'                                         " don't remember these files (for Vim help files)
   let g:ctrlp_lazy_update = 1                                                 " wait 250ms after typing before refreshing
   let g:ctrlp_regexp = 0                                                      " use regexp as default search mode
   let g:ctrlp_user_command = 'ack %s -f'                                      " use ack as search index
@@ -88,7 +88,7 @@ if !g:vimrc_disable_plugins
   " NerdTree
   let g:NERDTreeBookmarksFile = g:runtimepath . '/cache/.nerdtree_bookmarks'  " where to store the NERDTree bookmarks
   let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']                            " don't show these files
-  let g:NERDTreeQuitOnOpen = 1                                                " quit VIM in nerdtree is the only buffer open
+  let g:NERDTreeQuitOnOpen = 1                                                " quit Vim in nerdtree is the only buffer open
   let g:NERDTreeShowBookmarks = 0                                             " show bookmarks by default
   let g:NERDTreeShowHidden = 1                                                " show hidden files by default
   let g:NERDTreeWinSize = 60                                                  " width of nerdtree window
@@ -98,7 +98,7 @@ if !g:vimrc_disable_plugins
   let g:Tlist_Auto_Update = 1                                                 " process new files as they are opened
   let g:Tlist_Compact_Format = 1                                              " don't put line breaks between categories
   let g:Tlist_Enable_Fold_Column = 0                                          " show fold column in taglist window
-  let g:Tlist_Exit_OnlyWindow = 1                                             " quit VIM when taglist is the only window open
+  let g:Tlist_Exit_OnlyWindow = 1                                             " quit Vim when taglist is the only window open
   let g:Tlist_File_Fold_Auto_Close = 1                                        " automatically close folds corresponding to non active windows
   let g:Tlist_GainFocus_On_ToggleOpen = 0                                     " move cursor to taglist window when opening it
   let g:Tlist_Highlight_Tag_On_BufEnter = 1                                   " highlight active tag when entering a buffer
@@ -135,14 +135,14 @@ if !g:vimrc_disable_options
   set encoding=utf-8                                                          " en-coh-ding
   set hidden                                                                  " allow hidden buffers
   set lazyredraw                                                              " don't redraw during macros, etc.
-  set magic                                                                   " use VIM magic regular expressions by default
+  set magic                                                                   " use Vim magic regular expressions by default
   set modelines=0                                                             " read meta stuff from top or bottom of files
   set noautochdir                                                             " cwd is set differently (cf. ``s:smart_chdir`` function below)
   set nostartofline                                                           " keeps cursor on current column for movements like H, M, ...
   set number                                                                  " activate line numbers
   set sidescrolloff=5                                                         " allow 5 lines left/right of the cursor
   set scrolloff=5                                                             " allow 5 lines below/above the cursor
-  set shell=/bin/bash\ --rcfile\ ~/.bashrc                                    " load .bashrc when starting shell from VIM
+  set shell=/bin/bash\ --rcfile\ ~/.bashrc                                    " load .bashrc when starting shell from Vim
   set shellslash                                                              " use forward slashes for paths, always
   set showcmd                                                                 " show partial command and number of lines/columns selected
   set tag=./.tags;,.venvtags                                                  " tags files
@@ -319,7 +319,7 @@ if !g:vimrc_disable_mappings
 
   " languages
 
-  " VIM
+  " Vim
   " open .vimrc
   nnoremap <leader>ve :tabnew $MYVIMRC<cr>
   "source .vimrc
@@ -391,7 +391,7 @@ endif
 
 if !g:vimrc_disable_autocommands
 
-  " use the correct help program for VIM and tex files
+  " use the correct help program for Vim and tex files
   augroup helpgroup
     autocmd!
     autocmd   FileType                    help                setlocal keywordprg=:help
@@ -647,7 +647,7 @@ function! s:autocompile()
   " # AUTOCOMPILE destination origin_directory
   " notes:
   " * destination path is relative to the current file's directory
-  " * origin_folder is relative to VIM's current work directory
+  " * origin_folder is relative to Vim's current work directory
   " * replace the hash sign by the language's comment symbol
   " * form haml, all the files in the origin_folder will be compiled into a
   "   single destination file
@@ -710,7 +710,7 @@ endfunction
 
 function! s:map_next_family(map,cmd)
   " previous and next mappings factory
-  " copied from unimpaired.vim by tim pope, https://github.com/tpope/VIM-unimpaired/
+  " copied from unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
   let map = '<Plug>unimpaired'.toupper(a:map)
   let end = ' ".(v:count ? v:count : "")<CR>'
   execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.a:cmd.'previous'.end
@@ -739,7 +739,7 @@ function! s:create_next_mappings()
 endfunction
 
 function! s:toggle_paste(force) abort
-  " also inspired by unimpaired.vim by tim pope, https://github.com/tpope/VIM-unimpaired/
+  " also inspired by unimpaired.vim by tim pope, https://github.com/tpope/vim-unimpaired/
   if a:force
     let s:paste = &paste
     set paste
@@ -893,7 +893,7 @@ endif
 " ideas
 
 " Locate
-" the search tool you never knew VIM had
+" the search tool you never knew Vim had
 " vimgrep on steroids
 " use dictionary-functions for when closing location window (or use python bindings)
 " Mapping
