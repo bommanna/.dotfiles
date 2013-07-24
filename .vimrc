@@ -64,7 +64,7 @@ if !g:vimrc_disable_plugins
   let g:cursorcross_debug = 0                                                 " show messages to debug order of autocommands
   let g:cursorcross_dynamic = 1                                               " cursorline in normal mode, cursorcolumn in insert mode
   let g:cursorcross_mappings = 1                                              " create mappings
-  let g:cursorcross_exceptions = ['tex', 'qf']                                " disable cursorcross for these filetypes
+  let g:cursorcross_exceptions = ['tex', 'qf', 'scratch']                     " disable cursorcross for these filetypes
 
   " EasyMotion
   let g:EasyMotion_leader_key = "'"                                           " ' key is unbound in normal and visual mode below
@@ -129,7 +129,6 @@ syntax enable                                                                 " 
 if !g:vimrc_disable_options
 
   " general
-  let &viminfo .= ',n' . $HOME . '/.config/info/.viminfo'                     " location of .viminfo file
   set encoding=utf-8                                                          " en-coh-ding
   set hidden                                                                  " allow hidden buffers
   set lazyredraw                                                              " don't redraw during macros, etc.
@@ -213,7 +212,6 @@ if !g:vimrc_disable_options
   set laststatus=2                                                            " always show status line
   set statusline=%<                                                           " truncate on left if too long
   set statusline+=%F\                                                         " full filepath
-  " set statusline+=%{&modifiable?fugitive#statusline():''}\                    " current git branch (if any and if buffer modifiable)
   set statusline+=%r                                                          " readonly flag [RO]
   set statusline+=%#pandocStrikeoutTable#                                     " highlighting start 
   set statusline+=%y                                                          " filetype
@@ -225,12 +223,14 @@ if !g:vimrc_disable_options
 
   " spelling
   let &dictionary = '/usr/share/dict/words,'                                  " files where to load word for dictionary
-  let &dictionary .= g:runtimepath . '/spell/custom-dictionary.utf-8.add'     "   completion for use with <c-x><c-k>
+  let &dictionary .= g:runtimepath . '/spell/custom-dictionary.utf-8.add'     " completion for use with <c-x><c-k>
   let &spellfile = g:runtimepath . '/spell/custom-dictionary.utf-8.add'       " file where to add new dictionary words
   set nospell                                                                 " no spellcheck on by default
 
   " disabled
   " syntax sync fromstart                                                     " otherwise folding messes up highlighting
+  " let &viminfo .= ',n' . $HOME . '/.config/info/.viminfo'                   " location of .viminfo file
+  " set statusline+=%{&modifiable?fugitive#statusline():''}\                  " current git branch (if any and if buffer modifiable)
 
 endif
 

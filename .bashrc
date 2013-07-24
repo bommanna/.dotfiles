@@ -19,7 +19,7 @@ export IPYTHONDIR="$HOME/.config/ipython"
 export VISUAL='vim'
 
 # Less
-export LESSHISTFILE="$HOME/.config/info/.lesshst"
+# export LESSHISTFILE="$HOME/.config/info/.lesshst"
 
 # Pylint
 export PYLINTHOME="$HOME/.config/pylint"
