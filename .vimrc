@@ -872,6 +872,15 @@ function! s:on_buf_delete(...)
 endfunction
 
 
+" EXTRA:
+
+" source extra vimrc if it exists
+let s:extra_vimrc = $HOME . '/.config/extra/.vimrc'
+if filereadable(s:extra_vimrc)
+  execute 'source ' . s:extra_vimrc
+endif
+
+
 " FUTURE:
 
 " changes/fixes
