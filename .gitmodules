@@ -1,0 +1,36 @@
+[submodule ".config/vim/bundle/colorschemes/solarized"]
+	path = .config/vim/bundle/colorschemes/solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule ".config/vim/bundle/plugins/fugitive"]
+	path = .config/vim/bundle/plugins/fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule ".config/vim/bundle/plugins/tabular"]
+	path = .config/vim/bundle/plugins/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule ".config/vim/bundle/plugins/latexbox"]
+	path = .config/vim/bundle/plugins/latexbox
+	url = https://github.com/LaTeX-Box-Team/LaTeX-Box.git
+[submodule ".config/vim/bundle/plugins/gundo"]
+	path = .config/vim/bundle/plugins/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule ".config/vim/bundle/plugins/ctrlp"]
+	path = .config/vim/bundle/plugins/ctrlp
+	url = https://github.com/kien/ctrlp.vim.git
+[submodule ".config/vim/bundle/plugins/easymotion"]
+	path = .config/vim/bundle/plugins/easymotion
+	url = https://github.com/Lokaltog/vim-easymotion.git
+[submodule ".config/vim/bundle/plugins/nerdtree"]
+	path = .config/vim/bundle/plugins/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule ".config/vim/bundle/plugins/cursorcross"]
+	path = .config/vim/bundle/plugins/cursorcross
+	url = https://github.com/mtth/cursorcross.vim.git
+[submodule ".config/vim/bundle/plugins/scratch"]
+	path = .config/vim/bundle/plugins/scratch
+	url = https://github.com/mtth/scratch.vim.git
+[submodule ".config/vim/bundle/plugins/taglist"]
+	path = .config/vim/bundle/plugins/taglist
+	url = https://github.com/mtth/taglist.vim.git
+[submodule ".config/vim/bundle/plugins/surround"]
+	path = .config/vim/bundle/plugins/surround
+	url = https://github.com/tpope/vim-surround.git

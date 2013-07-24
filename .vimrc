@@ -23,8 +23,8 @@
 
 " CONFIGURATION:
 
-" runtime path (leave empty for default)
-let g:runtimepath = ''
+" runtime path
+let g:runtimepath = $HOME . '/.config/vim'
 if strlen(g:runtimepath)
   let &runtimepath .= ',' . g:runtimepath
 else
