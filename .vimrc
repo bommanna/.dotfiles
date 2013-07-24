@@ -10,6 +10,7 @@
 " * https://github.com/bling/dotvim/blob/master/vimrc
 " * https://github.com/tpope/vim-sensible
 " * https://github.com/spf13/spf13-vim
+" * https://github.com/r00k/dotfiles/blob/master/vimrc
 "
 "
 " Features inspirations from:
@@ -165,6 +166,7 @@ if !g:vimrc_disable_options
   " tabbing
   set expandtab                                                               " insert spaces instead of a tab when tabbing
   set shiftwidth=2                                                            " spaces used for indent keys (>>, ...) and for autoindent
+  set shiftround                                                              " round to multiple of shiftwidth when indenting
   set tabstop=2                                                               " number of spaces a tab takes (displayed)
 
   " autocomplete
@@ -266,6 +268,11 @@ if !g:vimrc_disable_mappings
   nnoremap ]d ]c
   nnoremap [d [c
 
+  " editing
+
+  " don't overwrite " register with single normal mode x
+  nnoremap x "_x
+
   " searches
 
   " repeating search
@@ -310,11 +317,15 @@ if !g:vimrc_disable_mappings
   " quickfix window
   nnoremap <leader>cc :cclose<cr>
   nnoremap <leader>co :copen<cr>
-  " toggle messages
+  " show locations of latest changes
+  nnoremap <leader>J :changes<cr>
+  " show latest jumps
+  nnoremap <leader>j :jumps<cr>
+  " show messages
   nnoremap <leader>M :messages<cr>
-  " toggle marks
+  " show marks
   nnoremap <leader>m :marks<cr>
-  " toggle registers
+  " show registers
   nnoremap <leader>r :registers<cr>
 
   " languages
