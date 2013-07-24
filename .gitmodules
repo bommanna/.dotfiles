@@ -31,9 +31,6 @@
 [submodule ".vim/bundle/plugins/gundo"]
 	path = .vim/bundle/plugins/gundo
 	url = https://github.com/sjl/gundo.vim.git
-[submodule ".vim/bundle/colorschemes/molokai"]
-	path = .vim/bundle/colorschemes/molokai
-	url = https://github.com/tomasr/molokai.git
 [submodule ".vim/bundle/plugins/surround"]
 	path = .vim/bundle/plugins/surround
 	url = https://github.com/tpope/vim-surround.git
