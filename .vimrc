@@ -23,7 +23,15 @@
 
 " CONFIGURATION:
 
-" via environment variables
+" runtime path (leave empty for default)
+let g:runtimepath = ''
+if strlen(g:runtimepath)
+  let &runtimepath .= ',' . g:runtimepath
+else
+  let g:runtimepath = split(&runtimepath, ',')[0]
+endif
+
+" environment variables
 let g:vimrc_disable_plugins = $VIM_DISABLE_PLUGINS == 1                       " disable all plugins except colorschemes
 let g:vimrc_disable_colorschemes = $VIM_DISABLE_COLORSCHEMES == 1             " disable colorschemes
 let g:vimrc_disable_options = $VIM_DISABLE_OPTIONS == 1                       " disable all options (still keeps nocompatible)
@@ -44,13 +52,16 @@ if !g:vimrc_disable_plugins
 
   " Ctrlp
   let g:ctrlp_by_filename = 1                                                 " search by filename by default
-  let g:ctrlp_cache_dir = $HOME . '/.vim/cache/ctrlp'                         " directory to store cached filepaths
+  let g:ctrlp_cache_dir = g:runtimepath . '/cache/ctrlp'                      " directory to store cached filepaths
   let g:ctrlp_clear_cache_on_exit = 0                                         " retain cache between sessions (<F5> to clear manually)
   let g:ctrlp_cmd = 'CtrlPMRU'                                                " search mru files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
+  let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
+  let g:ctrlp_mruf_exclude='.*\.txt$'                                         " don't remember these files (for VIM help files)
   let g:ctrlp_lazy_update = 1                                                 " wait 250ms after typing before refreshing
   let g:ctrlp_regexp = 0                                                      " use regexp as default search mode
   let g:ctrlp_user_command = 'ack %s -f'                                      " use ack as search index
+  let g:ctrlp_working_path_mode = ''                                          " use lcd as ctrlp directory
 
   " Cursorcross
   let g:cursorcross_debug = 0                                                 " show messages to debug order of autocommands
@@ -75,7 +86,7 @@ if !g:vimrc_disable_plugins
   let g:LatexBox_latexmk_preview_continuously = 0                             " compile latex manually
 
   " NerdTree
-  let g:NERDTreeBookmarksFile = $HOME . '/.vim/cache/.nerdtree_bookmarks'     " where to store the NERDTree bookmarks
+  let g:NERDTreeBookmarksFile = g:runtimepath . '/cache/.nerdtree_bookmarks'  " where to store the NERDTree bookmarks
   let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']                            " don't show these files
   let g:NERDTreeQuitOnOpen = 1                                                " quit VIM in nerdtree is the only buffer open
   let g:NERDTreeShowBookmarks = 0                                             " show bookmarks by default
@@ -96,7 +107,7 @@ if !g:vimrc_disable_plugins
   let g:Tlist_Use_Right_Window = 1                                            " put taglist window on the right
   let g:Tlist_WinWidth = 60                                                   " width of taglist window
 
-  call pathogen#infect($HOME . '/.vim/bundle/plugins')                        " load all plugins
+  call pathogen#infect(g:runtimepath . '/bundle/plugins')                     " load all plugins
 endif
 
 if !g:vimrc_disable_colorschemes
@@ -105,7 +116,7 @@ if !g:vimrc_disable_colorschemes
   " Solarized
   let g:solarized_termtrans = 1                                               " transparent background sometimes
 
-  call pathogen#infect($HOME . '/.vim/bundle/colorschemes')                   " load all colorschemes
+  call pathogen#infect(g:runtimepath . '/bundle/colorschemes')                " load all colorschemes
 endif
 
 if !g:vimrc_disable_plugins || !g:vimrc_disable_colorschemes
@@ -164,7 +175,7 @@ if !g:vimrc_disable_options
   set wildmenu                                                                " allow autocompletion with c-n
 
   " undohistory
-  set undodir=~/.vim/cache/undo                                               " saves directory
+  let &undodir = g:runtimepath . '/cache/undo'                                " saves directory
   set undofile                                                                " allow persistence of undo history
   set undolevels=1000                                                         " number of operations used
   set undoreload=1000                                                         " number of operations stored
@@ -172,6 +183,7 @@ if !g:vimrc_disable_options
   " folds
   set fillchars="fold: "                                                      " don't show hyphens after folds
   set foldcolumn=2                                                            " width of the fold column
+  set foldopen=mark,quickfix,tag,undo                                         " only open folds when using these commands
   set foldlevelstart=11                                                       " open all folds when opening new file
   set foldmethod=indent                                                       " fold by indent
   set foldminlines=0                                                          " allow folding of single lines
@@ -184,9 +196,9 @@ if !g:vimrc_disable_options
   set smartcase                                                               " if some uppercase in search query, respect case
 
   " backups and swapfiles
+  let &backupdir = g:runtimepath . '/cache/backup'                            " store them here
+  let &directory = g:runtimepath . '/cache/swap'                              " we won't create swapfiles, but just in case
   set backup                                                                  " store existing files when overwriting
-  set backupdir=~/.vim/cache/backup                                           " store them here
-  set directory=~/.vim/cache/swap                                             " we won't create swapfiles, but just in case
   set noswapfile                                                              " as we said, no swapfiles
 
   " theme
@@ -213,10 +225,10 @@ if !g:vimrc_disable_options
   set statusline+=%c,%l/%L                                                    " current column, current line / total lines
 
   " spelling
-  set dictionary=/usr/share/dict/words                                        " files where to load word for dictionary
-  set dictionary+=~/.vim/spell/custom-dictionary.utf-8.add                    "   completion for use with <c-x><c-k>
+  let &dictionary = '/usr/share/dict/words,'                                  " files where to load word for dictionary
+  let &dictionary .= g:runtimepath . '/spell/custom-dictionary.utf-8.add'     "   completion for use with <c-x><c-k>
+  let &spellfile = g:runtimepath . '/spell/custom-dictionary.utf-8.add'       " file where to add new dictionary words
   set nospell                                                                 " no spellcheck on by default
-  set spellfile=~/.vim/spell/custom-dictionary.utf-8.add                      " file where to add new dictionary words
 
   " disabled
   " syntax sync fromstart                                                     " otherwise folding messes up highlighting
@@ -338,7 +350,7 @@ if !g:vimrc_disable_mappings
   nnoremap <space> :call <SID>toggle_hlsearch()<cr>
   " smart indentation
   inoremap <expr> <s-tab> <SID>smart_indent()
-  " toggle line numbers
+  " toggle line numbers (Ex mode can also be entered with ``gQ``, with bonus editing features)
   nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
   " pasting (inspired by unimpaired.vim, cf. above)
   nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a

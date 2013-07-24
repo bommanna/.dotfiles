@@ -14,7 +14,7 @@ setlocal nowrap
 setlocal statusline=%f%=%l/%L
 
 " resize window
-execute "wincmd J"
+" execute "wincmd J"
 call s:resize_window(1, 20)
 
 " mappings

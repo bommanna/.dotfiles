@@ -63,13 +63,19 @@ Thumbs.db
 *.ppt
 *.pptx
 *.pdf
-*.aux
 *.doc
 *.docx
+
+# Latex temporary files #
+#########################
+*.aux
+*.bbl
 *.blg
 *.fdb_latexmk
 *.fls
-*.bbl
+*.lof
+*.lot
+*.toc
 
 # Virtual environments #
 ########################
