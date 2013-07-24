@@ -1,8 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/Users/Matt/.vimperator'
-let g:netrw_dirhist_2='/Users/Matt/.dotfiles/.vim/cundle/vim-fugitive'
-let g:netrw_dirhist_3='/Users/Matt/.dotfiles/.vim/cundle'
-let g:netrw_dirhist_4='/Users/Matt/.dotfiles/.vim'
-let g:netrw_dirhist_5='/Users/Matt/Repos/taglist.vim/plugin'
-let g:netrw_dirhist_6='/Users/Matt/.dotfiles/.vim/bundle/scratch.vim'
