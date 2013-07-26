@@ -34,3 +34,6 @@
 [submodule ".config/vim/bundle/plugins/surround"]
 	path = .config/vim/bundle/plugins/surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule ".config/vim/bundle/plugins/locate"]
+	path = .config/vim/bundle/plugins/locate
+	url = https://github.com/mtth/locate.vim.git

@@ -37,6 +37,7 @@ let g:vimrc_disable_autocommands = $VIM_DISABLE_AUTOCOMMANDS == 1             " 
 
 " miscellaneous
 let g:project_root_markers = ['.git/', 'venv/']                               " markers to find project root directory
+let g:tex_flavor = 'latex'                                                    " use tex filetype by default instead of plaintex
 
 
 " PLUGINS AND COLORSCHEMES:
@@ -54,16 +55,13 @@ if !g:vimrc_disable_plugins
   let g:ctrlp_cmd = 'CtrlPMRU'                                                " search mru files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
-  let g:ctrlp_mruf_exclude='.*\.txt$'                                         " don't remember these files (for Vim help files)
-  let g:ctrlp_lazy_update = 1                                                 " wait 250ms after typing before refreshing
+  let g:ctrlp_mruf_exclude='/usr/.*/vim/.*\.txt$'                                    " don't remember these files (for Vim help files)
+  let g:ctrlp_lazy_update = 100                                               " wait 250ms after typing before refreshing
   let g:ctrlp_regexp = 0                                                      " use regexp as default search mode
   let g:ctrlp_user_command = 'ack %s -f'                                      " use ack as search index
   let g:ctrlp_working_path_mode = ''                                          " use lcd as ctrlp directory
 
   " Cursorcross
-  let g:cursorcross_debug = 0                                                 " show messages to debug order of autocommands
-  let g:cursorcross_dynamic = 1                                               " cursorline in normal mode, cursorcolumn in insert mode
-  let g:cursorcross_mappings = 1                                              " create mappings
   let g:cursorcross_exceptions = ['tex', 'qf', 'scratch']                     " disable cursorcross for these filetypes
 
   " EasyMotion
@@ -76,11 +74,13 @@ if !g:vimrc_disable_plugins
   let g:gundo_preview_bottom = 0                                              " use full width for diff preview window
 
   " LatexBox
-  let g:LatexBox_autosave = 1                                                 " save before compiling
+  let g:LatexBox_completion_close_braces = 0                                  " don't close braces automatically
   let g:LatexBox_Folding = 0                                                  " special folding for latex
   let g:LatexBox_split_width = 60                                             " width of table of contents
-  let g:LatexBox_async = 0                                                    " compile latex in background
-  let g:LatexBox_latexmk_preview_continuously = 0                             " compile latex manually
+
+  " Locate
+  let g:locate_highlight = 'pandocDefinitionTerm'                             " highlighting style for matches
+  let g:locate_very_magic = 0                                                 " use normal magic mode by default
 
   " NerdTree
   let g:NERDTreeBookmarksFile = g:runtimepath . '/cache/.nerdtree_bookmarks'  " where to store the NERDTree bookmarks
@@ -130,6 +130,7 @@ if !g:vimrc_disable_options
 
   " general
   set encoding=utf-8                                                          " en-coh-ding
+  set eadirection=hor                                                         " only resize automatically horizontally (cf. ``equalalways`` option)
   set hidden                                                                  " allow hidden buffers
   set lazyredraw                                                              " don't redraw during macros, etc.
   set magic                                                                   " use Vim magic regular expressions by default
@@ -301,9 +302,6 @@ if !g:vimrc_disable_mappings
 
   " redraw
   nnoremap , <c-l>
-  " ' is used for easymotion, replaced by ` mark travel
-  nnoremap ' <nop>
-  vnoremap ' <nop>
   " easier indentation in visual mode
   vnoremap > >gv
   vnoremap < <gv
@@ -362,15 +360,21 @@ if !g:vimrc_disable_mappings
   " toggle line numbers (Ex mode can also be entered with ``gQ``, with bonus editing features)
   nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
   " pasting (inspired by unimpaired.vim, cf. above)
-  nnoremap <silent> ya  :call <SID>toggle_paste(1)<CR>a
-  nnoremap <silent> yi  :call <SID>toggle_paste(1)<CR>i
-  nnoremap <silent> yo  :call <SID>toggle_paste(1)<CR>o
-  nnoremap <silent> yO  :call <SID>toggle_paste(1)<CR>O
-  nnoremap <silent> yA  :call <SID>toggle_paste(1)<CR>A
-  nnoremap <silent> yI  :call <SID>toggle_paste(1)<CR>I
+  nnoremap <silent> ya  :call <SID>toggle_paste(1)<cr>a
+  nnoremap <silent> yi  :call <SID>toggle_paste(1)<cr>i
+  nnoremap <silent> yo  :call <SID>toggle_paste(1)<cr>o
+  nnoremap <silent> yO  :call <SID>toggle_paste(1)<cr>O
+  nnoremap <silent> yA  :call <SID>toggle_paste(1)<cr>A
+  nnoremap <silent> yI  :call <SID>toggle_paste(1)<cr>I
 
   if !g:vimrc_disable_plugins
 
+    " easymotion
+    noremap ' <nop>
+    noremap yf f
+    noremap yF F
+    map f 'f
+    map F 'F
     " toggle NERDtree
     nnoremap <leader>f :NERDTreeToggle<cr>
     " toggle taglist
@@ -892,30 +896,18 @@ endif
 
 " FUTURE:
 
-" changes/fixes
+" changes/fixes/ideas
+
+" locate:
+" auto closing location list windows when corresponding window is closed
+" jumping to closest (or next) match instead of first
+" auto refresh location list when writing file
+" auto scrolling of matches as scrolling window
 
 " gundo avoid resize craziness
 " fugitive bug fixes
 " write virtualenv setter
-" write search using lvim (Locate, see below)
-
-" ideas
-
-" Locate
-" the search tool you never knew Vim had
-" vimgrep on steroids
-" use dictionary-functions for when closing location window (or use python bindings)
-" Mapping
-" gl: locate selection (or same as previous if no selection)
-" gL: locate prompt (if nothing inputed, use last general search pattern)
-" Commands
-" Lo[cate][!] [PATTERN]
-" Options
-" height = [5, 20] (min, max height of location window)
-" highlight = 1 (highlight matches in window)
-" jump = 0 (automatically jump to first match when using mapping)
-" verymagic = 0 (automatically add verymagic flag to prompted pattern)
-" refresh = 0 (automatically refresh location list when buffer changes)
+" for rst filetype have <s-tab> repeat title underlines
 
 " execute command without moving cursor in window
 " doesn't work currently (doesn't do anything)

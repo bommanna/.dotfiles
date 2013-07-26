@@ -75,6 +75,7 @@ alias be='vim ~/.bashrc'
 alias bs='source ~/.bashrc'
 alias la='ls -AFG'
 alias ll='ls -AFGl'
+alias vi='vim'
 
 
 # Functions
