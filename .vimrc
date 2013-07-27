@@ -55,14 +55,15 @@ if !g:vimrc_disable_plugins
   let g:ctrlp_cmd = 'CtrlPMRU'                                                " search mru files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
-  let g:ctrlp_mruf_exclude='/usr/.*/vim/.*\.txt$'                                    " don't remember these files (for Vim help files)
+  let g:ctrlp_mruf_exclude='/usr/.*/vim/.*\.txt$'                             " don't remember these files (for Vim help files)
   let g:ctrlp_lazy_update = 100                                               " wait 250ms after typing before refreshing
   let g:ctrlp_regexp = 0                                                      " use regexp as default search mode
   let g:ctrlp_user_command = 'ack %s -f'                                      " use ack as search index
   let g:ctrlp_working_path_mode = ''                                          " use lcd as ctrlp directory
 
   " Cursorcross
-  let g:cursorcross_exceptions = ['tex', 'qf', 'scratch']                     " disable cursorcross for these filetypes
+  let g:cursorcross_dynamic = 1                                               " enable automatic cursorcolumn and cursorline handling
+  let g:cursorcross_exceptions = ['tex', 'qf', 'scratch', 'taglist']          " disable cursorcross for these filetypes
 
   " EasyMotion
   let g:EasyMotion_leader_key = "'"                                           " ' key is unbound in normal and visual mode below
@@ -379,7 +380,7 @@ if !g:vimrc_disable_mappings
     nnoremap <leader>f :NERDTreeToggle<cr>
     " toggle taglist
     nnoremap <silent> <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-    nnoremap <silent> <leader>T :CursorcrossOff<cr>:TlistToggle<cr><c-w>=:CursorcrossToggle<cr>
+    nnoremap <silent> <leader>T :TlistToggle<cr><c-w>=:CursorcrossRestore<cr>
     " fugitive
     nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
     nnoremap <leader>gP :Git pull<cr>
@@ -734,12 +735,6 @@ function! s:map_next_family(map,cmd)
   execute 'nmap <silent> ]'.        a:map .' '.map.'Next'
   execute 'nmap <silent> ['.toupper(a:map).' '.map.'First'
   execute 'nmap <silent> ]'.toupper(a:map).' '.map.'Last'
-  if exists(':'.a:cmd.'nfile')
-    execute 'nnoremap <silent> '.map.'PFile :<C-U>exe "'.a:cmd.'pfile'.end
-    execute 'nnoremap <silent> '.map.'NFile :<C-U>exe "'.a:cmd.'nfile'.end
-    execute 'nmap <silent> [<C-'.a:map.'> '.map.'PFile'
-    execute 'nmap <silent> ]<C-'.a:map.'> '.map.'NFile'
-  endif
 endfunction
 
 function! s:create_next_mappings()
