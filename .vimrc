@@ -55,7 +55,7 @@ if !g:vimrc_disable_plugins
   let g:ctrlp_cmd = 'CtrlPMRU'                                                " search mru files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
-  let g:ctrlp_mruf_exclude='/usr/.*/vim/.*\.txt$'                             " don't remember these files (for Vim help files)
+  let g:ctrlp_mruf_exclude='.git\|/usr/.*/vim/.*\.txt$'                       " don't remember these files (for Vim help files)
   let g:ctrlp_lazy_update = 100                                               " wait 250ms after typing before refreshing
   let g:ctrlp_regexp = 0                                                      " use regexp as default search mode
   let g:ctrlp_user_command = 'ack %s -f'                                      " use ack as search index
@@ -81,6 +81,7 @@ if !g:vimrc_disable_plugins
 
   " Locate
   let g:locate_highlight = 'pandocDefinitionTerm'                             " highlighting style for matches
+  let g:locate_refresh = 1                                                    " refresh location list on save
   let g:locate_very_magic = 0                                                 " use normal magic mode by default
 
   " NerdTree
@@ -894,9 +895,7 @@ endif
 " changes/fixes/ideas
 
 " locate:
-" auto closing location list windows when corresponding window is closed
 " jumping to closest (or next) match instead of first
-" auto refresh location list when writing file
 " auto scrolling of matches as scrolling window
 
 " gundo avoid resize craziness
