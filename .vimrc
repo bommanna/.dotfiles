@@ -247,6 +247,11 @@ if !g:vimrc_disable_mappings
   " visual up, down
   noremap j gj
   noremap k gk
+  " easy one hand scrolling
+  noremap <up> <c-u>
+  noremap <down> <c-d>
+  nnoremap <left> <c-w>h
+  nnoremap <right> <c-w>l
   " easy movement around splits
   nnoremap <c-h> <c-w>h
   nnoremap <c-j> <c-w>j
