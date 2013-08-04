@@ -45,18 +45,18 @@ let g:tex_flavor = 'latex'                                                    " 
 filetype off                                                                  " safe plugin loading
 set nocompatible                                                              " one more time
 
-if !g:vimrc_disable_plugins
-  " plugin options
+if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
 
   " Ctrlp
   let g:ctrlp_by_filename = 1                                                 " search by filename by default
   let g:ctrlp_cache_dir = g:runtimepath . '/cache/ctrlp'                      " directory to store cached filepaths
   let g:ctrlp_clear_cache_on_exit = 0                                         " retain cache between sessions (<F5> to clear manually)
-  let g:ctrlp_cmd = 'CtrlPMRU'                                                " search mru files by default
+  let g:ctrlp_cmd = 'CtrlPMRU'                                                " search MRU files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
-  let g:ctrlp_mruf_exclude='.git\|/usr/.*/vim/.*\.txt$'                       " don't remember these files (for Vim help files)
   let g:ctrlp_lazy_update = 100                                               " wait 250ms after typing before refreshing
+  let g:ctrlp_mruf_exclude='.git'                                             " don't remember these files (for Vim help files)
+  let g:ctrlp_mruf_relative=1                                                 " only show MRU files in current working directory
   let g:ctrlp_regexp = 0                                                      " use regexp as default search mode
   let g:ctrlp_user_command = 'ack %s -f'                                      " use ack as search index
   let g:ctrlp_working_path_mode = ''                                          " use lcd as ctrlp directory
@@ -92,6 +92,9 @@ if !g:vimrc_disable_plugins
   let g:NERDTreeShowHidden = 1                                                " show hidden files by default
   let g:NERDTreeWinSize = 60                                                  " width of nerdtree window
 
+  " Surround
+  let g:surround_no_mappings = 1                                              " default mappings are bad
+
   " Taglist
   let g:Tlist_Auto_Highlight_Tag = 1                                          " highlight active tag (after a small inactivity period)
   let g:Tlist_Auto_Update = 1                                                 " process new files as they are opened
@@ -107,19 +110,22 @@ if !g:vimrc_disable_plugins
   let g:Tlist_WinWidth = 60                                                   " width of taglist window
 
   call pathogen#infect(g:runtimepath . '/bundle/plugins')                     " load all plugins
+  call pathogen#helptags()                                                    " create Vim help tags
+
+  let s:loaded_plugins = 1
+
 endif
 
-if !g:vimrc_disable_colorschemes
-  " colorscheme options
+if !g:vimrc_disable_colorschemes && !exists('s:loaded_colorschemes')
 
   " Solarized
   let g:solarized_termtrans = 1                                               " transparent background sometimes
 
   call pathogen#infect(g:runtimepath . '/bundle/colorschemes')                " load all colorschemes
-endif
+  call pathogen#helptags()                                                    " create Vim help tags
 
-if !g:vimrc_disable_plugins || !g:vimrc_disable_colorschemes
-  call pathogen#helptags()
+  let s:loaded_colorschemes = 1
+
 endif
 
 filetype plugin on                                                            " reenable per filetype loading
@@ -128,7 +134,7 @@ syntax enable                                                                 " 
 
 " OPTIONS:
 
-if !g:vimrc_disable_options
+if !g:vimrc_disable_options && !exists('s:loaded_options')
 
   " general
   set encoding=utf-8                                                          " en-coh-ding
@@ -194,7 +200,7 @@ if !g:vimrc_disable_options
   set ignorecase                                                              " if all lowercase in search query, ignore case
   set incsearch                                                               " highlight potential matches as search query is being typed
   set nohlsearch                                                              " don't highlight matches after executing search query
-  set smartcase                                                               " if some uppercase in search query, respect case
+  set nosmartcase                                                             " always respect case
 
   " backups and swapfiles
   let &backupdir = g:runtimepath . '/cache/backup'                            " store them here
@@ -235,6 +241,8 @@ if !g:vimrc_disable_options
   " let &viminfo .= ',n' . $HOME . '/.config/info/.viminfo'                   " location of .viminfo file
   " set statusline+=%{&modifiable?fugitive#statusline():''}\                  " current git branch (if any and if buffer modifiable)
 
+  let s:loaded_options = 1
+
 endif
 
 
@@ -247,7 +255,7 @@ if !g:vimrc_disable_mappings
   " visual up, down
   noremap j gj
   noremap k gk
-  " easy one hand scrolling
+  " easy scrolling
   noremap <up> <c-u>
   noremap <down> <c-d>
   nnoremap <left> <c-w>h
@@ -275,6 +283,9 @@ if !g:vimrc_disable_mappings
 
   " editing
 
+  " allow undoing of <c-u> and <c-w>
+  inoremap <c-u> <c-g>u<c-u>
+  inoremap <c-w> <c-g>u<c-w>
   " don't overwrite registers with single normal mode xs
   nnoremap x "_x
   nnoremap X "_X
@@ -363,7 +374,7 @@ if !g:vimrc_disable_mappings
   " toggle search highlight
   nnoremap <space> :call <SID>toggle_hlsearch()<cr>
   " smart indentation
-  inoremap <expr> <s-tab> <SID>smart_indent()
+  inoremap <expr> <s-tab> <SID>smart_tab()
   " toggle line numbers (Ex mode can also be entered with ``gQ``, with bonus editing features)
   nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
   " pasting (inspired by unimpaired.vim, cf. above)
@@ -378,10 +389,8 @@ if !g:vimrc_disable_mappings
 
     " easymotion
     noremap ' <nop>
-    noremap yf f
-    noremap yF F
-    map f 'f
-    map F 'F
+    map s 'f
+    map S 'F
     " toggle NERDtree
     nnoremap <leader>f :NERDTreeToggle<cr>
     " toggle taglist
@@ -401,6 +410,15 @@ if !g:vimrc_disable_mappings
     nnoremap <leader>gw :Gwrite<cr>
     " toggle Gundo
     nnoremap <leader>u :GundoToggle<cr>
+    " surround
+    nmap ds <Plug>Dsurround
+    nmap cs <Plug>Csurround
+    nmap ys <Plug>Ysurround
+    nmap yS <Plug>YSurround
+    nmap yss <Plug>Yssurround
+    nmap ySS <Plug>YSsurround
+    xmap s <Plug>VSurround
+    xmap S <Plug>VgSurround
 
   endif
 
@@ -423,8 +441,6 @@ if !g:vimrc_disable_autocommands
   augroup eventgroup
     autocmd!
     autocmd   VimEnter                    *                   call <SID>create_next_mappings()
-    autocmd   BufDelete                   *                   call <SID>on_buf_delete()
-    autocmd   BufEnter                    *                   call <SID>on_buf_enter()
     autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
   augroup END
 
@@ -546,21 +562,33 @@ command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
 " Helpers
 
-function! s:smart_indent()
-  " matches indent of characters preceded by two or more whitespace characters
-  " in the first non-empty line above
-  let line_number = line('.')
+function! s:smart_tab()
+  " fills in line with character before cursor until one of the following
+  " * matches indent of characters preceded by two or more whitespace characters
+  "   in the first non-empty line above
+  " * texwidth
+  " * next tabstop
+  " if the current line is empty, the fill character will be a single space
+  let [buf_name, line_number, col_number, off_number] = getpos('.')
+  let cur_line = getline(line_number)
+  if strlen(cur_line)
+    let fill_char = cur_line[strlen(cur_line) - 1]
+  else
+    let fill_char = ' '
+  endif
   let line_content = ''
   while !strlen(line_content) && line_number >=# 1
     let line_number -= 1
     let line_content = getline(line_number)
   endwhile
   let line_content = line_content[col('.') - 1:]
-  let offset = match(line_content, '\s\s\S')
-  if offset >=# 0
-    return repeat(' ', offset + 2)
+  let offset = match(line_content, '\s\s\zs\S\|$')
+  if offset ># 0
+    return repeat(fill_char, offset)
+  elseif &textwidth && col_number <=# &textwidth
+    return repeat(fill_char, &textwidth - col_number + 1)
   else
-    return repeat(' ', &tabstop)
+    return repeat(fill_char, &tabstop - (col_number - 1) % &tabstop)
   endif
 endfunction
 
@@ -842,7 +870,7 @@ function! s:toggle_hlsearch()
   echo line
 endfunction
 
-" Buffer management
+" Buffer management (not used currently)
 
 function! s:on_buf_enter()
   " buffer event handlers
