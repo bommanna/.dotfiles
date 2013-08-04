@@ -1,4 +1,4 @@
-" rst specific options
+" text specific options
 
 setlocal colorcolumn=79
 setlocal formatoptions+=aw

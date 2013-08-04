@@ -441,6 +441,7 @@ if !g:vimrc_disable_autocommands
   augroup eventgroup
     autocmd!
     autocmd   VimEnter                    *                   call <SID>create_next_mappings()
+    autocmd   BufEnter                    *                   call <SID>smart_chdir()
     autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
   augroup END
 
@@ -572,7 +573,7 @@ function! s:smart_tab()
   let [buf_name, line_number, col_number, off_number] = getpos('.')
   let cur_line = getline(line_number)
   if strlen(cur_line)
-    let fill_char = cur_line[strlen(cur_line) - 1]
+    let fill_char = cur_line[col('.') - 2]
   else
     let fill_char = ' '
   endif
@@ -874,7 +875,6 @@ endfunction
 
 function! s:on_buf_enter()
   " buffer event handlers
-  call s:smart_chdir()
   if exists('b:autoclose') && b:autoclose
     if winbufnr(2) ==# -1
       if tabpagenr('$') ==# 1
