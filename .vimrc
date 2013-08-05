@@ -166,7 +166,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set nolinebreak                                                             " wrap lines anywhere (``linebreak`` is incompatible with list)
   set nosmartindent                                                           " don't add extra indents, ever
   set textwidth=0                                                             " don't insert line breaks for long lines
-  set wrap                                                                    " wrap long lines
+  set wrap                                                                    " wrap long lines (disable ``list`` for this to work)
 
   " tabbing
   set expandtab                                                               " insert spaces instead of a tab when tabbing
@@ -197,10 +197,10 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set foldnestmax=10                                                          " maximum fold level
 
   " search
-  set ignorecase                                                              " if all lowercase in search query, ignore case
   set incsearch                                                               " highlight potential matches as search query is being typed
   set nohlsearch                                                              " don't highlight matches after executing search query
-  set nosmartcase                                                             " always respect case
+  set noignorecase                                                            " always respect case
+  set smartcase                                                               " but in case we don't, respect it when uppercase is present
 
   " backups and swapfiles
   let &backupdir = g:runtimepath . '/cache/backup'                            " store them here

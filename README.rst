@@ -20,7 +20,7 @@ Recommended packages
 --------------------
 
 Homebrew_ is the supported way to install these packages. Below is the 
-preferred instal order. Otherwise, for example, there might be issues of VIM 
+preferred instal order. Otherwise, for example, there might be issues of Vim 
 linking with the system python instead of the brew installed python.  They can 
 be installed in one command by running ``make brew``.
 

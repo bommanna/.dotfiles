@@ -1,11 +1,11 @@
-VIM configuration directory
+Vim configuration directory
 ===========================
 
 * ``autoload``: should only contain pathogen_
 * ``bundle``: pathogen managed plugins (split into colorschemes and others)
-* ``cache``: this directory contains information cached to disk by VIM plugins. 
-  Each subdirectory should contain a file named ``.gitignore`` with the 
-  following contents:
+* ``cache``: this directory contains information cached to disk by Vim 
+  plugins. Each subdirectory should contain a file named ``.gitignore`` with 
+  the following contents:
 
   .. code::
 
