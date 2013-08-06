@@ -9,7 +9,7 @@
 #
 # * uninstall
 # 	restore previous dotfiles
-#		
+#
 # * brew
 # 	install important brew formulae
 #
@@ -22,8 +22,8 @@
 # 	previous ones will raise an error
 #
 # * clean
-#	removes all symbolic links that correspond to tracked
-#	files here
+# removes all symbolic links that correspond to tracked
+# files here
 #
 # * link
 # 	create symlinks for the relevant files in this directory

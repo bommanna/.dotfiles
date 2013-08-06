@@ -11,6 +11,7 @@
 " * https://github.com/tpope/vim-sensible
 " * https://github.com/spf13/spf13-vim
 " * https://github.com/r00k/dotfiles/blob/master/vimrc
+" * https://github.com/jbro/vim/blob/master/vimrc
 "
 "
 " Features inspirations from:
@@ -51,7 +52,7 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:ctrlp_by_filename = 1                                                 " search by filename by default
   let g:ctrlp_cache_dir = g:runtimepath . '/cache/ctrlp'                      " directory to store cached filepaths
   let g:ctrlp_clear_cache_on_exit = 0                                         " retain cache between sessions (<F5> to clear manually)
-  let g:ctrlp_cmd = 'CtrlPMRU'                                                " search MRU files by default
+  let g:ctrlp_cmd = 'CtrlP'                                                   " search MRU files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
   let g:ctrlp_lazy_update = 100                                               " wait 250ms after typing before refreshing
@@ -91,6 +92,9 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:NERDTreeShowBookmarks = 0                                             " show bookmarks by default
   let g:NERDTreeShowHidden = 1                                                " show hidden files by default
   let g:NERDTreeWinSize = 60                                                  " width of nerdtree window
+
+  " Scratch
+  let g:scratch_height = 10                                                   " height of scratch window
 
   " Surround
   let g:surround_no_mappings = 1                                              " default mappings are bad
@@ -161,7 +165,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set formatlistpat=^\\s*\\(\\d\\+\\\|[*+-]\\)[\\]:.)}\\t\ ]\\s*              " allow non numbered lists (starting by *+-)
   set formatoptions+=nj                                                       " recognize lists when formatting and remove comment marker when joining
   set list                                                                    " show hidden characters (cf. ``listchar`` option below)
-  set listchars=tab:>-,trail:\                                                " which hidden characters to show
+  set listchars=tab:¬\ ,trail:·                                               " which hidden characters to show
   set nojoinspaces                                                            " don't insert two spaces after punctuation on a join
   set nolinebreak                                                             " wrap lines anywhere (``linebreak`` is incompatible with list)
   set nosmartindent                                                           " don't add extra indents, ever
@@ -211,10 +215,10 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   " theme
   silent! colorscheme solarized                                               " colorscheme (if available)
   set background=dark                                                         " theme
-  set colorcolumn=                                                            " don't highlight any columns by default
+  set colorcolumn=+2                                                          " highlight 2 columns after textwidth
   set nocursorcolumn                                                          " don't highlight the current column
   set nocursorline                                                            " or the current row
-  set showbreak=>>\ \                                                         " characters shown after wrap linebreak
+  set showbreak=                                                              " no characters shown after a linebreak
   set t_Co=256                                                                " terminal colors
 
   " status line
@@ -428,12 +432,6 @@ endif
 " AUTOCOMMANDS:
 
 if !g:vimrc_disable_autocommands
-
-  " use the correct help program for help files
-  augroup helpgroup
-    autocmd!
-    autocmd   FileType                    help                setlocal keywordprg=:help
-  augroup END
 
   " general events
   augroup eventgroup
