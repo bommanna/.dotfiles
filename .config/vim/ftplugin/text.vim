@@ -1,6 +1,4 @@
-" text specific options
-
-setlocal colorcolumn=79
+setlocal colorcolumn=80
 setlocal formatoptions+=aw
 setlocal textwidth=78
 setlocal spell

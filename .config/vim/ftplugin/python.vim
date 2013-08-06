@@ -1,2 +1,2 @@
-setlocal colorcolumn=79
+setlocal colorcolumn=80
 setlocal spell

@@ -37,3 +37,6 @@
 [submodule ".config/vim/bundle/plugins/locate"]
 	path = .config/vim/bundle/plugins/locate
 	url = https://github.com/mtth/locate.vim.git
+[submodule ".config/vim/bundle/plugins/coffeescript"]
+	path = .config/vim/bundle/plugins/coffeescript
+	url = https://github.com/kchmck/vim-coffee-script.git

@@ -429,12 +429,10 @@ endif
 
 if !g:vimrc_disable_autocommands
 
-  " use the correct help program for Vim and tex files
+  " use the correct help program for help files
   augroup helpgroup
     autocmd!
     autocmd   FileType                    help                setlocal keywordprg=:help
-    autocmd   FileType                    tex                 setlocal keywordprg=texdoc
-    autocmd   FileType                    vim                 setlocal keywordprg=:help
   augroup END
 
   " general events
