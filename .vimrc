@@ -379,6 +379,8 @@ if !g:vimrc_disable_mappings
   nnoremap <space> :call <SID>toggle_hlsearch()<cr>
   " smart indentation
   inoremap <expr> <s-tab> <SID>smart_tab()
+  " inplace join
+  nnoremap <silent> J :call <SID>inplace_join()<cr>
   " toggle line numbers (Ex mode can also be entered with ``gQ``, with bonus editing features)
   nnoremap <silent> Q :call <SID>toggle_relativenumber(-1)<cr>
   " pasting (inspired by unimpaired.vim, cf. above)
@@ -587,6 +589,13 @@ function! s:smart_tab()
   else
     return repeat(fill_char, &tabstop - (col_number - 1) % &tabstop)
   endif
+endfunction
+
+function! s:inplace_join()
+  " join lines without moving cursor
+  let pos = getpos('.')
+  execute 'join'
+  call setpos('.', pos)
 endfunction
 
 function! s:get_visual_selection()

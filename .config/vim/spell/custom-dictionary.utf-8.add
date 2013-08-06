@@ -50,3 +50,5 @@ ScratchConfig
 autohide
 SQLAlchemy
 app
+inplace
+smartcase
