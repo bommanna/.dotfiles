@@ -414,15 +414,15 @@ if !g:vimrc_disable_mappings
     nnoremap <leader>gw :Gwrite<cr>
     " toggle Gundo
     nnoremap <leader>u :GundoToggle<cr>
-    " surround
-    nmap ds <Plug>Dsurround
-    nmap cs <Plug>Csurround
-    nmap ys <Plug>Ysurround
-    nmap yS <Plug>YSurround
-    nmap yss <Plug>Yssurround
-    nmap ySS <Plug>YSsurround
-    xmap s <Plug>VSurround
-    xmap S <Plug>VgSurround
+    " Zurround
+    nmap dz <Plug>Dsurround
+    nmap cz <Plug>Csurround
+    nmap yz <Plug>Ysurround
+    nmap yZ <Plug>YSurround
+    nmap yzz <Plug>Yssurround
+    nmap yZZ <Plug>YSsurround
+    xmap z <Plug>VSurround
+    xmap Z <Plug>VgSurround
 
   endif
 
@@ -436,9 +436,9 @@ if !g:vimrc_disable_autocommands
   " general events
   augroup eventgroup
     autocmd!
-    autocmd   VimEnter                    *                   call <SID>create_next_mappings()
-    autocmd   BufEnter                    *                   call <SID>smart_chdir()
-    autocmd   InsertLeave                 *                   call <SID>toggle_paste(0)
+    autocmd   VimEnter                    *                   silent call <SID>create_next_mappings()
+    autocmd   BufEnter                    *                   silent call <SID>smart_chdir()
+    autocmd   InsertLeave                 *                   silent call <SID>toggle_paste(0)
   augroup END
 
   " some commands when using the taglist window
