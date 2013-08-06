@@ -232,7 +232,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set statusline+=%m                                                          " modified flag [+] (or [-] if nomodifiable is set)
   set statusline+=%*                                                          " end highlighting
   set statusline+=%=                                                          " switch to right side
-  set statusline+=%c,%l/%L                                                    " current column, current line / total lines
+  set statusline+=%c,%l/%{&textwidth},%L                                      " current column, current line / textwidth, total lines
 
   " spelling
   let &dictionary = '/usr/share/dict/words,'                                  " files where to load word for dictionary
