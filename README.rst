@@ -11,9 +11,9 @@ Installation
   $ cd .dotfiles
   $ make install
 
-This will create symbolic links to all tracked dotfiles in your home directory. 
-Any files that would be overwritten are saved in the ``.save/`` directory. To 
-restore these, simply run ``make uninstall``.
+This will create symbolic links to all tracked dotfiles in your home 
+directory. Any files that would be overwritten are saved in the ``.save/`` 
+directory. To restore these, simply run ``make uninstall``.
 
 
 Recommended packages

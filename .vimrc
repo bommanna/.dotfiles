@@ -163,7 +163,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set autoindent                                                              " keep indentation when going to new line
   set backspace=indent,eol,start                                              " allow backspace to delete new lines, etc.
   set formatlistpat=^\\s*\\(\\d\\+\\\|[*+-]\\)[\\]:.)}\\t\ ]\\s*              " allow non numbered lists (starting by *+-)
-  set formatoptions+=nj                                                       " recognize lists when formatting and remove comment marker when joining
+  set formatoptions=crqnlj                                                    " relatively strict defaults
   set list                                                                    " show hidden characters (cf. ``listchar`` option below)
   set listchars=tab:¬\ ,trail:·                                               " which hidden characters to show
   set nojoinspaces                                                            " don't insert two spaces after punctuation on a join
@@ -215,7 +215,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   " theme
   silent! colorscheme solarized                                               " colorscheme (if available)
   set background=dark                                                         " theme
-  set colorcolumn=+2                                                          " highlight 2 columns after textwidth
+  set colorcolumn=+1                                                          " highlight after textwidth
   set nocursorcolumn                                                          " don't highlight the current column
   set nocursorline                                                            " or the current row
   set showbreak=                                                              " no characters shown after a linebreak
@@ -932,6 +932,7 @@ endif
 
 " changes/fixes/ideas
 
+" easymotion: play better with jumps (don't go to start of line)
 " locate:
 " jumping to closest (or next) match instead of first
 " auto scrolling of matches as scrolling window
