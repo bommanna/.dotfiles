@@ -1,1 +1,2 @@
-setlocal textwidth=78
+setlocal comments=b:#,b:#:
+setlocal textwidth=79

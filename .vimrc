@@ -39,6 +39,7 @@ let g:vimrc_disable_autocommands = $VIM_DISABLE_AUTOCOMMANDS == 1             " 
 " miscellaneous
 let g:project_root_markers = ['.git/', 'venv/']                               " markers to find project root directory
 let g:tex_flavor = 'latex'                                                    " use tex filetype by default instead of plaintex
+let g:tex_comment_nospell = 1                                                 " don't spellcheck inside tex comments
 
 
 " PLUGINS AND COLORSCHEMES:
@@ -163,13 +164,13 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set autoindent                                                              " keep indentation when going to new line
   set backspace=indent,eol,start                                              " allow backspace to delete new lines, etc.
   set formatlistpat=^\\s*\\(\\d\\+\\\|[*+-]\\)[\\]:.)}\\t\ ]\\s*              " allow non numbered lists (starting by *+-)
-  set formatoptions=crqnlj                                                    " relatively strict defaults
+  set formatoptions=rqnlj                                                     " only manual formatting by default
   set list                                                                    " show hidden characters (cf. ``listchar`` option below)
   set listchars=tab:¬\ ,trail:·                                               " which hidden characters to show
   set nojoinspaces                                                            " don't insert two spaces after punctuation on a join
-  set nolinebreak                                                             " wrap lines anywhere (``linebreak`` is incompatible with list)
+  set linebreak                                                               " wrap lines at break characters (cf. ``wrap``)
   set nosmartindent                                                           " don't add extra indents, ever
-  set textwidth=0                                                             " don't insert line breaks for long lines
+  set textwidth=0                                                             " no maximum line length by default
   set wrap                                                                    " wrap long lines (disable ``list`` for this to work)
 
   " tabbing
