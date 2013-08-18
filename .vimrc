@@ -37,7 +37,7 @@ let g:vimrc_disable_mappings = $VIM_DISABLE_MAPPINGS == 1                     " 
 let g:vimrc_disable_autocommands = $VIM_DISABLE_AUTOCOMMANDS == 1             " disable autocommands
 
 " miscellaneous
-let g:project_root_markers = ['.git/', 'venv/']                               " markers to find project root directory
+let g:project_root_markers = ['.git', '.git/', 'venv/']                       " markers to find project root directory
 let g:tex_flavor = 'latex'                                                    " use tex filetype by default instead of plaintex
 let g:tex_comment_nospell = 1                                                 " don't spellcheck inside tex comments
 
@@ -52,8 +52,8 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   " Ctrlp
   let g:ctrlp_by_filename = 1                                                 " search by filename by default
   let g:ctrlp_cache_dir = g:runtimepath . '/cache/ctrlp'                      " directory to store cached filepaths
-  let g:ctrlp_clear_cache_on_exit = 0                                         " retain cache between sessions (<F5> to clear manually)
-  let g:ctrlp_cmd = 'CtrlP'                                                   " search MRU files by default
+  let g:ctrlp_clear_cache_on_exit = 1                                         " clear cache between sessions (<F5> to clear manually)
+  let g:ctrlp_cmd = 'CtrlPMRU'                                                " search MRU files by default
   let g:ctrlp_extensions = ['tag']                                            " add tag explorer
   let g:ctrlp_follow_symlinks = 1                                             " follow symbolic links
   let g:ctrlp_lazy_update = 100                                               " wait 250ms after typing before refreshing
@@ -83,7 +83,7 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
 
   " Locate
   let g:locate_highlight = 'pandocDefinitionTerm'                             " highlighting style for matches
-  let g:locate_refresh = 1                                                    " refresh location list on save
+  let g:locate_jump_to = 'closest'                                            " jump to next match
   let g:locate_very_magic = 0                                                 " use normal magic mode by default
 
   " NerdTree
@@ -350,8 +350,8 @@ if !g:vimrc_disable_mappings
   " languages
 
   " Vim
-  " open .vimrc
-  nnoremap <leader>ve :tabnew $MYVIMRC<cr>
+  " open .vimrc (following potential symbolic link)
+  nnoremap <leader>ve :tabnew <c-r>=resolve(expand($MYVIMRC))<cr><cr>
   "source .vimrc
   nnoremap <leader>vs :source $MYVIMRC<cr>
 

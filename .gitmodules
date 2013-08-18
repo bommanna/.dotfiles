@@ -40,3 +40,6 @@
 [submodule ".config/vim/bundle/plugins/coffeescript"]
 	path = .config/vim/bundle/plugins/coffeescript
 	url = https://github.com/kchmck/vim-coffee-script.git
+[submodule ".config/vim/bundle/plugins/indent"]
+	path = .config/vim/bundle/plugins/indent
+	url = https://github.com/michaeljsmith/vim-indent-object.git

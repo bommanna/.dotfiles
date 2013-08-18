@@ -4,11 +4,13 @@
 --type-set=coffee=.coffee
 --type-set=csv=.csv
 --type-set=json=.json
+--type-set=git=.git,.gitmodules,.gitignore
 --type-set=log=.log
 --type-set=tags=.tags,.venvtags
 
 # ignore some types by default
 --nocsv
+--nogit
 --nojson
 --nolog
 --nosql
@@ -18,4 +20,4 @@
 --follow
 
 # page results
---pager=less -r
+# --pager=less -r
