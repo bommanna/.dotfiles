@@ -211,6 +211,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   let &backupdir = g:runtimepath . '/cache/backup'                            " store them here
   let &directory = g:runtimepath . '/cache/swap'                              " we won't create swapfiles, but just in case
   set backup                                                                  " store existing files when overwriting
+  set backupskip=/tmp/*,/private/tmp/*                                        " don't backup when editing these files (crontabs namely)
   set noswapfile                                                              " as we said, no swapfiles
 
   " theme
@@ -935,13 +936,15 @@ endif
 
 " easymotion: play better with jumps (don't go to start of line)
 " locate:
-" jumping to closest (or next) match instead of first
 " auto scrolling of matches as scrolling window
+" rst:
+" better highlighting (indented code, links, etc.)
+" rst highlighting in python docstrings
+" follow links from rst reference
 
 " gundo avoid resize craziness
 " fugitive bug fixes
 " write virtualenv setter
-" for rst filetype have <s-tab> repeat title underlines
 
 " execute command without moving cursor in window
 " doesn't work currently (doesn't do anything)
