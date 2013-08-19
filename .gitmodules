@@ -43,6 +43,3 @@
 [submodule ".config/vim/bundle/plugins/indent"]
 	path = .config/vim/bundle/plugins/indent
 	url = https://github.com/michaeljsmith/vim-indent-object.git
-[submodule ".config/vim/bundle/plugins/riv"]
-	path = .config/vim/bundle/plugins/riv
-	url = https://github.com/mtth/riv.vim.git
