@@ -73,6 +73,15 @@ PROMPT_COMMAND='timer_stop'
 export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n${VENV_PROMPT}\$ '
 
 
+# Convenience locations
+# ---------------------
+
+# Vim runtime directory
+VMR="$HOME/.config/vim"
+# Downloads
+DWN="$HOME/Downloads"
+
+
 # Aliases
 # -------
 
@@ -131,6 +140,17 @@ function up ()
   done
   cd $dir
   return 0
+}
+
+# activate virtualenv
+function va ()
+{
+  if [ $1 ]; then
+    local venv_dir=$1
+  else
+    local venv_dir='venv'
+  fi
+  . "$venv_dir/bin/activate"
 }
 
 

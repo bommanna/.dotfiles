@@ -343,24 +343,9 @@ if !g:vimrc_disable_mappings
   "source .vimrc
   nnoremap <leader>vs :source $MYVIMRC<cr>
 
-  " bash
-  " execute file
-  nnoremap <leader>bb :%w !bash<cr>
-  " execute selection using bash (no replacement)
-  vnoremap <leader>bb :w !bash<cr>
-
   " python
   " set filetype
   nnoremap <leader>pf :set filetype=python<cr>
-  " execute file using shell python
-  nnoremap <leader>pp :%w !python<cr>
-  " execute file using shell ipython or python and go in interactive mode, note that this saves the file first
-  nnoremap <leader>pi :w<cr>:!ipython -i %<cr>
-  nnoremap <leader>py :w<cr>:!python -i %<cr>
-  " run pylint on file (this saves the file first)
-  nnoremap <leader>pl :w<cr>:!pylint %<cr>
-  " execute selection with shell python (without replacing selection)
-  vnoremap <leader>pp :w !python<cr>
 
   " function mappings
 
@@ -845,10 +830,10 @@ endfunction
 function! s:toggle_relativenumber(force)
   " toggle number/relativenumber (force = 0 to set number, force = 1 to set relativenumber)
   " note that if neither option is on, and force is different from 0 and 1, nothing will happen
-  if a:force ==# 0 || &number
+  if a:force ==# 0 || (&number && !&relativenumber)
     set relativenumber
   elseif a:force ==# 1 || &relativenumber
-    set number
+    set norelativenumber
   endif
 endfunction
 
