@@ -28,9 +28,6 @@
 [submodule "src/config/vim/bundle/locate.vim"]
 	path = src/config/vim/bundle/locate.vim
 	url = https://github.com/mtth/locate.vim.git
-[submodule "src/config/vim/bundle/nerdtree"]
-	path = src/config/vim/bundle/nerdtree
-	url = https://github.com/scrooloose/nerdtree.git
 [submodule "src/config/vim/bundle/scratch.vim"]
 	path = src/config/vim/bundle/scratch.vim
 	url = https://github.com/mtth/scratch.vim.git
