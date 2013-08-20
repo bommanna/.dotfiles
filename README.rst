@@ -25,8 +25,8 @@ Utilities
 
 These will be installed (or updated) automatically if using the installer:
 
-* *ack_*
-* *ctags_*
+* *ack*
+* *ctags*
 * *git*
 * python
 * tmux
@@ -36,6 +36,4 @@ These will be installed (or updated) automatically if using the installer:
 missing.
 
 
-.. _ack: http://beyondgrep.com/
-.. _ctags: http://ctags.sourceforge.net/ctags.html
 .. _Homebrew: http://brew.sh/

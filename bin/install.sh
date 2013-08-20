@@ -2,7 +2,7 @@
 
 # TODO: check if mac
 
-# install (or update) Homebrew and formulae
+# install (or update/upgrade) Homebrew and formulae
 if command -v brew | read; then
   brew update
 else
@@ -11,7 +11,11 @@ fi
 
 FORMULAE='git tmux ctags ack python vim'
 for FORMULA in $FORMULAE; do
-  brew install $FORMULA
+  if brew list $FORMULA 2>&1 1>/dev/null | read; then
+    brew install $FORMULA
+  else
+    brew upgrade $FORMULA
+  fi
 done
 
 # clone dotfiles git repository
@@ -29,3 +33,5 @@ BINARIES='link.sh submodules.sh'
 for BINARY in $BINARIES; do
   bash "bin/$BINARY"
 done
+
+echo 'Installation complete!'

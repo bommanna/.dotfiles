@@ -40,9 +40,7 @@ echo 'Checking for missing submodules...'
 for SUBMODULE in "${VIM_SUBMODULES[@]}"; do
   REPOSITORY=${SUBMODULE##*/}
   SUBMODULE_DIR="$VIM_SUBMODULES_DIR/${REPOSITORY%.*}"
-  if [ -e $SUBMODULE_DIR ]; then
-    echo "$REPOSITORY already exists"
-  else
+  if [ ! -e $SUBMODULE_DIR ]; then
     git submodule add $SUBMODULE $SUBMODULE_DIR
   fi
 done
