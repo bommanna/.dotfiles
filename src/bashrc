@@ -8,9 +8,11 @@
 # General purpose, Homebrew and Node
 export PATH=.:/usr/local/bin:/usr/local/share/npm/bin:$PATH
 
-# Coloring for ls
-# cf http://blog.imzaid.com/color-terminal-bash-on-the-mac-iterm-included
+# ls coloring
+# BSD ls (default on mac)
 export LSCOLORS=exfxcxdxbxegedabagacad
+# GNU ls (gls with coreutils)
+export LS_COLORS='di=0;34:ln=0;35:so=0;32:pi=0;33:ex=0;31:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
 
 # IPython
 export IPYTHONDIR="$HOME/.config/ipython"
@@ -73,9 +75,15 @@ export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\
 
 alias be='vim ~/.bashrc'
 alias bs='source ~/.bashrc'
-alias la='ls -AFG'
-alias ll='ls -AFGl'
 alias vi='vim'
+
+if command -v gls | read; then
+  alias la='gls -AF --color'
+  alias ll='gls -AFlh --color --group-directories-first'
+else
+  alias la='ls -AFG'
+  alias ll='ls -AFGl'
+fi
 
 
 # Functions

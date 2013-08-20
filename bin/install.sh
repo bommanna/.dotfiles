@@ -9,7 +9,7 @@ else
   ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 fi
 
-FORMULAE='git tmux ctags ack python vim'
+FORMULAE='git tmux ctags ack python vim coreutils'
 for FORMULA in $FORMULAE; do
   if brew list $FORMULA 2>&1 1>/dev/null | read; then
     brew install $FORMULA
