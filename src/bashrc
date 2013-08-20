@@ -20,9 +20,6 @@ export IPYTHONDIR="$HOME/.config/ipython"
 # Editor
 export VISUAL='vim'
 
-# Less
-# export LESSHISTFILE="$HOME/.config/info/.lesshst"
-
 # Pylint
 export PYLINTHOME="$HOME/.config/pylint"
 export PYLINTRC="$HOME/.config/pylint/.pylintrc"
@@ -33,12 +30,22 @@ export MYIGLOORC="$HOME/.config/igloo/.igloorc"
 # Grep
 export GREP_OPTIONS='--color=auto'
 
+# Less
+# export LESSHISTFILE="$HOME/.config/less/hist"
+
+# MySQL
+# PATH=$PATH:/usr/local/mysql/bin   # MySQL (not needed when using brew)
+# export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
+
+
 # Terminal prompt display
+# -----------------------
+#
 # Prompt indicates wall time (in seconds) of last command run along with
 # color indicator of success or failure (blue for success and orange for
 # failure)
 
-# Disable virtualenv prompt (we show it differently)
+# First, disable virtualenv prompt (we show it differently)
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 function timer_start {
@@ -65,10 +72,6 @@ PROMPT_COMMAND='timer_stop'
 
 export PS1='\n\[\e[${DOLLAR_COLOR}m\]${WALLTIME}\[\e[m\] \u@\h:\[\e[0;34m\]\w\[\e[m\]\n${VENV_PROMPT}\$ '
 
-# MySQL
-# PATH=$PATH:/usr/local/mysql/bin   # MySQL (not needed when using brew)
-# export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
-
 
 # Aliases
 # -------
@@ -78,9 +81,11 @@ alias bs='source ~/.bashrc'
 alias vi='vim'
 
 if command -v gls | read; then
+  # GNU ls is available
   alias la='gls -AF --color'
   alias ll='gls -AFlh --color --group-directories-first'
 else
+  # Fallback to BSD ls
   alias la='ls -AFG'
   alias ll='ls -AFGl'
 fi
@@ -89,29 +94,50 @@ fi
 # Functions
 # ---------
 
-my-ip(){
+function my_ip ()
+{
   MY_IP=$(/sbin/ifconfig en1 | awk '/inet / { print $2 } ')
   echo ${MY_IP:-"Not connected"}
 }
 
 # find all extensions in a directory, with counts
 # percent sign is because of vim undo files
-extensions(){
+function extensions ()
+{
   REGEXP='^.+[^/%]\.([^/.]+)$'
   find $1 | sed -nE "s:${REGEXP}:\1:p" | sort | uniq -c | sort
 }
 
-reattach-tmux(){
-  # reattach tmux if the command is available
+# reattach tmux if the command is available
+function reattach ()
+{
   if which reattach-to-user-namespace 2>&1 >/dev/null; then
     reattach-to-user-namespace -l bash
   fi
 }
+
+# move up directory hierarchy
+function up ()
+{
+  if [ $1 ]; then
+    local depth=$1
+  else
+    local depth=1
+  fi
+  local dir=''
+  while [ $depth -gt 0 ]; do
+    dir="../$dir"
+    depth=$(expr $depth - 1)
+  done
+  cd $dir
+  return 0
+}
+
 
 # Source extra configuration files
 # --------------------------------
 
 EXTRA="$HOME/.extra/bashrc"
 if [ -e $EXTRA ]; then
-  source $EXTRA;
-fi;
+  source $EXTRA
+fi
