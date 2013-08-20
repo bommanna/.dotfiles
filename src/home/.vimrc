@@ -44,10 +44,10 @@ let g:tex_comment_nospell = 1                                                 " 
 
 " PLUGINS AND COLORSCHEMES:
 
-filetype off                                                                  " safe plugin loading
-set nocompatible                                                              " one more time
-
 if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
+
+  filetype off                                                                " safe plugin loading
+  set nocompatible                                                            " one more time
 
   " Ctrlp
   let g:ctrlp_by_filename = 1                                                 " search by filename by default
@@ -114,27 +114,18 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:Tlist_Use_Right_Window = 1                                            " put taglist window on the right
   let g:Tlist_WinWidth = 60                                                   " width of taglist window
 
-  call pathogen#infect(g:runtimepath . '/bundle/plugins')                     " load all plugins
+  " Solarized
+  let g:solarized_termtrans = 1                                               " transparent background sometimes
+
+  call pathogen#infect()                                                      " load all plugins
   call pathogen#helptags()                                                    " create Vim help tags
+
+  filetype plugin on                                                          " reenable per filetype loading
+  syntax enable                                                               " activate syntax highlighting
 
   let s:loaded_plugins = 1
 
 endif
-
-if !g:vimrc_disable_colorschemes && !exists('s:loaded_colorschemes')
-
-  " Solarized
-  let g:solarized_termtrans = 1                                               " transparent background sometimes
-
-  call pathogen#infect(g:runtimepath . '/bundle/colorschemes')                " load all colorschemes
-  call pathogen#helptags()                                                    " create Vim help tags
-
-  let s:loaded_colorschemes = 1
-
-endif
-
-filetype plugin on                                                            " reenable per filetype loading
-syntax enable                                                                 " activate syntax highlighting
 
 
 " OPTIONS:
