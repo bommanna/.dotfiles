@@ -372,8 +372,8 @@ if !g:vimrc_disable_mappings
     map s 'f
     map S 'F
     " toggle taglist
-    nnoremap <silent> <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
-    nnoremap <silent> <leader>T :TlistToggle<cr><c-w>=:CursorcrossRestore<cr>
+    nnoremap <silent> <leader>] :TlistHighlightTag<cr>:TlistOpen<cr>
+    nnoremap <silent> <leader>} :TlistToggle<cr><c-w>=:CursorcrossRestore<cr>
     " fugitive
     nnoremap <leader>gL :silent Glog --<cr>:copen<cr>:redraw!<cr>
     nnoremap <leader>gP :Git pull<cr>
