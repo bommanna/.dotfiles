@@ -1,5 +1,7 @@
 #!/usr/bash
 
+# TODO
+
 # do everything
 # check if mac
 # install brew

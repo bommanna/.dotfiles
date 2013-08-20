@@ -1,5 +1,8 @@
 #!/usr/bash
 
+# Removes all symbolic links created by link.sh
+# Also deletes any created directories than become empty after unlinking
+
 function delete_link ()
 {
   local src_path=$1

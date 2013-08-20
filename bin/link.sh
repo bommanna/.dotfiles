@@ -1,5 +1,9 @@
 #!/usr/bash
 
+# Creates symlinks for all available dotfiles
+# Overrides any previously existing symlinks
+# But preserves any original dotfiles
+
 function create_link ()
 {
   local src_path=$1
