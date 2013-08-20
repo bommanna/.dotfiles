@@ -30,8 +30,7 @@ let g:runtimepath = $HOME . '/.config/vim'
 let &runtimepath .= ',' . g:runtimepath
 
 " environment variables
-let g:vimrc_disable_plugins = $VIM_DISABLE_PLUGINS == 1                       " disable all plugins except colorschemes
-let g:vimrc_disable_colorschemes = $VIM_DISABLE_COLORSCHEMES == 1             " disable colorschemes
+let g:vimrc_disable_plugins = $VIM_DISABLE_PLUGINS == 1                       " disable all plugins
 let g:vimrc_disable_options = $VIM_DISABLE_OPTIONS == 1                       " disable all options (still keeps nocompatible)
 let g:vimrc_disable_mappings = $VIM_DISABLE_MAPPINGS == 1                     " disable mappings
 let g:vimrc_disable_autocommands = $VIM_DISABLE_AUTOCOMMANDS == 1             " disable autocommands
@@ -85,14 +84,6 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:locate_highlight = 'pandocDefinitionTerm'                             " highlighting style for matches
   let g:locate_jump_to = 'closest'                                            " jump to next match
   let g:locate_very_magic = 0                                                 " use normal magic mode by default
-
-  " NerdTree
-  let g:NERDTreeBookmarksFile = g:runtimepath . '/cache/.nerdtree_bookmarks'  " where to store the NERDTree bookmarks
-  let g:NERDTreeIgnore = ['\.pyc$', '^\.DS_Store']                            " don't show these files
-  let g:NERDTreeQuitOnOpen = 1                                                " quit Vim in nerdtree is the only buffer open
-  let g:NERDTreeShowBookmarks = 0                                             " show bookmarks by default
-  let g:NERDTreeShowHidden = 1                                                " show hidden files by default
-  let g:NERDTreeWinSize = 60                                                  " width of nerdtree window
 
   " Scratch
   let g:scratch_height = 10                                                   " height of scratch window
@@ -322,6 +313,9 @@ if !g:vimrc_disable_mappings
   vnoremap < <gv
   " copying (consistency with C and D)
   nnoremap Y y$
+  " explore current directory
+  nnoremap <leader>e :edit %:p:h<cr>8j
+  nnoremap <leader>E :edit .<cr>
   " changing background color
   nnoremap <leader>bgd :set background=dark<cr>
   nnoremap <leader>bgl :set background=light<cr>
@@ -390,8 +384,6 @@ if !g:vimrc_disable_mappings
     noremap ' <nop>
     map s 'f
     map S 'F
-    " toggle NERDtree
-    nnoremap <leader>f :NERDTreeToggle<cr>
     " toggle taglist
     nnoremap <silent> <leader>t :TlistHighlightTag<cr>:TlistOpen<cr>
     nnoremap <silent> <leader>T :TlistToggle<cr><c-w>=:CursorcrossRestore<cr>
@@ -915,7 +907,7 @@ endfunction
 " EXTRA:
 
 " source extra vimrc if it exists
-let s:extra_vimrc = $HOME . '/.config/extra/.vimrc'
+let s:extra_vimrc = $HOME . '/.extra/vimrc'
 if filereadable(s:extra_vimrc)
   execute 'source ' . s:extra_vimrc
 endif
