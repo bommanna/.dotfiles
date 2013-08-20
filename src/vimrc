@@ -171,7 +171,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
 
   " history
   let &undodir = g:runtimepath . '/cache/undo'                                " saves directory
-  let &viminfo .= ',n' . g:runtimepath . '/info'                              " location of .viminfo file
+  let &viminfo .= ',n' . g:runtimepath . '/cache/info'                        " location of .viminfo file
   set undofile                                                                " allow persistence of undo history
   set undolevels=1000                                                         " number of operations used
   set undoreload=1000                                                         " number of operations stored
