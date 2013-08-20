@@ -39,6 +39,7 @@ let g:vimrc_disable_autocommands = $VIM_DISABLE_AUTOCOMMANDS == 1             " 
 let g:project_root_markers = ['.git', '.git/', 'venv/']                       " markers to find project root directory
 let g:tex_flavor = 'latex'                                                    " use tex filetype by default instead of plaintex
 let g:tex_comment_nospell = 1                                                 " don't spellcheck inside tex comments
+let g:netrw_home = g:runtimepath . '/cache/netrw'                             " cache directory for file explorer
 
 
 " PLUGINS AND COLORSCHEMES:
@@ -168,8 +169,9 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set wildignore=*.swp,*.bak,*.pyc,*.class                                    " don't show these files in file autocompletion
   set wildmenu                                                                " allow autocompletion with c-n
 
-  " undohistory
+  " history
   let &undodir = g:runtimepath . '/cache/undo'                                " saves directory
+  let &viminfo .= ',n' . g:runtimepath . '/info'                              " location of .viminfo file
   set undofile                                                                " allow persistence of undo history
   set undolevels=1000                                                         " number of operations used
   set undoreload=1000                                                         " number of operations stored

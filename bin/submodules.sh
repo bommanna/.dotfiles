@@ -20,7 +20,6 @@ VIM_SUBMODULES=(
 'https://github.com/michaeljsmith/vim-indent-object.git'
 'https://github.com/LaTeX-Box-Team/LaTeX-Box.git'
 'https://github.com/mtth/locate.vim.git'
-'https://github.com/scrooloose/nerdtree.git'
 'https://github.com/mtth/scratch.vim.git'
 'https://github.com/tpope/vim-surround.git'
 'https://github.com/godlygeek/tabular.git'
