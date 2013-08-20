@@ -2,8 +2,8 @@
 
 # Install Homebrew formulae in correct order
 
-FORMULAE='tmux ctags ack python vim'
-
-for FORMULA in $FORMULAE; do
-  brew install $FORMULA
-done
+if command -v brew2 | read; then
+  echo 'exists'
+else
+  echo 'no'
+fi

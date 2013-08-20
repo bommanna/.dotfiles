@@ -1,4 +1,4 @@
-#!/usr/bash
+#!/bin/bash
 
 # Removes all symbolic links created by link.sh
 # Also deletes any created directories than become empty after unlinking

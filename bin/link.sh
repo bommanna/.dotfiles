@@ -1,4 +1,4 @@
-#!/usr/bash
+#!/bin/bash
 
 # Creates symlinks for all available dotfiles
 # Overrides any previously existing symlinks
