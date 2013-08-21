@@ -69,6 +69,7 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
 
   " EasyMotion
   let g:EasyMotion_leader_key = "'"                                           " ' key is unbound in normal and visual mode below
+  let g:EasyMotion_startofline = 0                                            " stay in current column when using j/k motions
 
   " Gundo
   let g:gundo_preview_height = 12                                             " height of diff preview window
