@@ -16,7 +16,7 @@ function! s:test_module(filename)
   " test current module
   let test_filename = 'test/test_' . a:filename
   if filereadable(test_filename)
-    execute '!python ' . test_filename
+    execute '!nosetests ' . test_filename
   else
     echoerr 'No test file found for this module.'
   endif
@@ -25,7 +25,7 @@ endfunction
 function! s:test_all()
   " run all tests in repository
   if filewritable('test') ==# 2
-    execute '!nose test'
+    execute '!nosetests test'
   endif
 endfunction
 

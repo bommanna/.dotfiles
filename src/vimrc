@@ -419,7 +419,7 @@ if !g:vimrc_disable_autocommands
   " some commands when using the taglist window
   augroup taglistgroup
     autocmd!
-    autocmd   BufWritePost                *                   silent call <SID>refresh_tags(0)
+    autocmd   BufWritePost                *                   silent call <SID>tags_refresh(0, 0)
   augroup END
 
 endif
@@ -474,8 +474,8 @@ command! -bang -nargs=* -complete=file Ack call <SID>ack(<bang>0, <q-args>)
 "
 command! -bang -nargs=* OpenInPreviousWindow call <SID>open_in_previous_window(<bang>0, <q-args>)
 
-" RefreshTags:
-"   :RefreshTags[!]
+" TagsRefresh:
+"   :TagsRefresh[!]
 "
 "   By default this command only does something if the taglist window is open.
 "   If this is the case, it will update the taglist and run ctags recursively
@@ -485,7 +485,7 @@ command! -bang -nargs=* OpenInPreviousWindow call <SID>open_in_previous_window(<
 "   !                                   Force tag refresh, even if the taglist
 "                                       window isn't open.
 "
-command! -bang RefreshTags call <SID>refresh_tags(<bang>0)
+command! -bang TagsRefresh call <SID>tags_refresh(<bang>0, 1)
 
 " Retab:
 "   :[RANGE]Retab BEFORE AFTER
@@ -650,17 +650,23 @@ endfunction
 
 " Tags
 
-function! s:refresh_tags(force)
-  " (cf. RefreshTags command above for details)
-  if bufloaded('__Tag_List__') || a:force
-    TlistUpdate
+function! s:tags_refresh(venv, force)
+  " (cf. TagsRefresh command above for details)
+  if bufloaded('__Tag_List__')
     echomsg 'Taglist updated!'
+    TlistUpdate
+  endif
+  if bufloaded('__Tag_List__') || a:force
     if !empty(finddir('.git'))
       call system('ctags -R --exclude=venv')
       echomsg 'Project tags updated!'
     else
       echomsg "Can't compile project tags, git repository not found in root."
     endif
+  endif
+  if a:venv && filewritable('venv') ==# 2
+    echomsg 'Project virtual environment tags updated!'
+    call system('ctags -Rf .venvtags venv')
   endif
 endfunction
 
