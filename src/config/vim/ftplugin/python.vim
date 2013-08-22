@@ -1,7 +1,6 @@
 setlocal comments=b:#
 setlocal textwidth=79
 
-
 " Executing:
 
 nnoremap <leader>x :%w !python<cr>

@@ -97,10 +97,13 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:syntastic_check_on_open = 1                                           " check syntax when opening file
   let g:syntastic_check_on_wq = 0                                             " check when closing
   let g:syntastic_enable_balloons = 0                                         " show balloons when mouseing over errors
-  let g:syntastic_mode_map = {'mode': 'passive'}                              " check manually in general
+  let g:syntastic_mode_map = {'mode': 'active'}                               " check automatically in general
   let g:syntastic_auto_loc_list = 2                                           " close location list automatically
+  let g:syntastic_auto_jump = 1                                               " jump to first match automatically
   let g:syntastic_loc_list_height = 20                                        " height of location list window
   let g:syntastic_echo_current_error = 0                                      " echo current error in command line
+  let g:syntastic_python_checkers = ['python']                                " pylint is too slow to check actively
+  let g:syntastic_manual = {'python': ['pylint']}                             " custom option to run manual checks with extra utilities
 
   " Taglist
   let g:Tlist_Auto_Highlight_Tag = 1                                          " highlight active tag (after a small inactivity period)
@@ -415,7 +418,7 @@ if !g:vimrc_disable_mappings
     xmap z <Plug>VSurround
     xmap Z <Plug>VgSurround
     " syntastic
-    nnoremap <leader>s :call <SID>syntastic_check(1)<cr>
+    nnoremap <leader>s :call <SID>syntastic_check()<cr>
     nnoremap <leader>S :SyntasticReset<cr>
 
 
@@ -800,31 +803,34 @@ endfunction
 
 " Syntax checking
 
-function! s:syntastic_check(open)
+function! s:syntastic_check()
   " simple syntastic wrapper
   let syntax_checkers = []
-  for checker in g:SyntasticRegistry.Instance().availableCheckersFor(&filetype)
+  for checker in g:SyntasticRegistry.Instance().getActiveCheckers(&filetype)
     call add(syntax_checkers, checker.getName())
   endfor
+  if has_key(g:syntastic_manual, &filetype)
+    call extend(syntax_checkers, g:syntastic_manual[&filetype])
+  endif
   if !len(syntax_checkers)
-    echo 'No syntax checker found.'
+    echo 'No manual syntax checkers found.'
   else
-    echo 'Running syntax checkers: ' . join(syntax_checkers, ', ')
-    silent execute 'SyntasticCheck'
-    let loclist = g:SyntasticLoclist.current()
-    if loclist.hasErrorsOrWarningsToDisplay()
-      let errors = loclist.errors()
-      let warnings = loclist.warnings()
-      echo len(errors) . ' error(s) and ' . len(warnings) . ' warning(s) found.'
-      if a:open
+    for checker_name in syntax_checkers
+      echo 'Running syntax checker: ' . checker_name '...'
+      silent execute 'SyntasticCheck ' . checker_name
+      let loclist = g:SyntasticLoclist.current()
+      if loclist.hasErrorsOrWarningsToDisplay()
+        let errors = loclist.errors()
+        let warnings = loclist.warnings()
+        echo len(errors) . ' error(s) and ' . len(warnings) . ' warning(s) found.'
         let num_issues = loclist.getLength()
-        execute 'Errors'
+        silent execute 'Errors'
         execute 'lclose | lopen ' . min([num_issues, g:syntastic_loc_list_height])
         execute 'll'
+        return
       endif
-    else
-      echo 'Success!'
-    endif
+    endfor
+    echo 'Success!'
   endif
 endfunction
 
