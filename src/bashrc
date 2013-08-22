@@ -5,8 +5,8 @@
 # Env variables
 # -------------
 
-# General purpose, Homebrew and Node
-export PATH=.:/usr/local/bin:/usr/local/share/npm/bin:$PATH
+# General purpose, Homebrew, Node, and Ruby
+export PATH=.:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/opt/ruby/bin:$PATH
 
 # ls coloring
 # BSD ls (default on mac)

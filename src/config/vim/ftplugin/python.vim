@@ -1,4 +1,5 @@
 setlocal comments=b:#
+setlocal keywordprg=pydoc
 setlocal textwidth=79
 
 " Executing:
