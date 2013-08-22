@@ -342,9 +342,6 @@ if !g:vimrc_disable_mappings
   " changing background color
   nnoremap <leader>bgd :set background=dark<cr>
   nnoremap <leader>bgl :set background=light<cr>
-  " quickfix window
-  nnoremap <leader>cc :cclose<cr>
-  nnoremap <leader>co :copen<cr>
   " show locations of latest changes
   nnoremap <leader>J :changes<cr>
   " show latest jumps
