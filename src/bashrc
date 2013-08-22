@@ -88,6 +88,7 @@ DWN="$HOME/Downloads"
 alias be='vim ~/.bashrc'
 alias bs='source ~/.bashrc'
 alias vi='vim'
+alias v='vim'
 
 if command -v gls | read; then
   # GNU ls is available

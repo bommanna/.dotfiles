@@ -24,6 +24,8 @@ VIM_SUBMODULES=(
 'https://github.com/tpope/vim-surround.git'
 'https://github.com/godlygeek/tabular.git'
 'https://github.com/mtth/taglist.vim.git'
+'https://github.com/scrooloose/syntastic.git'
+'https://github.com/jmcantrell/vim-virtualenv.git'
 )
 
 # Directory where Vim plugins will be installed

@@ -40,3 +40,9 @@
 [submodule "src/config/vim/bundle/taglist.vim"]
 	path = src/config/vim/bundle/taglist.vim
 	url = https://github.com/mtth/taglist.vim.git
+[submodule "src/config/vim/bundle/syntastic"]
+	path = src/config/vim/bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git
+[submodule "src/config/vim/bundle/vim-virtualenv"]
+	path = src/config/vim/bundle/vim-virtualenv
+	url = https://github.com/jmcantrell/vim-virtualenv.git

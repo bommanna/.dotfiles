@@ -93,6 +93,15 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   " Surround
   let g:surround_no_mappings = 1                                              " default mappings are bad
 
+  " Syntastic
+  let g:syntastic_check_on_open = 1                                           " check syntax when opening file
+  let g:syntastic_check_on_wq = 0                                             " check when closing
+  let g:syntastic_enable_balloons = 0                                         " show balloons when mouseing over errors
+  let g:syntastic_mode_map = {'mode': 'passive'}                              " check manually in general
+  let g:syntastic_auto_loc_list = 2                                           " close location list automatically
+  let g:syntastic_loc_list_height = 20                                        " height of location list window
+  let g:syntastic_echo_current_error = 0                                      " echo current error in command line
+
   " Taglist
   let g:Tlist_Auto_Highlight_Tag = 1                                          " highlight active tag (after a small inactivity period)
   let g:Tlist_Auto_Update = 1                                                 " process new files as they are opened
@@ -107,8 +116,12 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:Tlist_Use_Right_Window = 1                                            " put taglist window on the right
   let g:Tlist_WinWidth = 60                                                   " width of taglist window
 
+  " Virtualenv
+  let g:virtualenv_directory = '.'                                            " directory where to find virtualenv
+
   " Solarized
   let g:solarized_termtrans = 1                                               " transparent background sometimes
+  let g:solarized_visibility = 'normal'                                       " visibility of 'list' characters
 
   call pathogen#infect()                                                      " load all plugins
   call pathogen#helptags()                                                    " create Vim help tags
@@ -231,6 +244,9 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   " syntax sync fromstart                                                     " otherwise folding messes up highlighting
   " let &viminfo .= ',n' . $HOME . '/.config/info/.viminfo'                   " location of .viminfo file
   " set statusline+=%{&modifiable?fugitive#statusline():''}\                  " current git branch (if any and if buffer modifiable)
+
+  " custom highlighting
+  highlight SignColumn ctermbg=none guibg=none
 
   let s:loaded_options = 1
 
@@ -398,6 +414,10 @@ if !g:vimrc_disable_mappings
     nmap yZZ <Plug>YSsurround
     xmap z <Plug>VSurround
     xmap Z <Plug>VgSurround
+    " syntastic
+    nnoremap <leader>s :call <SID>syntastic_check(1)<cr>
+    nnoremap <leader>S :SyntasticReset<cr>
+
 
   endif
 
@@ -774,6 +794,36 @@ function! s:toggle_paste(force) abort
     if exists('s:paste')
       let &paste = s:paste
       unlet s:paste
+    endif
+  endif
+endfunction
+
+" Syntax checking
+
+function! s:syntastic_check(open)
+  " simple syntastic wrapper
+  let syntax_checkers = []
+  for checker in g:SyntasticRegistry.Instance().availableCheckersFor(&filetype)
+    call add(syntax_checkers, checker.getName())
+  endfor
+  if !len(syntax_checkers)
+    echo 'No syntax checker found.'
+  else
+    echo 'Running syntax checkers: ' . join(syntax_checkers, ', ')
+    silent execute 'SyntasticCheck'
+    let loclist = g:SyntasticLoclist.current()
+    if loclist.hasErrorsOrWarningsToDisplay()
+      let errors = loclist.errors()
+      let warnings = loclist.warnings()
+      echo len(errors) . ' error(s) and ' . len(warnings) . ' warning(s) found.'
+      if a:open
+        let num_issues = loclist.getLength()
+        execute 'Errors'
+        execute 'lclose | lopen ' . min([num_issues, g:syntastic_loc_list_height])
+        execute 'll'
+      endif
+    else
+      echo 'Success!'
     endif
   endif
 endfunction
