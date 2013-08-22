@@ -85,7 +85,6 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   " Locate
   let g:locate_highlight = 'pandocDefinitionTerm'                             " highlighting style for matches
   let g:locate_jump_to = 'closest'                                            " jump to next match
-  let g:locate_very_magic = 0                                                 " use normal magic mode by default
 
   " Scratch
   let g:scratch_height = 10                                                   " height of scratch window
@@ -98,8 +97,9 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:syntastic_check_on_wq = 0                                             " check when closing
   let g:syntastic_enable_balloons = 0                                         " show balloons when mouseing over errors
   let g:syntastic_mode_map = {'mode': 'active'}                               " check automatically in general
-  let g:syntastic_auto_loc_list = 2                                           " close location list automatically
-  let g:syntastic_auto_jump = 1                                               " jump to first match automatically
+  let g:syntastic_auto_loc_list = 0                                           " never update location list automatically
+  let g:syntastic_auto_jump = 0                                               " this option forces location list updates
+  let g:syntastic_always_populate_loc_list = 0                                " default but to be safe
   let g:syntastic_loc_list_height = 20                                        " height of location list window
   let g:syntastic_echo_current_error = 0                                      " echo current error in command line
   let g:syntastic_python_checkers = ['python']                                " pylint is too slow to check actively
@@ -830,6 +830,7 @@ function! s:syntastic_check()
         return
       endif
     endfor
+    execute 'lclose'
     echo 'Success!'
   endif
 endfunction
