@@ -1,0 +1,12 @@
+snippet f "Function." !b
+function! ${1:s:function_name}($2)
+  " ${3:Function description.}
+  ${4:return}
+endfunction
+endsnippet
+
+snippet cvar "Configuration variable." b
+if !exists('g:`!v expand('%:t:r')`_${1:option_name}')
+  let g:`!v expand('%:t:r')`_$1 = '${2:default_value}'
+endif
+endsnippet
