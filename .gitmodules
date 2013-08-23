@@ -46,3 +46,6 @@
 [submodule "src/config/vim/bundle/vim-virtualenv"]
 	path = src/config/vim/bundle/vim-virtualenv
 	url = https://github.com/jmcantrell/vim-virtualenv.git
+[submodule "src/config/vim/bundle/ultisnips"]
+	path = src/config/vim/bundle/ultisnips
+	url = https://github.com/SirVer/ultisnips.git
