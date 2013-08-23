@@ -2,6 +2,7 @@
 
 setlocal nowrap
 setlocal statusline=%f%=%l/%L
+setlocal foldcolumn=0
 
 " resize window
 " execute "wincmd J"
