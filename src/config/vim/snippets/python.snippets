@@ -1,8 +1,132 @@
+global !p
+
+import vim
+
+def get_args(arglist):
+	args = [arg.split('=')[0].strip() for arg in arglist.split(',') if arg]
+	args = [arg for arg in args if arg and arg != "self"]
+	return args
+
+def format_arg(arg):
+	return ":param %s: TODO" % arg
+
+def write_docstring_args(args, snip):
+	if not args:
+		snip.rv += '"""'
+		return
+	snip.rv += '\n' + snip.mkline('', indent='')
+	for arg in args:
+		snip += format_arg(arg)
+
+def write_init_body(args, parents, snip):
+	for arg in args:
+		snip += "self._%s = %s" % (arg, arg)
+
+endglobal
+
+# Module
+
 snippet #! "Hashbang header with docstring." !b
 #!/usr/bin/env python
 # encoding: utf-8
 
-"""${1:Module docstring.}"""
+"""${1:TODO: module docstring.}"""
 
+$0
+endsnippet
 
+# Class
+
+snippet class "class definition" !bs
+class ${1:ClassName}(${2:object}):
+
+	"""${3:TODO: $1 docstring}`!p snip.rv = ""
+snip >> 1
+
+args = get_args(t[4])
+
+write_docstring_args(args, snip)
+if args:
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '"""'
+
+`
+
+	def __init__(self$4):`!p
+snip >> 2
+args = get_args(t[4])
+if args:
+	write_init_body(args, t[2], snip)
+else:
+	snip += ''
+`$0
+endsnippet
+
+# Function
+#
+snippet def "function definition" !bs
+def ${1:function}($2):
+	"""${4:TODO: $1 docstring.}`!p
+args = get_args(t[2])
+if args:
+	snip.rv = ""
+	snip >> 1
+	write_docstring_args(args, snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '"""'
+else:
+	snip.rv = '"""'`
+	${0:pass}
+endsnippet
+
+snippet defm "method definition" !bs
+def ${1:method}(self$2):
+	"""${4:TODO: $1 docstring.}`!p
+args = get_args(t[2])
+if args:
+	snip.rv = ""
+	snip >> 1
+	write_docstring_args(args, snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '"""'
+else:
+	snip.rv = '"""'`
+	${0:pass}
+endsnippet
+
+snippet defc "class method definition" !bs
+@classmethod
+def ${1:method}(cls$2):
+	"""${4:TODO: $1 docstring.}`!p
+args = get_args(t[2])
+if args:
+	snip.rv = ""
+	snip >> 1
+	write_docstring_args(args, snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '"""'
+else:
+	snip.rv = '"""'`
+	${0:pass}
+endsnippet
+
+snippet defs "static method definition" !bs
+@staticmethod
+def ${1:method}($2):
+	"""${4:TODO: $1 docstring.}`!p
+args = get_args(t[2])
+if args:
+	snip.rv = ""
+	snip >> 1
+	write_docstring_args(args, snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '"""'
+else:
+	snip.rv = '"""'`
+	${0:pass}
+endsnippet
+
+snippet def_ "magic method definition" !bs
+def __${1:method}__(self$2):
+	return $0
 endsnippet

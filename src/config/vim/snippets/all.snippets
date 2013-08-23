@@ -1,0 +1,57 @@
+global !p
+
+from random import choice, randrange
+from subprocess import Popen, PIPE
+
+import re, vim
+
+FORTUNE_PATTERN = re.compile('\n\s*(?=.)')
+TAB_PATTERN = re.compile('\t')
+
+def expand_tab(string, tabstop=None):
+	tabstop = tabstop or int(vim.eval('&tabstop'))
+	return TAB_PATTERN.sub(' ' * tabstop, string)
+
+def get_random_quote(max_length=160, join_string=None, short=True):
+	short_option = '-s' if short else '-l'
+	try:
+		process = Popen(
+			['fortune', '-n', str(max_length), short_option],
+			stdout=PIPE
+		)
+	except OSError:
+		return 'Fortune not installed.'
+	else:
+		if join_string is None:
+			quote = process.stdout.read()
+		else:
+			quote = FORTUNE_PATTERN.sub(join_string, process.stdout.read()).strip()
+		return expand_tab(quote) if vim.eval('&expandtab') else quote
+
+def _get_random_line(handle):
+	cur_line = next(handle)
+	for n_line, line in enumerate(handle):
+		if randrange(n_line + 2):
+			continue
+		cur_line = line
+	return cur_line
+
+def get_random_word(camelcase=False):
+	dictionaries = vim.options['dictionary'].split(',')
+	if dictionaries:
+		with open(dictionaries[0]) as handle:
+			# random_word = _get_random_line(handle).strip()
+			# random_word = choice([line.strip() for line in handle])
+			random_word = next(handle).strip()
+	else:
+		random_word = 'foobar'
+	if camelcase:
+		return random_word.title()
+	else:
+		return random_word
+
+endglobal
+
+snippet fortune "Fortune quote"
+`!p if not snip.c: snip.rv = get_random_quote()`$0
+endsnippet
