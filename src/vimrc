@@ -122,6 +122,7 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
 
   " Ultisnips
   let g:UltiSnipsSnippetsDir = g:runtimepath . '/snippets'                    " directory where to store snippets
+  let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'snippets']               " where to look for snippets
   let g:UltiSnipsExpandTrigger = '<c-e>'                                      " key to trigger snippet
   let g:UltiSnipsListSnippets = '<c-y>'                                       " list snippets
 
