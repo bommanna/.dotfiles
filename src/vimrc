@@ -77,6 +77,13 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:gundo_help = 0                                                        " show help
   let g:gundo_preview_bottom = 0                                              " use full width for diff preview window
 
+  " Jedi
+  let g:jedi#auto_vim_initialization = 0                                      " manual init
+  let g:jedi#auto_vim_configuration = 0                                       " manual mapping and 'completeopt'
+  let g:jedi#popup_select_first = 0                                           " don't select anything
+  let g:jedi#use_tabs_not_buffers = 1                                         " always
+  let g:jedi#popup_on_dot = 0                                                 " manual completion
+
   " LatexBox
   let g:LatexBox_completion_close_braces = 0                                  " don't close braces automatically
   let g:LatexBox_Folding = 0                                                  " special folding for latex
@@ -123,7 +130,7 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   " Ultisnips
   let g:UltiSnipsSnippetsDir = g:runtimepath . '/snippets'                    " directory where to store snippets
   let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'snippets']               " where to look for snippets
-  let g:UltiSnipsExpandTrigger = '<c-e>'                                      " key to trigger snippet
+  let g:UltiSnipsExpandTrigger = '<c-j>'                                      " key to trigger snippet
   let g:UltiSnipsListSnippets = '<c-y>'                                       " list snippets
   let g:ultisnips_python_style = 'sphinx'                                     " docstring format
 
@@ -191,6 +198,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   set complete-=i                                                             " what to include when pressing <c-n> and <c-p> in insert mode
   set completefunc=syntaxcomplete#Complete                                    " default user completion using syntax keywords
   set completeopt=longest,menuone                                             " only insert longest common strings of suggestions
+  set pumheight=20                                                            " maximum height of popup menu
   set wildignore=*.swp,*.bak,*.pyc,*.class                                    " don't show these files in file autocompletion
   set wildmenu                                                                " allow autocompletion with c-n
   set wildmode=longest,full                                                   " first complete common string before navigating through matches
@@ -362,6 +370,9 @@ if !g:vimrc_disable_mappings
   nnoremap <leader>r :registers<cr>
 
   " languages
+
+  " omnicompletion shortcut and menu closer
+  inoremap <expr> <c-e> pumvisible() ? "\<c-e>" : "\<c-x>\<c-o>"
 
   " Vim
   " open .vimrc (following potential symbolic link)

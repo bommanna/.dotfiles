@@ -21,11 +21,11 @@ VIM_SUBMODULES=(
 'https://github.com/scrooloose/syntastic.git'
 'https://github.com/jmcantrell/vim-virtualenv.git'
 'https://github.com/SirVer/ultisnips.git'
+'https://github.com/davidhalter/jedi-vim.git'
 )
 
 # Unused modules currently
 OTHER_VIM_MODULES=(
-'https://github.com/davidhalter/jedi-vim.git'
 'https://github.com/sjl/gundo.vim.git'
 )
 

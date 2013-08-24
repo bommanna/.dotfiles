@@ -20,7 +20,7 @@ def write_docstring_args(args, snip):
 
 def write_init_body(args, parents, snip):
 	for arg in args:
-		snip += "self._%s = %s" % (arg, arg)
+		snip += "self.%s = %s" % (arg, arg)
 
 endglobal
 
@@ -52,18 +52,18 @@ if args:
 
 `
 
-	def __init__(self$4):`!p
-snip >> 2
+	def __init__(self$4):`!p snip >> 2
+parents = [parent.strip() for parent in t[2].split(',') if parent != 'object']
+if parents:
+	snip += 'super(%s, self).__init__()' % (t[1], )
 args = get_args(t[4])
 if args:
 	write_init_body(args, t[2], snip)
-else:
-	snip += ''
 `$0
 endsnippet
 
 # Function
-#
+
 snippet def "function definition" !bs
 def ${1:function}($2):
 	"""${4:TODO: $1 docstring.}`!p
@@ -76,7 +76,7 @@ if args:
 	snip += '"""'
 else:
 	snip.rv = '"""'`
-	${0:pass}
+	${5:pass}$0
 endsnippet
 
 snippet defm "method definition" !bs
@@ -91,7 +91,7 @@ if args:
 	snip += '"""'
 else:
 	snip.rv = '"""'`
-	${0:pass}
+	${5:pass}$0
 endsnippet
 
 snippet defc "class method definition" !bs
@@ -107,7 +107,7 @@ if args:
 	snip += '"""'
 else:
 	snip.rv = '"""'`
-	${0:pass}
+	${5:pass}$0
 endsnippet
 
 snippet defs "static method definition" !bs
@@ -123,7 +123,7 @@ if args:
 	snip += '"""'
 else:
 	snip.rv = '"""'`
-	${0:pass}
+	${5:pass}$0
 endsnippet
 
 snippet def_ "magic method definition" !bs
