@@ -9,15 +9,13 @@ On a mac, using Homebrew_:
 
 .. code:: bash
 
-  $ curl -s -L https://raw.github.com/mtth/.dotfiles/master/bin/install.sh | bash -s
+  $ curl -sSL https://raw.github.com/mtth/.dotfiles/master/bin/install.sh | bash -s
 
 Otherwise:
 
 .. code:: bash
 
-  $ git clone https://github.com/mtth/.dotfiles.git
-  $ .dotfiles/bin/link.sh
-  $ .dotfiles/bin/submodules.sh
+  $ git clone https://github.com/mtth/.dotfiles.git && .dotfiles/bin/install.sh
 
 
 Utilities
