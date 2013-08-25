@@ -55,11 +55,11 @@ function! s:compile_selection() range
   execute 'resize ' . min([n_lines, 20])
 endfunction
 
-nnoremap <leader>c :call <SID>compile_file()<cr>
-nnoremap <leader>C :call <SID>open_compiled_file()<cr>
-vnoremap <leader>c :call <SID>compile_selection()<cr>
+nnoremap <buffer> <leader>c :call <SID>compile_file()<cr>
+nnoremap <buffer> <leader>C :call <SID>open_compiled_file()<cr>
+vnoremap <buffer> <leader>c :call <SID>compile_selection()<cr>
 
 
 " Executing:
 
-nnoremap <leader>x :CoffeeRun<cr>
+nnoremap <buffer> <leader>x :CoffeeRun<cr>

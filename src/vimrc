@@ -462,6 +462,13 @@ if !g:vimrc_disable_autocommands
     autocmd   BufWritePost                *                   silent call <SID>tags_refresh(0, 0)
   augroup END
 
+  " fixing some filetypes
+  augroup filetypegroup
+    autocmd!
+    autocmd   BufNewFile,BufRead          *.hamlc             set filetype=haml
+    autocmd   BufNewFile,BufRead          *.jst               set filetype=javascript
+  augroup END
+
 endif
 
 

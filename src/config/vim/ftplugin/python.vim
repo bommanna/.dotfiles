@@ -5,10 +5,10 @@ setlocal textwidth=79
 
 " Executing:
 
-nnoremap <leader>x :%w !python<cr>
-nnoremap <leader>X :!python %<cr>
-vnoremap <leader>x :w !python<cr>
-vnoremap <leader>X :!python<cr>
+nnoremap <buffer> <leader>x :%w !python<cr>
+nnoremap <buffer> <leader>X :!python %<cr>
+vnoremap <buffer> <leader>x :w !python<cr>
+vnoremap <buffer> <leader>X :!python<cr>
 
 
 " Testing:
@@ -29,5 +29,5 @@ function! s:test_all()
   execute '!nosetests'
 endfunction
 
-nnoremap <leader>t :call <SID>test_module(expand('%:t'))<cr>
-nnoremap <leader>T :call <SID>test_all()<cr>
+nnoremap <buffer> <leader>t :call <SID>test_module(expand('%:t'))<cr>
+nnoremap <buffer> <leader>T :call <SID>test_all()<cr>

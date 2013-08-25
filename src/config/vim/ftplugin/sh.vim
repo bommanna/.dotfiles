@@ -1,5 +1,5 @@
 " Execution mappings
-nnoremap <leader>x :%w !bash<cr>
-nnoremap <leader>X :!bash %<cr>
-vnoremap <leader>x :w !bash<cr>
-vnoremap <leader>X :!bash<cr>
+nnoremap <buffer> <leader>x :%w !bash<cr>
+nnoremap <buffer> <leader>X :!bash %<cr>
+vnoremap <buffer> <leader>x :w !bash<cr>
+vnoremap <buffer> <leader>X :!bash<cr>
