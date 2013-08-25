@@ -1,0 +1,11 @@
+snippet !!! "Doctype and header" b
+!!!
+%html
+	%head
+		%title ${2:Hello world!}
+	%body$0
+endsnippet
+
+snippet -# "Compilation options" b
+-# $1%:p %:p:h/$2%:p:t:r.${3:html}$0
+endsnippet
