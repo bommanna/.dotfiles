@@ -1,88 +1,44 @@
 setlocal comments=b:-#
 setlocal formatoptions-=o
 
+if expand('%:e') ==# 'hamlc'
+  setlocal makeprg=haml-coffee
+else
+  setlocal makeprg=haml
+endif
+
 
 " Compiling:
 
-function! s:compile_file()
-  " look in last line of file for compiling options
-  " two cases: .haml and .hamlc files, compiled differently
-  " if .haml, both the input and output MUST be present and specified last
-  " to simplify things, vim filename expansion is enabled
-  " cf. the `output` snippet for a sample
-  " if .hamlc, simply follow the command line options format
-  " note that this implies that the -i option should be set
-  " -o should also be set if compiling and merging several files
-  echo 'Compiling...'
-  let last_line = getline('$')
+function! b:get_default_compilation_options()
   if expand('%:e') ==# 'hamlc'
-    if last_line[0:1] ==# '-#'
-      let compile_options = substitute(last_line[3:],
-                                    \ '\(^\|\s\|/\)\zs%:\?[:phtre]*',
-                                    \ '\=expand(submatch(0))',
-                                    \ 'g')
-    else
-      let compile_options = '-i ' . expand('%:p')
-    endif
-    let output = system('haml-coffee ' . compile_options)
+    return '--input ' . expand('%')
   else
-    if last_line[0:1] ==# '-#'
-      let compile_options = substitute(last_line[3:],
-                                    \ '\(^\|\s\|/\)\zs%:\?[:phtre]*',
-                                    \ '\=expand(submatch(0))',
-                                    \ 'g')
-    else
-      let compile_options = expand('%:p') . ' ' . expand('%:t:r') . '.html'
-    endif
-    let output = system('haml ' . compile_options)
-  endif
-  redraw!
-  if v:shell_error
-    echoerr 'Compilation failed: ' . output
-  else
-    echo 'Compilation successful!'
+    return expand('%') . ' ' . expand('%:t:r') . '.html'
   endif
 endfunction
 
-function! s:open_compiled_file()
-  " open compiled html/jst file
+function! b:get_compiled_filepath()
   let last_line = getline('$')
   if expand('%:e') ==# 'hamlc'
-    if last_line[0:1] ==# '-#'
-      let compile_options = substitute(last_line[3:],
-                                    \ '\(^\|\s\|/\)\zs%:\?[:phtre]*',
-                                    \ '\=expand(submatch(0))',
-                                    \ 'g')
+    if last_line[0:2] ==# '-# '
       let matches = matchlist(last_line, '\(-[^-\s]*o\|--output\)\s\(\S\+\)')
       if len(matches)
-        let filepath = matches[2]
+        let filepath = g:expand_all(matches[2])
       else
-        let filepath = expand('%:p:r') . '.jst'
+        let filepath = expand('%:r') . '.jst'
       endif
     else
-      let filepath = expand('%:p:r') . '.jst'
+      let filepath = expand('%:r') . '.jst'
     endif
   else
-    if last_line[0:1] ==# '-#'
-      let compile_options = substitute(last_line[3:],
-                                    \ '\(^\|\s\|/\)\zs%:\?[:phtre]*',
-                                    \ '\=expand(submatch(0))',
-                                    \ 'g')
+    if last_line[0:2] ==# '-# '
+      let compile_options = g:expand_all(last_line[3:])
       let split_options = split(compile_options)
       let filepath = split_options[len(split_options) - 1]
     else
-      let filepath = expand('%:p:r') . '.html'
+      let filepath = expand('%:r') . '.html'
     endif
   endif
-  if filereadable(filepath)
-    let autoread_save = &autoread
-    let &autoread = 1
-    execute 'edit ' . filepath
-    let &autoread = autoread_save
-  else
-    echoerr 'No compiled file found at ' . filepath
-  endif
+  return filepath
 endfunction
-
-nnoremap <buffer> <leader>c :call <SID>compile_file()<cr>
-nnoremap <buffer> <leader>C :call <SID>open_compiled_file()<cr>

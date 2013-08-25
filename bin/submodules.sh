@@ -23,6 +23,7 @@ VIM_SUBMODULES=(
 'https://github.com/SirVer/ultisnips.git'
 'https://github.com/davidhalter/jedi-vim.git'
 'https://github.com/tpope/vim-haml.git'
+'https://github.com/wavded/vim-stylus.git'
 )
 
 # Unused modules currently

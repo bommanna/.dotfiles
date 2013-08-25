@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BREW_FORMULAE='bash git tmux ctags ack python vim coreutils node ruby wget fortune'
-NODE_PACKAGES='coffee-script coffeelint haml-coffee'
+NODE_PACKAGES='coffee-script coffeelint haml-coffee stylus'
 PYTHON_PACKAGES='virtualenv nose ipython jedi requests'
 RUBY_GEMS='haml'
 

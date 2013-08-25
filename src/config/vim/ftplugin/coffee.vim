@@ -1,51 +1,28 @@
 setlocal comments=b:#
+setlocal makeprg=coffee\ -c
 setlocal textwidth=79
 
 
 " Compiling:
 
-function! s:compile_file()
-  " look in last line of file for compiling options
-  " by default compile into same folder
-  echo 'Compiling...'
-  let last_line = getline('$')
-  if last_line[0] ==# '#'
-    let compile_options = last_line[2:]
-  else
-    let compile_options = ''
-  endif
-  let output = system('coffee -c ' . compile_options . ' ' . expand('%:p'))
-  redraw!
-  if v:shell_error
-    echoerr 'Compilation failed: ' . output
-  else
-    echo 'Compilation successful!'
-  endif
+function! b:get_default_compilation_options()
+  return expand('%')
 endfunction
 
-function! s:open_compiled_file()
-  " open compiled javascript file
+function! b:get_compiled_filepath()
   let last_line = getline('$')
   let filename = expand('%:t:r') . '.js'
   if last_line[0] ==# '#'
     let matches = matchlist(last_line, '\(-[^-\s]*o\|--output\)\s\(\S\+\)')
     if len(matches)
-      let output_dir = substitute(matches[2], '[^/]\zs$', '/', '')
+      let output_dir = g:expand_all(substitute(matches[2], '[^/]\zs$', '/', ''))
     else
       let output_dir = ''
     endif
   else
     let output_dir = ''
   endif
-  let filepath = expand('%:p:h') . '/' . output_dir . filename
-  if filereadable(filepath)
-    let autoread_save = &autoread
-    let &autoread = 1
-    execute 'edit ' . filepath
-    let &autoread = autoread_save
-  else
-    echoerr 'No compiled file found at ' . filepath
-  endif
+  return output_dir . filename
 endfunction
 
 function! s:compile_selection() range
@@ -55,8 +32,6 @@ function! s:compile_selection() range
   execute 'resize ' . min([n_lines, 20])
 endfunction
 
-nnoremap <buffer> <leader>c :call <SID>compile_file()<cr>
-nnoremap <buffer> <leader>C :call <SID>open_compiled_file()<cr>
 vnoremap <buffer> <leader>c :call <SID>compile_selection()<cr>
 
 

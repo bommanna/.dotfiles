@@ -178,6 +178,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   " text formatting
   set autoindent                                                              " keep indentation when going to new line
   set backspace=indent,eol,start                                              " allow backspace to delete new lines, etc.
+  set comments-=:%                                                            " these shouldn't be considered comments by default
   set formatlistpat=^\\s*\\(\\d\\+\\\|[*+-]\\)[\\]:.)}\\t\ ]\\s*              " allow non numbered lists (starting by *+-)
   set formatoptions=rqnlj                                                     " only manual formatting by default
   set list                                                                    " show hidden characters (cf. ``listchar`` option below)
@@ -265,7 +266,7 @@ if !g:vimrc_disable_options && !exists('s:loaded_options')
   " let &viminfo .= ',n' . $HOME . '/.config/info/.viminfo'                   " location of .viminfo file
   " set statusline+=%{&modifiable?fugitive#statusline():''}\                  " current git branch (if any and if buffer modifiable)
 
-  " custom highlighting
+  " highlighting
   highlight SignColumn ctermbg=none guibg=none
 
   let s:loaded_options = 1
@@ -368,6 +369,10 @@ if !g:vimrc_disable_mappings
   nnoremap <leader>m :marks<cr>
   " show registers
   nnoremap <leader>r :registers<cr>
+
+  " compilation
+  nnoremap <leader>c :call <SID>compile_file()<cr>
+  nnoremap <leader>C :call <SID>open_compiled_file()<cr>
 
   " languages
 
@@ -579,6 +584,18 @@ command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
 " FUNCTIONS:
 
+" Global
+
+function! g:expand_all(input_string)
+  " Perform command line expansion on string (i.e. % to filepath, etc.)
+  " literal % can be added by escaping them: \%
+  let input_string = substitute(a:input_string,
+                              \ '\(^\|[^\\]\)\zs%\(:[phtre]\)*',
+                              \ '\=expand(submatch(0))',
+                              \ 'g')
+  return substitute(input_string, '\\%', '%', 'g')
+endfunction
+
 " Helpers
 
 function! s:smart_tab()
@@ -717,43 +734,6 @@ function! s:tags_refresh(venv, force)
   endif
 endfunction
 
-" Autocompilation
-
-function! s:autocompile()
-  " autocompile coffeescript, haml, stylus on save using a comment on the first line
-  " usage (coffee, stylus):
-  " # AUTOCOMPILE destination
-  " usage (haml):
-  " # AUTOCOMPILE destination origin_directory
-  " notes:
-  " * destination path is relative to the current file's directory
-  " * origin_folder is relative to Vim's current work directory
-  " * replace the hash sign by the language's comment symbol
-  " * form haml, all the files in the origin_folder will be compiled into a
-  "   single destination file
-  let firstLine = split(getline(1))
-  if len(firstLine) > 2
-    if firstLine[1] ==# 'AUTOCOMPILE'
-      let src = expand('%')
-      let srcdir = expand('%:p:h')
-      let dest = srcdir . '/' . firstLine[2]
-      if &ft ==# 'coffee'
-        let result = system('coffee -o ' . dest . ' -c ' . src)
-      elseif &ft ==# 'haml'
-        let result = system('haml-coffee -b -i ' . firstLine[3] . ' -o ' . dest)
-      elseif &ft ==# 'stylus'
-        let result = system('stylus ' . src . ' --out ' . dest)
-      endif
-      redraw
-      if v:shell_error
-        echo result
-      else
-        echo 'Compilation successful!'
-      endif
-    endif
-  endif
-endfunction
-
 " Ack
 
 function! s:ack(force, args)
@@ -775,7 +755,7 @@ function! s:ack(force, args)
       else
         cgete l:results
       endif
-      copen
+      execute 'copen ' . min([20, len(getqflist())])
       call matchadd('Search', '\v' . s:search_args)
       redraw!
       echo line('$') . ' result(s) found'
@@ -861,6 +841,46 @@ function! s:syntastic_check()
     endfor
     execute 'lclose'
     echo 'Success!'
+  endif
+endfunction
+
+" Compilation
+
+function! s:compile_file()
+  " look in last line of file for compiling options
+  echo 'Compiling...'
+  if synIDattr(synIDtrans(synID(line('$'), col('.'), 0)), 'name') == 'Comment'
+    let compile_options = g:expand_all(join(split(getline('$'))[1:]))
+  else
+    if exists('*b:get_default_compilation_options')
+      let compile_options = b:get_default_compilation_options()
+    else
+      let compile_options = ''
+    endif
+  endif
+  let output = system(&l:makeprg . ' ' . compile_options)
+  redraw!
+  if v:shell_error
+    echoerr 'Compilation failed: ' . output
+  else
+    echo 'Compilation successful!'
+  endif
+endfunction
+
+function! s:open_compiled_file()
+  " open compiled file
+  if exists('*b:get_compiled_filepath')
+    let filepath = b:get_compiled_filepath()
+    if filereadable(filepath)
+      let autoread_save = &autoread
+      let &autoread = 1
+      execute 'edit ' . filepath
+      let &autoread = autoread_save
+    else
+      echoerr 'No compiled file found at ' . filepath
+    endif
+  else
+    echoerr 'Unable to find compiled filepath.'
   endif
 endfunction
 
@@ -997,7 +1017,6 @@ endif
 
 " changes/fixes/ideas
 
-" easymotion: play better with jumps (don't go to start of line)
 " locate:
 " auto scrolling of matches as scrolling window
 " rst:
@@ -1007,7 +1026,6 @@ endif
 
 " gundo avoid resize craziness
 " fugitive bug fixes
-" write virtualenv setter
 
 " execute command without moving cursor in window
 " doesn't work currently (doesn't do anything)

@@ -6,6 +6,10 @@ snippet !!! "Doctype and header" b
 	%body$0
 endsnippet
 
-snippet -# "Compilation options" b
--# $1%:p %:p:h/$2%:p:t:r.${3:html}$0
+snippet make "Make options" b
+-# `!p
+if fn.rsplit('.', 1)[1] == 'hamlc':
+	snip.rv = '--input % --output %:r.jst'
+else:
+	snip.rv = '% %:r.html'`$0
 endsnippet
