@@ -49,3 +49,6 @@
 [submodule "src/config/vim/bundle/jedi-vim"]
 	path = src/config/vim/bundle/jedi-vim
 	url = https://github.com/davidhalter/jedi-vim.git
+[submodule "src/config/vim/bundle/vim-haml"]
+	path = src/config/vim/bundle/vim-haml
+	url = https://github.com/tpope/vim-haml.git

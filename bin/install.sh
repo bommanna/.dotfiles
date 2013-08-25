@@ -2,7 +2,8 @@
 
 BREW_FORMULAE='bash git tmux ctags ack python vim coreutils node ruby wget fortune'
 NODE_PACKAGES='coffee-script coffeelint'
-PYTHON_PACKAGES='virtualenv nose ipython jedi'
+PYTHON_PACKAGES='virtualenv nose ipython jedi requests'
+RUBY_GEMS='haml'
 
 if [ "$(uname)" == "Darwin" ]; then
   # Mac OS X
@@ -38,6 +39,11 @@ done
 echo 'Installing python packages...'
 for PACKAGE in $PYTHON_PACKAGES; do
   pip install --upgrade $PACKAGE
+done
+
+echo 'Installing ruby gems...'
+for GEM in $RUBY_GEMS; do
+  gem install $GEM
 done
 
 cd ~

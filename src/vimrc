@@ -108,9 +108,9 @@ if !g:vimrc_disable_plugins && !exists('s:loaded_plugins')
   let g:syntastic_auto_jump = 0                                               " this option forces location list updates
   let g:syntastic_always_populate_loc_list = 0                                " default but to be safe
   let g:syntastic_loc_list_height = 20                                        " height of location list window
-  let g:syntastic_echo_current_error = 0                                      " echo current error in command line
+  let g:syntastic_echo_current_error = 1                                      " echo current error in command line
   let g:syntastic_python_checkers = ['python']                                " pylint is too slow to check actively
-  let g:syntastic_coffee_checkers = ['coffee']                                " pylint is too slow to check actively
+  let g:syntastic_coffee_checkers = ['coffee']                                " coffeelint is too slow to check actively
   let g:syntastic_manual = {'python': ['pylint'], 'coffee': ['coffeelint']}   " custom option to run manual checks with extra utilities
 
   " Taglist
@@ -844,7 +844,7 @@ function! s:syntastic_check()
         silent execute 'Errors'
         execute 'lclose | lopen ' . min([num_issues, g:syntastic_loc_list_height])
         setlocal modifiable
-        silent execute '%s/^[^|]\+|/%|'
+        silent! execute '%s/^[^|]*|/%|'
         setlocal nomodified
         setlocal nomodifiable
         setlocal foldcolumn=0

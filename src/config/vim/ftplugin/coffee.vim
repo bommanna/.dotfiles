@@ -1,10 +1,12 @@
 setlocal comments=b:#
 setlocal textwidth=79
 
+
 " Compiling:
 
 function! s:compile_file()
   " look in last line of file for compiling options
+  " by default compile into same folder
   echo 'Compiling...'
   let last_line = getline('$')
   if last_line[0] ==# '#'
@@ -47,7 +49,7 @@ function! s:open_compiled_file()
 endfunction
 
 function! s:compile_selection() range
-  " compile selection and adjust window height
+  " show compiled code from selection and adjust window height
   execute a:firstline . ','. a:lastline . 'CoffeeCompile'
   let n_lines = line('$')
   execute 'resize ' . min([n_lines, 20])
@@ -56,6 +58,7 @@ endfunction
 nnoremap <leader>c :call <SID>compile_file()<cr>
 nnoremap <leader>C :call <SID>open_compiled_file()<cr>
 vnoremap <leader>c :call <SID>compile_selection()<cr>
+
 
 " Executing:
 
