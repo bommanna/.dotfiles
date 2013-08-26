@@ -7,6 +7,6 @@ endsnippet
 
 snippet cvar "Configuration variable." b
 if !exists('g:`!v expand('%:t:r')`_${1:option_name}')
-  let g:`!v expand('%:t:r')`_$1 = '${2:default_value}'
+  let g:`!v expand('%:t:r')`_$1 = ${2:'default_value'}
 endif
 endsnippet

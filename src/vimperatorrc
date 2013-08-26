@@ -60,4 +60,4 @@ nnoremap <c-t> T
 
 " extra configuration
 
-silent source ~/.config/extra/.vimperatorrc
+silent source ~/.extra/vimperatorrc
