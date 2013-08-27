@@ -20,7 +20,6 @@ VIM_SUBMODULES=(
 'https://github.com/mtth/taglist.vim.git'
 'https://github.com/mtth/syntastic.git'
 'https://github.com/mtth/vim-virtualenv.git'
-'https://github.com/SirVer/ultisnips.git'
 'https://github.com/davidhalter/jedi-vim.git'
 'https://github.com/tpope/vim-haml.git'
 'https://github.com/wavded/vim-stylus.git'
@@ -29,6 +28,7 @@ VIM_SUBMODULES=(
 
 # Unused modules currently
 OTHER_VIM_MODULES=(
+'https://github.com/SirVer/ultisnips.git'
 'https://github.com/sjl/gundo.vim.git'
 )
 
