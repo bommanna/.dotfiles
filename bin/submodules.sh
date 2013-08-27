@@ -24,6 +24,7 @@ VIM_SUBMODULES=(
 'https://github.com/davidhalter/jedi-vim.git'
 'https://github.com/tpope/vim-haml.git'
 'https://github.com/wavded/vim-stylus.git'
+'https://github.com/mtth/compilastic.vim.git'
 )
 
 # Unused modules currently

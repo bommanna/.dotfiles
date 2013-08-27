@@ -584,18 +584,6 @@ command! -bang -nargs=1 SnipRegister call <SID>create_snippet(<bang>0, <f-args>)
 
 " FUNCTIONS:
 
-" Global
-
-function! g:expand_all(input_string)
-  " Perform command line expansion on string (i.e. % to filepath, etc.)
-  " literal % can be added by escaping them: \%
-  let input_string = substitute(a:input_string,
-                              \ '\(^\|[^\\]\)\zs%\(:[phtre]\)*',
-                              \ '\=expand(submatch(0))',
-                              \ 'g')
-  return substitute(input_string, '\\%', '%', 'g')
-endfunction
-
 " Helpers
 
 function! s:smart_tab()
@@ -841,46 +829,6 @@ function! s:syntastic_check()
     endfor
     execute 'lclose'
     echo 'Success!'
-  endif
-endfunction
-
-" Compilation
-
-function! s:compile_file()
-  " look in last line of file for compiling options
-  echo 'Compiling...'
-  if synIDattr(synIDtrans(synID(line('$'), col('.'), 0)), 'name') == 'Comment'
-    let compile_options = g:expand_all(join(split(getline('$'))[1:]))
-  else
-    if exists('*b:get_default_compilation_options')
-      let compile_options = b:get_default_compilation_options()
-    else
-      let compile_options = ''
-    endif
-  endif
-  let output = system(&l:makeprg . ' ' . compile_options)
-  redraw!
-  if v:shell_error
-    echoerr 'Compilation failed: ' . output
-  else
-    echo 'Compilation successful!'
-  endif
-endfunction
-
-function! s:open_compiled_file()
-  " open compiled file
-  if exists('*b:get_compiled_filepath')
-    let filepath = b:get_compiled_filepath()
-    if filereadable(filepath)
-      let autoread_save = &autoread
-      let &autoread = 1
-      execute 'edit ' . filepath
-      let &autoread = autoread_save
-    else
-      echoerr 'No compiled file found at ' . filepath
-    endif
-  else
-    echoerr 'Unable to find compiled filepath.'
   endif
 endfunction
 
